@@ -1,0 +1,1 @@
+Native Figma render compared with approved HTML master.

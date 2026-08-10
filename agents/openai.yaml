@@ -1,0 +1,5 @@
+interface:
+  display_name: "Victor Design System"
+  short_description: "Evidence-led authored visual direction and delivery"
+  brand_color: "#C24127"
+  default_prompt: "Use $victor-design-system to turn this subject and its real evidence into an authored visual artifact."

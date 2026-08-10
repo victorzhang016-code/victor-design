@@ -1,0 +1,1 @@
+Represents a local factual project image in this portable fixture.

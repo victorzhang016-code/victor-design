@@ -1,0 +1,1 @@
+Approved render placeholder for validator fixture.

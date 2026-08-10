@@ -1,0 +1,167 @@
+# Execution contract
+
+Use this contract for every substantial visual task. It converts design
+principles into releases; a later record cannot retroactively release earlier
+work.
+
+## Gate 1 — proposition and evidence
+
+Before the proposition is released, create or update `TASK_BRIEF.md` using
+`workflow/task-brief.md`. Its scope, source authority, asset policy, and form
+answers are inputs to this gate. A concept cannot use its own aesthetic
+confidence as a substitute for that record.
+
+Before high-fidelity work, obtain the user's explicit confirmation. Record it in
+`DESIGN_CONTROL.md` with a link or quoted approval evidence. For a controlled
+unattended run, record the controller and interaction policy in `TASK_BRIEF.md`
+instead; never treat a request for a visual, a controller, or self-written
+assumptions as approval of an inferred visual preference.
+
+Record all of the following:
+
+- subject, human stake, audience task, unique soul, required copy/language,
+  output surface, refusal list, and source route;
+- **deliverable-form declaration**: the exact shape of the deliverable and the
+  platform convention it answers to, with the inference basis when the brief
+  does not state it. Conventions to check before choosing: social graphic-text
+  = a cover plus body pages forming a continuous reading path (never a single
+  poster page); product interface = a state flow of at least two related
+  screens including the post-decision state (never one static screen); poster /
+  key visual = one canvas; slides = a narration sequence. A methodology, case,
+  tutorial, or pitch defaults to slides when the medium is unstated. A single
+  canvas needs an explicit user or control-layer reason; "one canvas per lane"
+  or "one proposition" is not such a reason. If the brief implies a medium,
+  state the assumption in one sentence so the user can veto it;
+- **density target and layer inventory**: when a reference artifact is named,
+  count its components (layers per page, inscription instances, material
+  effects, type-scale ratios, furniture) and record the counts as the density
+  target; with no reference, record the default anchor from
+  `workflow/density-and-care.md`. Also record which layers each page type will
+  carry. Gate 1 does not release a proposition that declares only a field, a
+  palette, and a type voice — that is a direction, not a design;
+- **surface lock**: record the controlling page/state count, canvas, reading
+  mode, and editable source requirement before concept work. A later note that
+  says "at most six slides" overrides every earlier poster inference;
+- **palette and type cause record**: name the current subject evidence for the
+  field, each semantic color, and each type family. Also name one rejected
+  field/palette and one rejected type voice. Earlier work cannot fill
+  either column by itself;
+- selected `style-evidence.md` rows and any exception;
+- contact sheet path and `ASSET_LEDGER.md` path;
+- primary/hero source, source status, and each selected asset's role;
+- the local → licensed web → unmet role → generation decision trail.
+
+Generation is blocked until the ledger names an unmet role and the user
+explicitly authorizes it. A generated hero image is blocked unless that approval
+explicitly says it may be the hero. Generated work is never factual product
+evidence.
+
+## Form challenge — mandatory self-correction
+
+Before building a master, challenge the declaration with three questions and
+write the answers beside it:
+
+1. **Authority** — Which exact user/controller sentence fixes the form? If
+   there is one, follow it verbatim. A model's own declaration cannot override
+   it.
+2. **Reader action** — Is the reader meant to read a sequence, compare pages,
+   follow product states, or take in one visual event? Choose the carrier that
+   performs that action.
+3. **Single-canvas test** — If one canvas is proposed, what explicit source
+   makes a sequence, set, or state flow unnecessary? "The prompt is short" and
+   "the topic has one claim" fail this test.
+
+Block production until all three answers agree. If they do not, prefer the
+multi-page/state convention above or ask the user. Do not use a form
+declaration as evidence that the declaration itself was correct.
+
+## Gate 2 — HTML master and user approval
+
+For posters, make a self-contained HTML master only after Gate 1 releases it.
+Use native HTML/CSS for text, fields, rules, and simple masks; use real assets
+for physical objects and complex surfaces.
+
+Before asking for approval, provide:
+
+- three genuinely different grayscale spatial grammars with real copy lengths;
+- a real-copy type specimen and a note on custom-font delivery risk;
+- a content check covering project definition, human stake, and one mechanism
+  or evidence layer;
+- a selected master render at full size, thumbnail, copy-hidden, and same-scale
+  reference view, plus image-hidden when an image or generated carrier is
+  visually dominant;
+- a review record from `operations/review.md`.
+
+For a multi-page or multi-state output, make a low-detail content thumbnail or
+role map before decoration. Name every page/state's job, dominant evidence or
+interaction, visual carrier, and transition from the previous state. Do not
+batch-produce a sequence from one attractive composition. After the role map,
+build one to three pilot pages at full craft — the cover, the densest
+evidence page, and the most unusual page — and obtain explicit user approval
+of the pilot renders before producing the rest.
+
+When delegating visual execution to a subagent, the brief must carry the
+design context the subagent cannot infer: reference image paths with an
+explicit instruction to view them, the approved layer inventory and density
+target, concrete font file paths (never "system stack" when project fonts
+exist), and the component list each page type must contain. Acceptance must
+include a full-size side-by-side comparison against the reference, performed
+by the delegating agent — deterministic subagent checks (overflow, floors,
+banned content) cannot certify craft.
+
+Stop after presenting the master. Do not self-approve, generate a delivery
+record, or begin Figma reconstruction until the user explicitly approves the
+render.
+
+## Gate 3 — native editable delivery
+
+Unless the user explicitly accepts a flattened-only outcome, a final poster
+requires editable Figma delivery after Gate 2 approval.
+
+Use the Figma integration only after reading its required skills. Create or
+target a Figma Design file, then rebuild the approved master with named native
+text, fields, masks, rules, and structural geometry. Keep raster images as
+replaceable fills; retain source images and four-point parameters for a
+perspective composite.
+
+Before reconstruction, inventory font, material-effect, crop, blend, mask, and
+perspective risks using `operations/figma-fidelity.md`. Record the Figma URL,
+primary frame/node, node audit, and an equal-scale render comparison to the
+approved HTML master. A screenshot pasted into Figma is not editable delivery.
+An unavailable custom font, lost CSS texture, or rectangular screen insertion
+is not an acceptable silent approximation.
+
+## Required records
+
+`DESIGN_CONTROL.md` uses these labels under the named gates:
+
+```markdown
+## Gate 1 — Proposition
+Decision:
+User approval:
+Approval evidence:
+Source route:
+Source policy:
+Contact sheet:
+Asset ledger:
+Hero source:
+Generation exception:
+
+## Gate 2 — Master
+Decision:
+HTML master:
+Approved render:
+User approval:
+Approval evidence:
+Visual review:
+
+## Gate 3 — Delivery
+Decision:
+Editable Figma file:
+Primary frame/node:
+Figma node audit:
+Figma comparison:
+```
+
+`ASSET_LEDGER.md` must list each selected asset with role, local path or URL,
+rights/status, factual-vs-interpretive status, and any crop/composite rule.
