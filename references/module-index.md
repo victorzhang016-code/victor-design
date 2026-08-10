@@ -1,4 +1,4 @@
-# Victor Design System routing
+# Victor Design routing
 
 ## Default chain
 

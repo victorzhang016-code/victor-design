@@ -1,9 +1,9 @@
 ---
 name: victor-design-system
-description: Art-direct and deliver high-quality posters, key visuals, editorial graphics, AI product interfaces, and cross-medium visual systems through Victor's evidence-led design language. Use when a task needs subject understanding translated into authored canvas structure, typography, content hierarchy, color, processed imagery, material texture, HTML-first poster production, high-fidelity editable Figma delivery, or critique that rejects generic AI image-led design and exhibition-board thinking without flattening authored character.
+description: Art-direct and deliver high-quality posters, key visuals, editorial graphics, AI product interfaces, and cross-medium visual systems through Victor Design's evidence-led design language. Use when a task needs subject understanding translated into authored canvas structure, typography, content hierarchy, color, processed imagery, material texture, HTML-first poster production, high-fidelity editable Figma delivery, or critique that rejects generic AI image-led design and exhibition-board thinking without flattening authored character.
 ---
 
-# Victor Design System
+# Victor Design
 
 ## First principle
 

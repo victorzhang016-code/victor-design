@@ -1,14 +1,40 @@
-# Victor Design System
+# Victor Design
 
-An evidence-led design skill for AI agents. It art-directs and delivers
-posters, key visuals, editorial graphics, product interfaces, and narrated
-decks by forcing one discipline: **understand the subject before choosing
-any visual move, and make every move state its cause.**
+An evidence-led design skill for AI agents — for **posters, social cards,
+product UI, and slide decks (PPT)**. It art-directs and delivers by forcing
+one discipline: **understand the subject before choosing any visual move, and
+make every move state its cause.**
 
 No visual decision is valid until it can name its subject cause, its viewer
 effect, and why this carrier is necessary. The skill rejects style labels,
 asset recipes, templates, and AI-generated spectacle as starting points —
 and it has the gates to prove the work actually happened.
+
+## Battle-tested
+
+Victor Design was evaluated head-to-head against seven world-class design
+skills in controlled blind races across four tracks — poster, social cards,
+product UI, and slides. It outperformed most of them, including a first-place
+finish by public vote. The full mechanism below is the direct result of that
+competition: every rule here was reverse-engineered from a real, recorded
+failure or a verified win.
+
+## The method
+
+1. **Material first, always.** Real workspace material and real evidence come
+   before any web search, and generation is a named, user-approved fallback —
+   never the default hero, never factual evidence.
+2. **Excavate the subject.** Person, tension, material world, and the
+   irreplaceable soul of the subject are established before composition,
+   typography, color, or imagery is chosen.
+3. **Match the design method to the subject.** A methodology or case becomes
+   a narrated deck; social content becomes a cover-plus-body card set; a
+   product task becomes a state flow; a poster is one canvas — and only when
+   the brief actually calls for one.
+4. **A hard anti-AI stance.** Refusal lists for spectacle and decorative
+   polish, a grep-enforced copy blacklist (negation-contrast templates,
+   false suspense, hollow parallelism, marketing abstractions), and a
+   positive craft model so "restrained" never collapses into "undesigned".
 
 ## Why this exists
 
@@ -49,7 +75,7 @@ SKILL.md
 │   │   ├── evidence-ledger.md    TEMPLATE — source weighting tiers A–D
 │   │   └── project-governance.md master/surface layers, P0–P3 severity
 │   ├── adapters/                 read exactly one per task
-│   │   ├── poster.md             single canvas / key visual + multi-page sets
+│   │   ├── poster.md             single canvas / key visual + social card sets
 │   │   ├── product-ui.md         state flows, confirmation friction, no dead ends
 │   │   └── slides.md             narrated decks: form lock, palette derivation,
 │   │                             pilot pages, type floors (≥56/23/16 px)

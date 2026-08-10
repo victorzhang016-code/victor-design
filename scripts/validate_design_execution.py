@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Victor Design System execution evidence, not visual taste."""
+"""Validate Victor Design execution evidence, not visual taste."""
 
 from __future__ import annotations
 
