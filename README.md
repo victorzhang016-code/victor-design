@@ -53,6 +53,27 @@ Design-capable agents fail in predictable ways:
 This skill is the accumulated counter-mechanism. Its rules were reverse-
 engineered from real, recorded failures — including its own.
 
+## Install
+
+Clone it into your agent's skills directory. Any agent that reads
+`SKILL.md`-style skills can then load it.
+
+**macOS / Linux (bash):**
+
+```bash
+git clone https://github.com/victorzhang016-code/victor-design.git ~/.agents/skills/victor-design
+```
+
+**Windows (PowerShell):**
+
+```powershell
+git clone https://github.com/victorzhang016-code/victor-design.git "$HOME\.agents\skills\victor-design"
+```
+
+Using a tool-specific skills directory instead? Point the same clone at it —
+e.g. `~/.claude/skills/victor-design` for Claude Code or
+`~/.codex/skills/victor-design` for Codex. The entry point is `SKILL.md`.
+
 ## Architecture
 
 `SKILL.md` is the runtime entry point. It routes through two mandatory
