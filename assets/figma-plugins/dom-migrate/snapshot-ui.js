@@ -173,11 +173,21 @@
       return { kind: "fixed", value: Math.max(number(token, 1), 0.1) };
     });
   }
-  function layoutFor(el, cs, childCount) {
+  function hasSingleInlineFlowLine(el, children) {
+    if (children.length < 2) return false;
+    const meaningful = Array.from(el.childNodes).filter((child) => child.nodeType === Node.TEXT_NODE ? Boolean(child.textContent?.trim()) : child.nodeType === Node.ELEMENT_NODE);
+    if (meaningful.length < 2) return false;
+    const everyChildIsInline = meaningful.every((child) => child.nodeType === Node.TEXT_NODE || getComputedStyle(child).display.startsWith("inline"));
+    if (!everyChildIsInline) return false;
+    const firstY = children[0].geometry.y;
+    return children.every((child) => Math.abs(child.geometry.y - firstY) <= 2);
+  }
+  function layoutFor(el, cs, children) {
     let mode = "none";
     if (cs.display === "flex" || cs.display === "inline-flex") mode = cs.flexDirection.startsWith("row") ? "horizontal" : "vertical";
     else if (cs.display === "grid" || cs.display === "inline-grid") mode = "grid";
-    else if (childCount > 0 && cs.display !== "inline") mode = "vertical";
+    else if (hasSingleInlineFlowLine(el, children)) mode = "horizontal";
+    else if (children.length > 0 && cs.display !== "inline") mode = "vertical";
     const value = {
       mode,
       gap: number(mode === "horizontal" ? cs.columnGap : cs.rowGap),
@@ -310,7 +320,7 @@
       kind,
       geometry: rect,
       visibleBounds: intersectRect(rect, clip),
-      layout: layoutFor(el, cs, children.length),
+      layout: layoutFor(el, cs, children),
       sizing: {
         horizontal: inferAxisSizing({ display: cs.display, flexGrow: cs.flexGrow, width: cs.width, position: cs.position }, "horizontal", authoredWidth, axisAnnotation(el, "width")),
         vertical: inferAxisSizing({ display: cs.display, flexGrow: cs.flexGrow, height: cs.height, position: cs.position }, "vertical", authoredHeight, axisAnnotation(el, "height")),
