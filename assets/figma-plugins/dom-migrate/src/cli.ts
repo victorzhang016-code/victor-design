@@ -137,7 +137,9 @@ export async function capture(options: CliOptions): Promise<DomMigratePackageV3>
   const rasterLayers: DomMigratePackageV3["compatibility"]["rasterLayers"] = [];
   let variables: DomMigratePackageV3["variables"] = { colors: {}, spacing: {}, radius: {} };
   try {
-    const context = await browser.newContext({ viewport: options.viewport, deviceScaleFactor: 1, colorScheme: "light", locale: "zh-CN" });
+    // Keep the CSS viewport deterministic while embedding 3× element assets.
+    // Figma can then retain sharp cropped imagery without rasterizing the UI.
+    const context = await browser.newContext({ viewport: options.viewport, deviceScaleFactor: 3, colorScheme: "light", locale: "zh-CN" });
     for (const state of options.states) {
       const page = await context.newPage();
       const url = targetUrl(options.input, state);
@@ -153,7 +155,7 @@ export async function capture(options: CliOptions): Promise<DomMigratePackageV3>
       const rasterAssetById = new Map<string, string>();
       walk(result.page.root, (node) => { if (node.raster) rasterAssetById.set(node.id, node.raster.assetKey); });
       const goldenName = `${state.replace(/[^a-z0-9_-]+/gi, "-")}.png`;
-      await page.screenshot({ path: path.join(goldenDirectory, goldenName), animations: "disabled" });
+      await page.screenshot({ path: path.join(goldenDirectory, goldenName), animations: "disabled", scale: "css" });
       result.page.golden = `goldens/${goldenName}`;
       pages.push(result.page);
       Object.assign(variables.colors, result.variables.colors);

@@ -4687,6 +4687,10 @@
     frame.resize(Math.max(node.geometry.width, 0.1), Math.max(node.geometry.height, 0.1));
     frame.layoutMode = layoutMode(node.layout.mode);
     if (frame.layoutMode !== "NONE") {
+      const primarySizing = frame.layoutMode === "HORIZONTAL" ? node.sizing.horizontal : node.sizing.vertical;
+      const counterSizing = frame.layoutMode === "HORIZONTAL" ? node.sizing.vertical : node.sizing.horizontal;
+      frame.primaryAxisSizingMode = primarySizing === "hug" ? "AUTO" : "FIXED";
+      frame.counterAxisSizingMode = counterSizing === "hug" ? "AUTO" : "FIXED";
       frame.paddingTop = node.layout.padding[0];
       frame.paddingRight = node.layout.padding[1];
       frame.paddingBottom = node.layout.padding[2];

@@ -104,7 +104,8 @@ Important invariants:
 ## Effects and images
 
 Image elements and leaf CSS background images are captured at their exact
-visible crop and become replaceable Figma image fills. Inline SVG stays vector.
+visible crop at 3× device resolution and become replaceable Figma image fills.
+Golden screenshots remain at CSS resolution. Inline SVG stays vector.
 
 Use `data-figma-rasterize` for an intentionally minimal effect layer. Gradients,
 filters, blends, masks, and pseudo-elements that cannot be represented natively
