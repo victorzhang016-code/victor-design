@@ -35,4 +35,16 @@ describe("Figma layout planner", () => {
     expect(planned.children[0].name).toBe("Layout / Center Sheet / Grabber");
     expect(planned.children[0].children[0].name).toBe("Sheet / Grabber");
   });
+
+  it("fixes a HUG parent axis when a child fills that axis", () => {
+    const planned = planFigmaNode(node({
+      name: "Field",
+      layout: { mode: "vertical", gap: 0, padding: [0, 0, 0, 0], justify: "start", align: "start", wrap: false },
+      sizing: { horizontal: "hug", vertical: "hug", grow: 0 },
+      children: [node({ name: "Value", kind: "text", sizing: { horizontal: "fill", vertical: "hug", grow: 0 } })]
+    }), { parentLayout: "vertical", parentFixed: { horizontal: false, vertical: false } });
+    expect(planned.layoutSizingHorizontal).toBe("FIXED");
+    expect(planned.sizing.horizontal).toBe("fixed");
+    expect(planned.children[0].layoutSizingHorizontal).toBe("FILL");
+  });
 });

@@ -4264,8 +4264,10 @@
     };
   }
   function planFigmaNode(node, context) {
+    const sizing = { ...node.sizing };
     const self = {
       ...node,
+      sizing,
       layoutSizingHorizontal: mapSizing(node.sizing.horizontal),
       layoutSizingVertical: mapSizing(node.sizing.vertical),
       children: []
@@ -4287,6 +4289,14 @@
       const margin = child.margins || [0, 0, 0, 0];
       if (!child.autoMargin?.top && margin.some((value) => value > 0) && node.layout.mode !== "none") finalChild = spacingWrapper(finalChild, node, margin);
       self.children.push(finalChild);
+    }
+    for (const axis of ["horizontal", "vertical"]) {
+      if (self.sizing[axis] !== "hug" || node.layout.mode === "none") continue;
+      const conflict = self.children.some((child) => child.position !== "absolute" && (child.sizing[axis] === "fill" || child.sizing.grow > 0));
+      if (conflict) {
+        self.sizing[axis] = "fixed";
+        self[`layoutSizing${axis === "horizontal" ? "Horizontal" : "Vertical"}`] = "FIXED";
+      }
     }
     return self;
   }
@@ -4869,6 +4879,7 @@
       frame.x = x;
       frame.y = origin.y;
       await populateContainer(frame, planned, context);
+      frame.name = `DOM Migrate v3 / ${pageSpec.name}`;
       frame.resize(pageSpec.viewport.width, pageSpec.viewport.height);
       frame.layoutSizingHorizontal = "FIXED";
       frame.layoutSizingVertical = "FIXED";

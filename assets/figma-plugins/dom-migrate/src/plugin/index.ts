@@ -430,6 +430,7 @@ async function buildPackage(pkg: DomMigratePackageV3, fonts: FontMap, pageName: 
     frame.name = `DOM Migrate v3 / ${pageSpec.name}`;
     frame.x = x; frame.y = origin.y;
     await populateContainer(frame, planned, context);
+    frame.name = `DOM Migrate v3 / ${pageSpec.name}`;
     frame.resize(pageSpec.viewport.width, pageSpec.viewport.height);
     frame.layoutSizingHorizontal = "FIXED"; frame.layoutSizingVertical = "FIXED";
     frame.clipsContent = true;

@@ -74,8 +74,10 @@ function spacingWrapper(child: PlannedNode, parent: IrNode, margins: [number, nu
 }
 
 export function planFigmaNode(node: IrNode, context: PlanContext): PlannedNode {
+  const sizing = { ...node.sizing };
   const self: PlannedNode = {
     ...node,
+    sizing,
     layoutSizingHorizontal: mapSizing(node.sizing.horizontal),
     layoutSizingVertical: mapSizing(node.sizing.vertical),
     children: []
@@ -97,6 +99,17 @@ export function planFigmaNode(node: IrNode, context: PlanContext): PlannedNode {
     const margin = child.margins || [0, 0, 0, 0];
     if (!child.autoMargin?.top && margin.some((value) => value > 0) && node.layout.mode !== "none") finalChild = spacingWrapper(finalChild, node, margin);
     self.children.push(finalChild);
+  }
+  // Figma cannot represent a HUG parent axis that contains a Fill/Grow child
+  // on that same axis. Keep the browser's measured parent size and make that
+  // axis FIXED; the child can then legally continue to Fill.
+  for (const axis of ["horizontal", "vertical"] as const) {
+    if (self.sizing[axis] !== "hug" || node.layout.mode === "none") continue;
+    const conflict = self.children.some((child) => child.position !== "absolute" && (child.sizing[axis] === "fill" || child.sizing.grow > 0));
+    if (conflict) {
+      self.sizing[axis] = "fixed";
+      self[`layoutSizing${axis === "horizontal" ? "Horizontal" : "Vertical"}`] = "FIXED";
+    }
   }
   return self;
 }
