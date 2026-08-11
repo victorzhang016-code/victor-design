@@ -139,6 +139,24 @@ Routing details and precedence live in `references/module-index.md`.
   declared spacing scale, density budget, closing beat, plus full-size /
   thumbnail / copy-hidden / image-hidden views.
 
+## Delivery
+
+Every category ships a native editable deliverable, not just a render:
+
+| Form | Static export | Editable | Interactive |
+| --- | --- | --- | --- |
+| Poster / key visual | PNG | Figma frames | — |
+| Social graphic-text set | PNG per page | Figma, one frame per page | — |
+| Slides / deck | PNG per page | Figma or PPTX (user's pick) | interactive HTML, restrained motion |
+| Product UI | PNG per state | Figma, one frame per state | interactive HTML, full state flow |
+
+The Figma route is a **migration, not a rebuild**: the bundled
+`assets/figma-plugins/dom-migrate` plugin snapshots the approved HTML master
+in a browser and creates native Figma frames from the DOM — text nodes with
+styled ranges, replaceable image fills, shapes with fills and strokes. Free,
+offline, no subscription. PPTX delivery rebuilds natively via python-pptx.
+Pipelines: `references/operations/delivery-implementations.md`.
+
 ## First use: fill the evidence layer
 
 Two files ship as templates and are empty on purpose:

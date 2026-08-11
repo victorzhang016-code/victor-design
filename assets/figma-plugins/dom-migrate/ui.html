@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: -apple-system, "Segoe UI", sans-serif; margin: 16px; font-size: 13px; color: #222; }
+  h2 { font-size: 14px; margin: 0 0 12px; }
+  input[type=file] { width: 100%; margin-bottom: 12px; }
+  button { width: 100%; padding: 8px; background: #1B1D1F; color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+  button:disabled { opacity: .4; cursor: default; }
+  #status { margin-top: 12px; color: #666; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+  <h2>DOM Migrate — JSON 导入</h2>
+  <input type="file" id="file" accept=".json">
+  <button id="go" disabled>构建 frame</button>
+  <div id="status"></div>
+  <script>
+    let pkg = null;
+    const status = (t) => document.getElementById("status").textContent = t;
+    document.getElementById("file").addEventListener("change", (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          pkg = JSON.parse(reader.result);
+          document.getElementById("go").disabled = false;
+          status(`已加载：${pkg.pages.length} 页，${Object.keys(pkg.images).length} 张图`);
+        } catch (err) { status("JSON 解析失败：" + err.message); }
+      };
+      reader.readAsText(f);
+    });
+    document.getElementById("go").addEventListener("click", () => {
+      document.getElementById("go").disabled = true;
+      parent.postMessage({ pluginMessage: { type: "build", pkg } }, "*");
+    });
+    onmessage = (e) => {
+      const m = e.data.pluginMessage;
+      if (!m) return;
+      if (m.type === "status" || m.type === "done") status(m.text);
+      if (m.type === "error") { status("错误：" + m.text); document.getElementById("go").disabled = false; }
+      if (m.type === "done") document.getElementById("go").disabled = false;
+    };
+  </script>
+</body>
+</html>

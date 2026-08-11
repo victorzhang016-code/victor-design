@@ -84,8 +84,9 @@ confirmed task, and name any exception.
    blocking rules, not documentation to complete after making work.
 4. Read `operations/production-toolkit.md` only for a released production need;
    read `operations/review.md` before calling a render approved or complete.
-   For editable poster delivery, also read `operations/figma-fidelity.md`
-   before any Figma translation.
+   For any editable delivery, read `operations/delivery-implementations.md`
+   for the build pipeline; for Figma translation, also read
+   `operations/figma-fidelity.md` first.
 5. Load `optional/*` only for its named need.
 
 ## Non-negotiable defaults
@@ -117,10 +118,12 @@ confirmed task, and name any exception.
 - Never batch-produce a multi-page deliverable before user-approved pilot
   pages (cover, densest evidence page, most unusual page). A page below the
   recorded density target is unfinished, not restrained.
-- For posters, use HTML to judge the master. Obtain explicit user approval of
-  the rendered master before Figma work. Unless the user explicitly accepts a
-  flattened-only result, deliver the approved poster as native editable Figma
-  nodes as well as the render.
+- Use HTML to judge masters and obtain explicit user approval of the rendered
+  master before any translation work. Unless the user explicitly accepts a
+  flattened-only result, every category ships a native editable deliverable:
+  posters and graphic-text sets as editable Figma frames; slides as Figma or
+  PPTX, chosen by the user per task; slides and product UI additionally ship
+  an interactive HTML with restrained functional motion.
 - Treat the approved render as Gate 3's golden source. Inventory custom fonts,
   CSS masks/blends/repeating textures, and perspective composites before
   translation; these are fidelity risks, not acceptable silent approximations.

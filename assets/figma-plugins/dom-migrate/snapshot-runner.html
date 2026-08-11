@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!-- dom-migrate snapshot runner.
+     Usage: copy next to the master HTML, replace MASTER.html below, then:
+     chrome --headless=new --allow-file-access-from-files --virtual-time-budget=15000 --dump-dom snapshot-runner.html > dump.html
+     Extract the <pre id="out"> JSON, then run package.py. -->
+<html>
+<head><meta charset="UTF-8"><style>body{margin:0}iframe{border:0;display:block}</style></head>
+<body>
+<iframe id="f" src="MASTER.html" width="1300" height="1700"></iframe>
+<pre id="out"></pre>
+<script>
+const f = document.getElementById("f");
+f.addEventListener("load", async () => {
+  const win = f.contentWindow;
+  const code = await fetch("snapshot.js").then(r => r.text());
+  win.eval(code);
+  const pages = await win.domMigrateSnapshotAll();
+  document.getElementById("out").textContent = JSON.stringify(pages);
+  document.title = "SNAPSHOT-DONE";
+}, { once: true });
+</script>
+</body>
+</html>

@@ -22,6 +22,7 @@
 | Need | Load | Boundary |
 | --- | --- | --- |
 | Asset sourcing, cutout, generation, SVG, perspective, or editable Figma | `operations/production-toolkit.md` | Use only after Gate 1 releases the named role. |
+| Concrete Figma/PPTX/interactive-HTML build pipelines | `operations/delivery-implementations.md` | Load at Gate 3, after the master is approved. |
 | Editable poster translation or correction of font/material/perspective drift | `operations/figma-fidelity.md` | Treat the approved render as the golden source; translation is not redesign. |
 | Any master review or completion claim | `operations/review.md` | Review is a visual veto; scripts are supporting evidence only. |
 | Revision-led work or a user-adjusted reference | `optional/reference-synthesis.md` | Preserve declared character while correcting declared flaws. |

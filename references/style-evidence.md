@@ -87,8 +87,15 @@ page carrying none is unfinished. For the positive model, run
 `workflow/density-and-care.md`.
 
 - AI hero spectacle, floating-object collage, or mood before subject.
+- Genre costumes as spectacle: dark neon tech-arena fields, scanline or static
+  textures, oversized poster type, and glow accents applied because they read
+  as "designed". A field is chosen from the subject's material, never from a
+  genre.
 - Decorative left color rails, badges, dots, slashes, fake metadata, numbered
   sequences, or tiny editorial labels that exist only to create polish.
+- Presentation apparatus that must be decoded before the content: fake archival
+  labels, stamps, counters, ornamental frames, or connector systems the reader
+  has to interpret before they can read the page.
 - Default rounded-card/bento structures, technical costume, or CSS imitation of
   a complex physical device when credible source material exists.
 - Excessive bands, competing modules, color zoning without a semantic system,

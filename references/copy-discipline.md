@@ -18,6 +18,14 @@ caption, action). If a sentence only makes the work sound designed, delete it.
   dates, measurements, and source lines set as crafted small type are core
   project voice. The blacklist targets invented metadata and decorative
   microcopy — text with no source. Never delete a true value to look clean.
+- Captions and callouts are a factual layer: name, role, sourced judgment.
+  A caption that decorates instead of informing is a defect.
+- Structural frames come from the source content. Comparisons, rankings,
+  versus-pairings, and winner/loser emphasis may appear only when the source
+  states them; never invent one for drama.
+- User-supplied corrections are applied verbatim. Every sentence in a
+  deliverable is either approved source copy or explicitly flagged as newly
+  drafted, so the user can veto it.
 
 ## Blacklist — templated AI-flavor rhetoric
 

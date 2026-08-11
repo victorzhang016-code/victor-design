@@ -103,5 +103,15 @@ orphaned, overtracked, or low-contrast text.
 5. Verify page count, no clipping/scrollbars, conclusion-first reading, source
    traceability, and a designed closing beat before release.
 
+Delivery (per the matrix in `operations/execution.md`):
+
+- The editable format — Figma or PPTX — is chosen by the user and recorded at
+  Gate 1. The skill must be capable of both; PPTX means native editable
+  slides, not pasted renders.
+- Ship an interactive HTML version: keyboard/click navigation through the
+  declared pages, with page transitions and content entrances that follow the
+  motion discipline (functional only, 150–400 ms, reduced-motion safe).
+- The per-page PNGs ship regardless; interactive HTML never substitutes.
+
 Use `operations/review.md` for the cross-page veto. A final deck must work as a
 story and as six individual images in a side-by-side or carousel review.

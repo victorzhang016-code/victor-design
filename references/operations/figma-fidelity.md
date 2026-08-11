@@ -17,6 +17,11 @@ Treat Figma delivery as translation of an approved golden source, not a redesign
 opportunity. Structural editability and visual fidelity are separate
 requirements; satisfy both deliberately.
 
+This checklist applies to single-canvas posters and to multi-frame work alike —
+graphic-text sets, decks, and UI state flows. Multi-frame translation means one
+frame per page or state, and every frame gets its own equal-scale comparison
+against its approved render.
+
 Before any write, load the required Figma skills and inspect the target file.
 Work incrementally and capture a render after every high-risk translation.
 

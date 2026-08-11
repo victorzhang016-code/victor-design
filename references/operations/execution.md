@@ -47,6 +47,12 @@ Record all of the following:
   field/palette and one rejected type voice. Earlier work cannot fill
   either column by itself;
 - selected `style-evidence.md` rows and any exception;
+- **fact provenance**: for every fact driving a design decision (brand
+  colors, names, versions, figures), record its level — user-confirmed,
+  file-recorded, or system-inferred. An inferred fact is marked as an
+  assumption and never presented as the user's choice;
+- **asset version**: when several versions of a source asset exist, record
+  which is canonical and why before compositing;
 - contact sheet path and `ASSET_LEDGER.md` path;
 - primary/hero source, source status, and each selected asset's role;
 - the local → licensed web → unmet role → generation decision trail.
@@ -115,21 +121,52 @@ render.
 
 ## Gate 3 — native editable delivery
 
-Unless the user explicitly accepts a flattened-only outcome, a final poster
-requires editable Figma delivery after Gate 2 approval.
+Unless the user explicitly accepts a flattened-only outcome, every category
+ships a native editable deliverable after Gate 2 approval. In a controlled
+unattended run, the controller decides whether this gate is waived and the
+waiver is recorded.
+
+### Delivery matrix
+
+| Form | Master | Static export | Editable delivery | Interactive delivery |
+| --- | --- | --- | --- | --- |
+| Poster / key visual | HTML | 1 PNG | native editable Figma nodes | — |
+| Social graphic-text set | HTML | 1 PNG per page | Figma: one frame per page, native text and shapes, images as replaceable fills | — |
+| Slides / deck | HTML | 1 PNG per page | Figma **or** PPTX — the user picks per task at Gate 1; the skill must be capable of both | interactive HTML: keyboard/click navigation with restrained functional motion |
+| Product UI | HTML | 1 PNG per state | Figma: one frame per state | interactive HTML: every declared state click-reachable, with motion feedback |
+
+### Motion discipline (interactive HTML)
+
+- Motion serves exactly two functions: feedback on a state change, and
+  guidance of reading order.
+- Durations 150–400 ms with one shared easing; no autoplay spectacle (floating
+  objects, particles, looping animation).
+- Respect `prefers-reduced-motion`; content stays complete with motion off.
+- Interactive HTML never replaces the static export: one PNG per page/state
+  still ships in `deliverables/`.
+
+### Editable translation
 
 Use the Figma integration only after reading its required skills. Create or
 target a Figma Design file, then rebuild the approved master with named native
-text, fields, masks, rules, and structural geometry. Keep raster images as
-replaceable fills; retain source images and four-point parameters for a
-perspective composite.
+text, fields, masks, rules, and structural geometry — one frame per page or
+state for multi-page/multi-state work. Keep raster images as replaceable
+fills; retain source images and four-point parameters for a perspective
+composite. For PPTX delivery, rebuild the approved pages as native slides with
+editable text, shapes, and image placeholders; an exported screenshot per
+slide is not editable delivery.
 
 Before reconstruction, inventory font, material-effect, crop, blend, mask, and
 perspective risks using `operations/figma-fidelity.md`. Record the Figma URL,
 primary frame/node, node audit, and an equal-scale render comparison to the
-approved HTML master. A screenshot pasted into Figma is not editable delivery.
-An unavailable custom font, lost CSS texture, or rectangular screen insertion
-is not an acceptable silent approximation.
+approved HTML master — per frame for multi-page work. A screenshot pasted into
+Figma is not editable delivery. An unavailable custom font, lost CSS texture,
+or rectangular screen insertion is not an acceptable silent approximation.
+
+Record in the Gate 3 fields: the chosen editable format (figma/pptx), the
+interactive HTML path, and a motion inventory (what animates, its function,
+its duration). For the concrete build pipelines, read
+`operations/delivery-implementations.md`.
 
 ## Required records
 
@@ -157,10 +194,13 @@ Visual review:
 
 ## Gate 3 — Delivery
 Decision:
+Editable format:
 Editable Figma file:
 Primary frame/node:
 Figma node audit:
 Figma comparison:
+Interactive HTML:
+Motion inventory:
 ```
 
 `ASSET_LEDGER.md` must list each selected asset with role, local path or URL,

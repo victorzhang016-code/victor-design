@@ -93,7 +93,9 @@ not taste calls:
 
 - **Overflow measurement**: sum the fixed content heights against the canvas's
   usable height. Overflow is a P0 even when a flex layout hides it by
-  collapsing gaps.
+  collapsing gaps. For images shown at native aspect ratio, compute each
+  column's total height from its assigned width *before* layout; an excess
+  over usable height is a P0 whether or not it is visibly clipped.
 - **Bottom-edge inspection at native resolution**: crop and view the bottom
   strip of every page or screen. A clipped footer, caption, or indicator is a
   P0.
@@ -105,6 +107,13 @@ not taste calls:
   event) and dead zones (blank regions with no compositional role) both fail.
 - **Closing beat**: any multi-page or multi-state work must end on a designed
   closing — a page or state that resolves the reading path — not simply stop.
+- **Apparatus bypass test**: a framing device (stamp, counter, fake label,
+  ornamental frame) must be removable without loss of meaning. An apparatus
+  the reader must decode before reading the content is a P1.
+- **Invented-frame veto**: a comparison, ranking, versus-pairing, or
+  winner/loser emphasis that the source content does not state is a P1.
+- **Caption check**: a caption with no name, role, or sourced fact is
+  decoration — P2.
 - **Persona-imagery match**: every person, avatar, or scene image must match
   the context the copy establishes (setting, activity, mood). State in one
   line why this figure is the right one before placing it; a mismatch

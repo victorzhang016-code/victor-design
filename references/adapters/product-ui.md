@@ -49,3 +49,15 @@ new person can identify what happened, what the system knows, what is uncertain,
 and what to do next. Run the authored review first, then deterministic
 accessibility and resilience checks, then reconcile without neutralizing the
 visual world.
+
+## Delivery
+
+Per the matrix in `operations/execution.md`:
+
+- Ship an interactive HTML build in which every declared state — including
+  waiting, empty, and error states — is reachable by click or key, and every
+  state transition carries motion feedback that follows the shared motion
+  discipline (functional only, 150–400 ms, reduced-motion safe).
+- Ship one PNG per state for review, plus an editable Figma file with one
+  frame per state: native text and components, replaceable image fills.
+- A single static screen recording or a flattened mockup is not delivery.

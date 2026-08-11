@@ -52,13 +52,20 @@ has merely been split, cropped, or repeated as a deck.
 
 ## Gate 3 — Delivery
 
-Translate only the approved master. For editable poster delivery, preserve named
+Translate only the approved master. Every category ships its editable form per
+the delivery matrix in `operations/execution.md`: posters and graphic-text
+sets as editable Figma frames, slides as Figma or PPTX per the user's recorded
+Gate 1 choice, and slides/UI additionally as interactive HTML. For editable
+poster delivery, preserve named
 native Figma text, fields, masks, rules, and geometry; keep images replaceable
 and record projective source/parameters.
 
-Release only when a Figma render has been compared at equal scale with the
+Release only when a Figma/PPTX render has been compared at equal scale with the
 approved HTML master and high-risk title/material/perspective crops have been
 checked. Block flattened editable claims, missing Figma URL/node audit,
 unapproved font substitution, font/crop drift, lost material masks or blends,
 false perspective, visible recovery layers, missing evidence, or technical
-failures. Any user rejection reopens Gate 3.
+failures. Also block: a slides/UI delivery without its interactive HTML;
+slides without a recorded editable-format choice; motion with no function or
+no reduced-motion fallback; a multi-page or multi-state Figma file reduced to
+a single frame. Any user rejection reopens Gate 3.

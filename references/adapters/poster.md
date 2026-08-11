@@ -166,6 +166,10 @@ After approval, read `operations/figma-fidelity.md` and translate only the
 approved master. Keep images replaceable, preserve custom-font and perspective
 sources, and compare the Figma render to the approved HTML at equal scale.
 
+A graphic-text set ships one Figma frame per page: native text layers and
+shapes, images as replaceable fills, each frame compared to its approved page
+render at equal scale. One flattened image per page is not editable delivery.
+
 ## Multi-page sets
 
 When the task is a social graphic-text set rather than a single canvas, the
@@ -175,3 +179,19 @@ numbering). Each page carries one idea with its own evidence; the last page is
 a designed closing beat, not a leftover. The single-canvas rules above apply
 to every page, and the set as a whole must still pass the density and closing
 gates in `operations/review.md`.
+
+A graphic-text set is an **article flow**, not a series of poster compositions:
+
+- Text runs full and continuous in source order. A page breaks when it is
+  full or at an earned beat — never to manufacture rhythm, never one stray
+  sentence per page.
+- Images enter as illustrations at the narrative points that need them. Show
+  them at native aspect ratio whenever the grid allows; crop only with a
+  recorded composition reason. Comparison evidence shows the full field —
+  strong and weak entries alike, since the weak ones carry the argument.
+- Establish the protagonist by position and scale, not by badges, frames, or
+  winner labels.
+- Captions carry facts (name, role, sourced judgment), never flourish.
+
+These rules apply to any multi-page editorial deliverable, not only social
+sets.

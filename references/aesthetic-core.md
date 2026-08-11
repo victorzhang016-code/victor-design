@@ -78,7 +78,10 @@ replace material contact with a line joining separate pictures.
 ## 4. Type, color, and refusal
 
 Choose type by voice, language support, reading distance, and role. Test the
-actual title, proposition, and necessary body copy before layout. Character
+actual title, proposition, and necessary body copy before layout. Declare a
+small fixed type ladder before composing — a handful of steps with assigned
+roles, used identically on every page or screen; per-page sizes invented on
+the fly are a defect. Character
 comes first from hierarchy, rhythm, crop, and alignment; a typeface cannot make
 an unrelated subject feel designed.
 

@@ -24,6 +24,10 @@ A generated or found image is raw material. Before placing it, declare whether
 it is factual evidence, a supporting carrier, a material field, or secondary
 proof. Generation may supply only an approved interpretive role.
 
+Show evidence and illustration images at native aspect ratio by default; crop
+only with a recorded composition reason. When several versions of an asset
+exist, confirm the canonical version before compositing.
+
 For a supporting carrier:
 
 1. isolate or crop the useful physical fragment;
