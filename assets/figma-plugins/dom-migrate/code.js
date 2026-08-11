@@ -169,7 +169,16 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
   } else {
     f.fills = node.fill ? [solid(node.fill.color, node.fill.opacity)] : [];
   }
-  if (node.stroke) { f.strokes = [solid(node.stroke.color)]; f.strokeWeight = node.stroke.weight; }
+  if (node.stroke) {
+    f.strokes = [solid(node.stroke.color)];
+    f.strokeWeight = node.stroke.weight;
+    if (node.borderSides) {
+      f.strokeTopWeight = node.borderSides[0] || 0;
+      f.strokeRightWeight = node.borderSides[1] || 0;
+      f.strokeBottomWeight = node.borderSides[2] || 0;
+      f.strokeLeftWeight = node.borderSides[3] || 0;
+    }
+  }
   if (node.radius) f.cornerRadius = node.radius;
   if (node.shadow) {
     f.effects = [{ type: "DROP_SHADOW", color: { r: node.shadow.color[0], g: node.shadow.color[1], b: node.shadow.color[2], a: node.shadow.opacity },
@@ -190,17 +199,32 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
     f.resize(node.fixW || node.size.w, node.fixH || node.size.h);
   }
   let prevSiblingGeom = null;
+  let flowBroken = false;
   for (const c of node.children || []) {
     const child = await buildTreeNode(c, hash, components, counts, inComponent || makeComponent);
     f.appendChild(child);
+    if (c.marginTopNeg && c.pos && f.layoutMode !== "NONE") {
+      // negative margins have no auto-layout equivalent — pin exactly
+      child.layoutPositioning = "ABSOLUTE";
+      child.x = c.pos.x; child.y = c.pos.y;
+      flowBroken = true;
+      continue;
+    }
+    if (flowBroken && c.pos && f.layoutMode !== "NONE") {
+      child.layoutPositioning = "ABSOLUTE";
+      child.x = c.pos.x; child.y = c.pos.y;
+      continue;
+    }
     if (c.absolute) {
       // ABSOLUTE positioning only exists inside auto-layout parents;
       // in a NONE parent a plain x/y is already absolute
       if (f.layoutMode !== "NONE") child.layoutPositioning = "ABSOLUTE";
       child.x = c.absolute.x; child.y = c.absolute.y;
     } else if (f.layoutMode !== "NONE") {
-      if (c.pos) {
-        // exact gap from the previous sibling (or padding edge) in real pixels
+      if (c.pos && (L.primary || "MIN") === "MIN") {
+        // exact gap from the previous sibling (or padding edge) in real pixels —
+        // only when the container packs from the start; CENTER/MAX/SPACE_BETWEEN
+        // compute positions themselves
         const prev = prevSiblingGeom;
         const padT = (L.pad || [0, 0, 0, 0])[0], padL = (L.pad || [0, 0, 0, 0])[3];
         let gap;

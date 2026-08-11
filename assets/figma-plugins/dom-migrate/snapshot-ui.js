@@ -155,6 +155,10 @@ window.domMigrateSnapshotUI = async function (root) {
     const mf = marginFlags(el);
     if (mf.mtAuto) out.marginTopAuto = true;
     if (mf.mxAuto) out.centerSelf = true;
+    const mTopPx = parseFloat(cs.marginTop) || 0;
+    if (mTopPx < -0.5) out.marginTopNeg = px(mTopPx);
+    const bws = [cs.borderTopWidth, cs.borderRightWidth, cs.borderBottomWidth, cs.borderLeftWidth].map(v => parseFloat(v) || 0);
+    if (bws.some(w => w > 0) && bws.filter(w => w > 0).length < 4) out.borderSides = bws.map(px);
     if (mf.fixW) out.fixW = mf.fixW;
     if (mf.fixH) out.fixH = mf.fixH;
     if (cs.alignSelf && cs.alignSelf !== "auto" && cs.alignSelf !== "stretch") out.alignSelf = mapAlign(cs.alignSelf);
