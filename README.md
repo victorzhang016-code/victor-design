@@ -74,6 +74,21 @@ Using a tool-specific skills directory instead? Point the same clone at it —
 e.g. `~/.claude/skills/victor-design` for Claude Code or
 `~/.codex/skills/victor-design` for Codex. The entry point is `SKILL.md`.
 
+## SkillHub release
+
+The GitHub checkout contains development fixtures and Figma build metadata
+that should not be published as part of the SkillHub bundle. Prepare a clean
+source directory first, then give that directory to `redskillhub-upload`:
+
+```bash
+python scripts/prepare_skillhub_release.py --output /tmp/victor-design-skillhub
+redskillhub-upload publish /tmp/victor-design-skillhub --dry-run --agent \
+  --source original --tag "效率工具,内容创作"
+```
+
+The CLI remains responsible for the final validation, archive generation,
+upload, and submission confirmation.
+
 ## Architecture
 
 `SKILL.md` is the runtime entry point. It routes through two mandatory

@@ -1,6 +1,6 @@
 ---
-name: victor-design-system
-description: Art-direct and deliver high-quality posters, key visuals, editorial graphics, AI product interfaces, and cross-medium visual systems through Victor Design's evidence-led design language. Use when a task needs subject understanding translated into authored canvas structure, typography, content hierarchy, color, processed imagery, material texture, HTML-first poster production, high-fidelity editable Figma delivery, or critique that rejects generic AI image-led design and exhibition-board thinking without flattening authored character.
+name: victor-design
+description: 视觉设计与 Figma 交付工作流：从任务分析、字体与版式，到材质处理、HTML 海报和可编辑 UI 迁移。
 ---
 
 # Victor Design
@@ -77,17 +77,17 @@ confirmed task, and name any exception.
    Conduct the design dialogue through the native structured prompt when
    callable. Do not infer Gate 1 approval from the request.
 2. Classify the deliverable form before choosing a visual direction, then read
-   exactly one adapter: `adapters/poster.md` for a user-specified single canvas,
-   `adapters/product-ui.md` for product surfaces, or `adapters/slides.md` for
+   exactly one adapter: `references/adapters/poster.md` for a user-specified single canvas,
+   `references/adapters/product-ui.md` for product surfaces, or `references/adapters/slides.md` for
    cases, methodologies, tutorials, pitches, and narrated presentations.
-3. Read `operations/execution.md` and `operations/three-gates.md`. They are
+3. Read `references/operations/execution.md` and `references/operations/three-gates.md`. They are
    blocking rules, not documentation to complete after making work.
-4. Read `operations/production-toolkit.md` only for a released production need;
-   read `operations/review.md` before calling a render approved or complete.
-   For any editable delivery, read `operations/delivery-implementations.md`
+4. Read `references/operations/production-toolkit.md` only for a released production need;
+   read `references/operations/review.md` before calling a render approved or complete.
+   For any editable delivery, read `references/operations/delivery-implementations.md`
    for the build pipeline; for Figma translation, also read
-   `operations/figma-fidelity.md` first.
-5. Load `optional/*` only for its named need.
+   `references/operations/figma-fidelity.md` first.
+5. Load `references/optional/*` only for its named need.
 
 ## Non-negotiable defaults
 
