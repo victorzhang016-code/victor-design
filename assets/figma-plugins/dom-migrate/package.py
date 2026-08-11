@@ -93,8 +93,8 @@ def main():
         src = n.get("src")
         if n.get("fit") == "cover" and n.get("size") and src and not src.startswith("data:"):
             n.pop("src", None)
-            n["imageKey"] = intern(cover_crop(resolve(src, args.base), n["size"]["w"], n["size"]["h"], n.get("pos")))
-            n.pop("fit", None); n.pop("pos", None)
+            n["imageKey"] = intern(cover_crop(resolve(src, args.base), n["size"]["w"], n["size"]["h"], n.get("objPos")))
+            n.pop("fit", None); n.pop("objPos", None)
             if n.get("type") == "bgimage": n["type"] = "image"
             return
         src = n.pop("src", None)

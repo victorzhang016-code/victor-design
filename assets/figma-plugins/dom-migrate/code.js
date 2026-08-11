@@ -159,7 +159,8 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
     f.primaryAxisAlignItems = ALIGN_MAP[L.primary] || "MIN";
     f.counterAxisAlignItems = L.counter === "STRETCH" ? "MIN" : (ALIGN_MAP[L.counter] || "MIN");
     if (L.counter === "STRETCH") f.counterAxisAlignItems = "MIN";
-    if (L.gap) f.itemSpacing = L.gap;
+    // exact mode: per-child spacers carry the real gaps, itemSpacing stays 0
+    f.itemSpacing = 0;
   }
   const pad = L.pad || [0, 0, 0, 0];
   f.paddingTop = pad[0]; f.paddingRight = pad[1]; f.paddingBottom = pad[2]; f.paddingLeft = pad[3];
@@ -176,6 +177,7 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
   }
   f.clipsContent = node.clips !== false && L.mode === "NONE" ? true : !!node.clips;
   if (L.mode === "NONE" && node.size) f.resize(node.size.w, node.size.h);
+  let prevSiblingGeom = null;
   for (const c of node.children || []) {
     const child = await buildTreeNode(c, hash, components, counts, inComponent || makeComponent);
     f.appendChild(child);
@@ -185,23 +187,42 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
       if (f.layoutMode !== "NONE") child.layoutPositioning = "ABSOLUTE";
       child.x = c.absolute.x; child.y = c.absolute.y;
     } else if (f.layoutMode !== "NONE") {
-      if (c.marginTopAuto && f.layoutMode === "VERTICAL") {
-        // margin-top:auto => flexible spacer pushes this child to the end
+      if (c.pos) {
+        // exact gap from the previous sibling (or padding edge) in real pixels
+        const prev = prevSiblingGeom;
+        const padT = (L.pad || [0, 0, 0, 0])[0], padL = (L.pad || [0, 0, 0, 0])[3];
+        let gap;
+        if (f.layoutMode === "VERTICAL") {
+          gap = c.pos.y - (prev ? prev.bottom : padT);
+          if (gap > 0.5) {
+            const sp = figma.createRectangle();
+            sp.name = "spacer"; sp.fills = [];
+            sp.resize(1, gap);
+            f.insertChild(f.children.indexOf(child), sp);
+          }
+        } else {
+          gap = c.pos.x - (prev ? prev.right : padL);
+          if (gap > 0.5) {
+            const sp = figma.createRectangle();
+            sp.name = "spacer"; sp.fills = [];
+            sp.resize(gap, 1);
+            f.insertChild(f.children.indexOf(child), sp);
+          }
+        }
+        prevSiblingGeom = c.absolute ? prevSiblingGeom : { bottom: c.pos.y + (c.size ? c.size.h : 0), right: c.pos.x + (c.size ? c.size.w : 0) };
+      } else if (c.marginTopAuto && f.layoutMode === "VERTICAL") {
         const g = figma.createFrame();
         g.name = "spacer-grow"; g.fills = [];
         f.insertChild(f.children.indexOf(child), g);
         g.layoutGrow = 1;
       }
-      if (c.marginTop) {
-        const sp = figma.createRectangle();
-        sp.name = "spacer"; sp.fills = [];
-        sp.resize(1, c.marginTop);
-        f.insertChild(f.children.indexOf(child), sp);
-      }
       if (c.layoutGrow) child.layoutGrow = c.layoutGrow;
       if (c.centerSelf) child.layoutAlign = "CENTER";
       else if (f.layoutMode === "VERTICAL" && L.stretchChildren !== false && !c.chip && (child.type === "TEXT" || child.type === "FRAME" || child.type === "COMPONENT" || child.type === "INSTANCE"))
         child.layoutAlign = "STRETCH";
+    } else if (c.pos && f.layoutMode === "NONE") {
+      // NONE parent: exact placement
+      child.x = c.pos.x; child.y = c.pos.y;
     }
   }
   if (node.absolute && node.size) {

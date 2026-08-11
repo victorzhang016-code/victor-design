@@ -120,6 +120,7 @@ window.domMigrateSnapshotUI = async function (root) {
 
     const out = {};
     out.size = { w: px(r.width), h: px(r.height) };
+    out.pos = { x: px(r.left - parentRect.left), y: px(r.top - parentRect.top) };
     if (cs.position === "absolute" || cs.position === "fixed") {
       out.absolute = { x: px(r.left - parentRect.left), y: px(r.top - parentRect.top) };
     }
@@ -133,7 +134,7 @@ window.domMigrateSnapshotUI = async function (root) {
     if (cs.alignSelf && cs.alignSelf !== "auto" && cs.alignSelf !== "stretch") out.alignSelf = mapAlign(cs.alignSelf);
 
     if (el.tagName === "IMG") return { kind: "image", name: el.getAttribute("alt") || "image", src: el.getAttribute("src"),
-      fit: cs.objectFit, pos: cs.objectPosition, ...out };
+      fit: cs.objectFit, objPos: cs.objectPosition, ...out };
     if (el.tagName.toUpperCase() === "SVG") return { kind: "svg", name: "icon", svg: el.outerHTML, ...out };
 
     const hasOwnText = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
