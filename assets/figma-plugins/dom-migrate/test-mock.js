@@ -86,7 +86,7 @@ const figma = {
   createComponent() { return this._create("COMPONENT"); },
   createNodeFromSvg() { return this._create("VECTOR-GROUP"); },
   createImage(data) { return { hash: `image-${data.length}` }; },
-  getNodeById(id) { return nodes.get(id) || null; },
+  getNodeById() { throw new Error("getNodeById is unavailable with documentAccess: dynamic-page"); },
   async getNodeByIdAsync(id) { return nodes.get(id) || null; },
   async setCurrentPageAsync(page) { this.currentPage = page; },
   async listAvailableFontsAsync() { return ["Regular", "Semi Bold", "Bold", "Extra Bold"].map((style) => ({ fontName: { family: "Inter", style } })); },

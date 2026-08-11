@@ -441,7 +441,8 @@ async function buildPackage(pkg: DomMigratePackageV3, fonts: FontMap, pageName: 
   }
   componentShelf.x = x + 40; componentShelf.y = origin.y;
   if (!context.components.size) componentShelf.remove();
-  figma.currentPage.selection = frameIds.map((id) => figma.getNodeById(id)).filter(Boolean) as SceneNode[];
+  const selected = (await Promise.all(frameIds.map((id) => figma.getNodeByIdAsync(id)))).filter(Boolean) as SceneNode[];
+  figma.currentPage.selection = selected;
   figma.viewport.scrollAndZoomIntoView(figma.currentPage.selection);
   return { frameIds, componentIds: Array.from(context.components.values()).map((node) => node.id), geometry: context.geometry };
 }
