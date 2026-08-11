@@ -61,12 +61,12 @@ show a deprecation warning. Flat/poster packages stay on the legacy route.
 
 ### 4. Build and audit
 
-Build into a dedicated `DOM Migrate v3 QA` page, or the explicit target page
-named by the user. Preserve any failed baseline frames as evidence when they
-exist. The generator creates fixed screen roots, native flex/grid containers,
-legal axis sizing, semantic spacing/alignment wrappers, vectors, replaceable
-images, components/instances, scoped local variables, and text styles. Download
-the Figma geometry audit from the plugin.
+Leave the target page blank to build into the current Figma page; enter a name
+only when a specific page is intended. Preserve any failed baseline frames as
+evidence when they exist. The generator creates fixed screen roots, native
+flex/grid containers, legal axis sizing, semantic spacing/alignment wrappers,
+vectors, replaceable images, components/instances, scoped local variables, and
+text styles. Download the Figma geometry audit from the plugin.
 
 ### 5. Verify
 

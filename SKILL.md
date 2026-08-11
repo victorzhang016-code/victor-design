@@ -131,6 +131,10 @@ confirmed task, and name any exception.
   gate: author the exact viewport states with semantic flex/grid and the
   importer annotations, capture the golden package, then compare the imported
   Figma states before release. A build that merely completes is not a pass.
+- When an AI product UI may need editable Figma delivery, author export-ready
+  controlled HTML from the first draft. Do not defer DOM Migrate annotations,
+  state routes, reusable tokens, or semantic layer names until after visual
+  approval; they are part of the UI's authored structure.
 - A control record proves a decision happened; it never replaces user approval
   or authored visual judgment.
 

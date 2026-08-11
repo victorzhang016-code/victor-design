@@ -22,7 +22,11 @@ typographic and interaction care as the happy path.
 ## DOM Migrate v3 authoring contract
 
 Strict editable-Figma delivery is guaranteed only for controlled VDS HTML.
-Write semantic DOM and CSS first, then annotate ambiguity:
+When editable Figma is requested or plausibly downstream, VDS must author this
+contract from the first HTML draft: one `data-figma-root` with a stable name,
+semantic names on meaningful layers, reusable tokens, and the annotations below
+where browser geometry cannot express intent. Do not retrofit the contract
+after the visual master is complete.
 
 - `data-figma-name` for stable layer naming;
 - `data-figma-width` / `data-figma-height` with `fixed|hug|fill` when browser
@@ -54,6 +58,9 @@ Write the source so its intended layout is unambiguous before capture:
   loading, and completion states.
 - Keep centring on the parent (`justify-content` / `align-items`) and let text
   use its real `text-align`; do not imitate it with absolute coordinates.
+- Keep mixed-size inline labels in source reading order with real inline
+  elements. DOM Migrate preserves the order by x-position and maps their shared
+  line to Figma Baseline alignment; never fake this relationship with offsets.
 - Use a source `<img>` for content imagery whenever possible. DOM Migrate
   captures its visible crop at 3× device resolution into a replaceable Figma
   image fill. Keep CSS effects on a separate named effect layer.
@@ -61,6 +68,9 @@ Write the source so its intended layout is unambiguous before capture:
   padding, and a semantic wrapper for ordinary spacing.
 - Name the four most revealing states: default, overlay/sheet, information
   dense, and empty/recovery. They are the minimum first-pass visual sample.
+- Before delivery, emit the strict v3 package and its goldens alongside the
+  approved HTML. The Figma import is an expected output of UI work, not an
+  optional later conversion.
 
 ## Figma acceptance
 
