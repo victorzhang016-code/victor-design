@@ -4463,6 +4463,14 @@
     };
   }
 
+  // src/plugin/placement.ts
+  function calculateImportOrigin(existing, viewportCenter, importedWidth, importedHeight, gap = 160) {
+    if (!existing.length) return { x: viewportCenter.x - importedWidth / 2, y: viewportCenter.y - importedHeight / 2 };
+    const minX = Math.min(...existing.map((rect) => rect.x));
+    const maxY = Math.max(...existing.map((rect) => rect.y + rect.height));
+    return { x: minX, y: maxY + gap };
+  }
+
   // src/plugin/index.ts
   figma.showUI(__html__, { width: 520, height: 640, themeColors: true });
   function color(value) {
@@ -4847,16 +4855,19 @@
     componentShelf.itemSpacing = 24;
     componentShelf.fills = [{ type: "SOLID", color: { r: 0.96, g: 0.96, b: 0.96 } }];
     const context = { images: imageMap, fonts, variables, textStyles, componentCounts: collectComponentCounts(pkg.pages), components: /* @__PURE__ */ new Map(), componentShelf, geometry: [], pageName: "" };
-    const existingBottom = page.children.filter((node) => node !== componentShelf).reduce((bottom, node) => Math.max(bottom, node.y + node.height), -160);
-    const startY = existingBottom + 160;
+    const importedWidth = pkg.pages.reduce((total, pageSpec) => total + pageSpec.viewport.width, 0) + Math.max(pkg.pages.length - 1, 0) * 160;
+    const importedHeight = Math.max(...pkg.pages.map((pageSpec) => pageSpec.viewport.height), 0);
+    const existing = page.children.filter((node) => node !== componentShelf).map((node) => ({ x: node.x, y: node.y, width: node.width, height: node.height }));
+    const viewportCenter = figma.viewport?.center || { x: 0, y: 0 };
+    const origin = calculateImportOrigin(existing, viewportCenter, importedWidth, importedHeight);
     const frameIds = [];
-    let x = 0;
+    let x = origin.x;
     for (const pageSpec of pkg.pages) {
       const planned = planFigmaNode(pageSpec.root, { parentLayout: "none", parentFixed: { horizontal: true, vertical: true } });
       const frame = figma.createFrame();
       frame.name = `DOM Migrate v3 / ${pageSpec.name}`;
       frame.x = x;
-      frame.y = startY;
+      frame.y = origin.y;
       await populateContainer(frame, planned, context);
       frame.resize(pageSpec.viewport.width, pageSpec.viewport.height);
       frame.layoutSizingHorizontal = "FIXED";
@@ -4869,7 +4880,7 @@
       figma.ui.postMessage({ type: "progress", text: `Built ${frameIds.length}/${pkg.pages.length}: ${pageSpec.name}` });
     }
     componentShelf.x = x + 40;
-    componentShelf.y = startY;
+    componentShelf.y = origin.y;
     if (!context.components.size) componentShelf.remove();
     figma.currentPage.selection = frameIds.map((id) => figma.getNodeById(id)).filter(Boolean);
     figma.viewport.scrollAndZoomIntoView(figma.currentPage.selection);

@@ -3,6 +3,7 @@ import { validateIr } from "../shared/invariants";
 import { planFigmaNode, type PlannedNode } from "../planner/plan";
 import { fontRequirementKey, resolveFontRequirements } from "./fonts";
 import { convertLegacyPackage, detectPackageRoute, type PackageRoute } from "./legacy";
+import { calculateImportOrigin } from "./placement";
 
 type FontMap = Map<string, FontName>;
 type VariableMap = Map<string, Variable>;
@@ -416,15 +417,18 @@ async function buildPackage(pkg: DomMigratePackageV3, fonts: FontMap, pageName: 
   componentShelf.paddingTop = 32; componentShelf.paddingRight = 32; componentShelf.paddingBottom = 32; componentShelf.paddingLeft = 32; componentShelf.itemSpacing = 24;
   componentShelf.fills = [{ type: "SOLID", color: { r: 0.96, g: 0.96, b: 0.96 } }];
   const context: BuildContext = { images: imageMap, fonts, variables, textStyles, componentCounts: collectComponentCounts(pkg.pages), components: new Map(), componentShelf, geometry: [], pageName: "" };
-  const existingBottom = page.children.filter((node) => node !== componentShelf).reduce((bottom, node) => Math.max(bottom, node.y + node.height), -160);
-  const startY = existingBottom + 160;
+  const importedWidth = pkg.pages.reduce((total, pageSpec) => total + pageSpec.viewport.width, 0) + Math.max(pkg.pages.length - 1, 0) * 160;
+  const importedHeight = Math.max(...pkg.pages.map((pageSpec) => pageSpec.viewport.height), 0);
+  const existing = page.children.filter((node) => node !== componentShelf).map((node) => ({ x: node.x, y: node.y, width: node.width, height: node.height }));
+  const viewportCenter = figma.viewport?.center || { x: 0, y: 0 };
+  const origin = calculateImportOrigin(existing, viewportCenter, importedWidth, importedHeight);
   const frameIds: string[] = [];
-  let x = 0;
+  let x = origin.x;
   for (const pageSpec of pkg.pages) {
     const planned = planFigmaNode(pageSpec.root, { parentLayout: "none", parentFixed: { horizontal: true, vertical: true } });
     const frame = figma.createFrame();
     frame.name = `DOM Migrate v3 / ${pageSpec.name}`;
-    frame.x = x; frame.y = startY;
+    frame.x = x; frame.y = origin.y;
     await populateContainer(frame, planned, context);
     frame.resize(pageSpec.viewport.width, pageSpec.viewport.height);
     frame.layoutSizingHorizontal = "FIXED"; frame.layoutSizingVertical = "FIXED";
@@ -435,7 +439,7 @@ async function buildPackage(pkg: DomMigratePackageV3, fonts: FontMap, pageName: 
     x += pageSpec.viewport.width + 160;
     figma.ui.postMessage({ type: "progress", text: `Built ${frameIds.length}/${pkg.pages.length}: ${pageSpec.name}` });
   }
-  componentShelf.x = x + 40; componentShelf.y = startY;
+  componentShelf.x = x + 40; componentShelf.y = origin.y;
   if (!context.components.size) componentShelf.remove();
   figma.currentPage.selection = frameIds.map((id) => figma.getNodeById(id)).filter(Boolean) as SceneNode[];
   figma.viewport.scrollAndZoomIntoView(figma.currentPage.selection);

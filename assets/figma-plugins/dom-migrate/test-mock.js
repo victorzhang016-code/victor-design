@@ -72,7 +72,7 @@ const root = { children: [] };
 const figma = {
   root,
   ui: { messages: [], postMessage(message) { this.messages.push(message); } },
-  viewport: { scrollAndZoomIntoView() {} },
+  viewport: { center: { x: 1000, y: 700 }, scrollAndZoomIntoView() {} },
   showUI() {},
   _create(type) {
     const node = type === "TEXT" ? new MockText(this) : type === "COMPONENT" ? new MockComponent(this) : new MockNode(type, this);
