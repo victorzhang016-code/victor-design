@@ -4263,6 +4263,18 @@
       synthetic: "spacing-wrapper"
     };
   }
+  function fillsParentCrossAxis(parent, child) {
+    if (child.position === "absolute" || child.kind === "text" || parent.layout.mode === "none") return null;
+    if (parent.layout.mode === "vertical") {
+      const available = parent.geometry.width - parent.layout.padding[1] - parent.layout.padding[3];
+      return child.sizing.horizontal === "hug" && Math.abs(child.geometry.width - available) <= 2 ? "horizontal" : null;
+    }
+    if (parent.layout.mode === "horizontal") {
+      const available = parent.geometry.height - parent.layout.padding[0] - parent.layout.padding[2];
+      return child.sizing.vertical === "hug" && Math.abs(child.geometry.height - available) <= 2 ? "vertical" : null;
+    }
+    return null;
+  }
   function planFigmaNode(node, context) {
     const sizing = { ...node.sizing };
     const self = {
@@ -4285,7 +4297,13 @@
           vertical: node.sizing.vertical === "fixed"
         }
       });
-      let finalChild = child.alignSelf === "center" && node.layout.mode !== "none" ? centerWrapper(planned, node) : planned;
+      const crossAxis = fillsParentCrossAxis(node, child);
+      if (crossAxis) {
+        planned.sizing[crossAxis] = "fill";
+        planned[`layoutSizing${crossAxis === "horizontal" ? "Horizontal" : "Vertical"}`] = "FILL";
+      }
+      const shouldCenter = child.alignSelf === "center" || planned.kind === "text" && planned.text?.align === "center";
+      let finalChild = shouldCenter && node.layout.mode !== "none" ? centerWrapper(planned, node) : planned;
       const margin = child.margins || [0, 0, 0, 0];
       if (!child.autoMargin?.top && margin.some((value) => value > 0) && node.layout.mode !== "none") finalChild = spacingWrapper(finalChild, node, margin);
       self.children.push(finalChild);
