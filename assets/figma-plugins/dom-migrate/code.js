@@ -185,6 +185,13 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
       if (f.layoutMode !== "NONE") child.layoutPositioning = "ABSOLUTE";
       child.x = c.absolute.x; child.y = c.absolute.y;
     } else if (f.layoutMode !== "NONE") {
+      if (c.marginTopAuto && f.layoutMode === "VERTICAL") {
+        // margin-top:auto => flexible spacer pushes this child to the end
+        const g = figma.createFrame();
+        g.name = "spacer-grow"; g.fills = [];
+        f.insertChild(f.children.indexOf(child), g);
+        g.layoutGrow = 1;
+      }
       if (c.marginTop) {
         const sp = figma.createRectangle();
         sp.name = "spacer"; sp.fills = [];
@@ -192,7 +199,8 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
         f.insertChild(f.children.indexOf(child), sp);
       }
       if (c.layoutGrow) child.layoutGrow = c.layoutGrow;
-      if (f.layoutMode === "VERTICAL" && L.stretchChildren !== false && !c.chip && (child.type === "TEXT" || child.type === "FRAME" || child.type === "COMPONENT" || child.type === "INSTANCE"))
+      if (c.centerSelf) child.layoutAlign = "CENTER";
+      else if (f.layoutMode === "VERTICAL" && L.stretchChildren !== false && !c.chip && (child.type === "TEXT" || child.type === "FRAME" || child.type === "COMPONENT" || child.type === "INSTANCE"))
         child.layoutAlign = "STRETCH";
     }
   }

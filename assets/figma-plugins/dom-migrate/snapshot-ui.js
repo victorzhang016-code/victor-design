@@ -99,6 +99,7 @@ window.domMigrateSnapshotUI = async function (root) {
     const mTop = parseFloat(cs.marginTop) || 0;
     if (mTop > 0 && cs.marginTop !== "auto") out.marginTop = px(mTop);
     if (cs.marginTop === "auto") out.marginTopAuto = true;
+    if (cs.marginLeft === "auto" && cs.marginRight === "auto") out.centerSelf = true;
     if (cs.alignSelf && cs.alignSelf !== "auto" && cs.alignSelf !== "stretch") out.alignSelf = mapAlign(cs.alignSelf);
 
     if (el.tagName === "IMG") return { kind: "image", name: el.getAttribute("alt") || "image", src: el.getAttribute("src"),
@@ -166,7 +167,7 @@ window.domMigrateSnapshotUI = async function (root) {
       primary: mapAlign(cs.justifyContent),
       counter: mapAlign(cs.alignItems),
     } : { mode: "NONE", pad: [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].map(v => px(parseFloat(v) || 0)) };
-    if (kids.some(k => k.marginTopAuto) && node.layout.mode === "VERTICAL") node.layout.primary = "SPACE_BETWEEN";
+    // margin-top:auto is handled by the plugin as a grow spacer, not SPACE_BETWEEN
     if (node.layout.mode === "VERTICAL") node.layout.stretchChildren = !isFlex || ["stretch","normal"].includes(cs.alignItems || "stretch");
     if (hasBg) node.fill = { color: rgbArr(cs.backgroundColor), opacity: bgA2.length === 4 ? parseFloat(bgA2[3]) : 1 };
     if (hasBorder) node.stroke = { color: rgbArr(cs.borderTopColor), weight: bw2 };
