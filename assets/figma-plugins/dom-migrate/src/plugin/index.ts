@@ -261,8 +261,12 @@ function positionChild(child: SceneNode, node: PlannedNode, parentNode: PlannedN
 
 function applySizing(child: SceneNode, node: PlannedNode, parent: FrameNode | ComponentNode): void {
   if (!("layoutSizingHorizontal" in child) || parent.layoutMode === "NONE" || node.position === "absolute") return;
-  child.layoutSizingHorizontal = node.layoutSizingHorizontal;
-  child.layoutSizingVertical = node.layoutSizingVertical;
+  // Figma only permits HUG on auto-layout frames or text children of an
+  // auto-layout frame. Visual leaves with HUG retain their browser geometry
+  // and use FIXED instead of sending an illegal sizing value to the API.
+  const canHug = child.type === "TEXT" || ((child.type === "FRAME" || child.type === "COMPONENT") && child.layoutMode !== "NONE");
+  child.layoutSizingHorizontal = node.layoutSizingHorizontal === "HUG" && !canHug ? "FIXED" : node.layoutSizingHorizontal;
+  child.layoutSizingVertical = node.layoutSizingVertical === "HUG" && !canHug ? "FIXED" : node.layoutSizingVertical;
   if (node.sizing.grow > 0) child.layoutGrow = node.sizing.grow;
   if (node.sizing.minWidth !== undefined) child.minWidth = node.sizing.minWidth;
   if (node.sizing.maxWidth !== undefined) child.maxWidth = node.sizing.maxWidth;

@@ -29,12 +29,14 @@ class MockNode {
   remove() { if (this.parent) this.parent.children = this.parent.children.filter((item) => item !== this); nodes.delete(this.id); }
   set layoutSizingHorizontal(value) {
     if (value === "FILL" && this.parent && this.parent.layoutMode === "NONE") throw new Error("FILL horizontal requires an auto-layout parent");
+    if (value === "HUG" && this.type !== "TEXT" && this.layoutMode === "NONE") throw new Error("HUG can only be set on auto-layout frames or text children of auto-layout frames");
     if (value === "HUG" && this.children?.some((child) => child.layoutSizingHorizontal === "FILL")) throw new Error("HUG horizontal parent cannot contain FILL child");
     this._layoutSizingHorizontal = value;
   }
   get layoutSizingHorizontal() { return this._layoutSizingHorizontal; }
   set layoutSizingVertical(value) {
     if (value === "FILL" && this.parent && this.parent.layoutMode === "NONE") throw new Error("FILL vertical requires an auto-layout parent");
+    if (value === "HUG" && this.type !== "TEXT" && this.layoutMode === "NONE") throw new Error("HUG can only be set on auto-layout frames or text children of auto-layout frames");
     if (value === "HUG" && this.children?.some((child) => child.layoutSizingVertical === "FILL")) throw new Error("HUG vertical parent cannot contain FILL child");
     this._layoutSizingVertical = value;
   }

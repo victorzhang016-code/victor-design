@@ -4687,8 +4687,9 @@
   }
   function applySizing(child, node, parent) {
     if (!("layoutSizingHorizontal" in child) || parent.layoutMode === "NONE" || node.position === "absolute") return;
-    child.layoutSizingHorizontal = node.layoutSizingHorizontal;
-    child.layoutSizingVertical = node.layoutSizingVertical;
+    const canHug = child.type === "TEXT" || (child.type === "FRAME" || child.type === "COMPONENT") && child.layoutMode !== "NONE";
+    child.layoutSizingHorizontal = node.layoutSizingHorizontal === "HUG" && !canHug ? "FIXED" : node.layoutSizingHorizontal;
+    child.layoutSizingVertical = node.layoutSizingVertical === "HUG" && !canHug ? "FIXED" : node.layoutSizingVertical;
     if (node.sizing.grow > 0) child.layoutGrow = node.sizing.grow;
     if (node.sizing.minWidth !== void 0) child.minWidth = node.sizing.minWidth;
     if (node.sizing.maxWidth !== void 0) child.maxWidth = node.sizing.maxWidth;
