@@ -184,9 +184,10 @@
   }
   function layoutFor(el, cs, children) {
     let mode = "none";
+    const inlineFlow = hasSingleInlineFlowLine(el, children);
     if (cs.display === "flex" || cs.display === "inline-flex") mode = cs.flexDirection.startsWith("row") ? "horizontal" : "vertical";
     else if (cs.display === "grid" || cs.display === "inline-grid") mode = "grid";
-    else if (hasSingleInlineFlowLine(el, children)) mode = "horizontal";
+    else if (inlineFlow) mode = "horizontal";
     else if (children.length > 0 && cs.display !== "inline") mode = "vertical";
     const value = {
       mode,
@@ -195,7 +196,9 @@
       columnGap: number(cs.columnGap),
       padding: padding(cs),
       justify: justify(cs.justifyContent),
-      align: align(cs.alignItems),
+      // Browser inline flow aligns glyphs on a shared baseline, not at each
+      // text box's top edge. Preserve that relationship for mixed-size labels.
+      align: inlineFlow ? "baseline" : align(cs.alignItems),
       wrap: cs.flexWrap !== "nowrap"
     };
     if (mode === "grid") value.grid = { columns: parseGridTrackList(cs.gridTemplateColumns), rows: parseGridTrackList(cs.gridTemplateRows) };
@@ -292,7 +295,8 @@
         const captured = textNode(el, child, textIndex++, viewport);
         if (captured) children.push(captured);
       }
-      children.sort((a, b) => a.geometry.y - b.geometry.y || a.geometry.x - b.geometry.x);
+      const inlineFlow = hasSingleInlineFlowLine(el, children);
+      children.sort(inlineFlow ? (a, b) => a.geometry.x - b.geometry.x || a.geometry.y - b.geometry.y : (a, b) => a.geometry.y - b.geometry.y || a.geometry.x - b.geometry.x);
     }
     const position = cs.position === "absolute" || cs.position === "fixed" ? "absolute" : "flow";
     const parentRect = el.parentElement ? rectOf(el.parentElement.getBoundingClientRect()) : viewport;

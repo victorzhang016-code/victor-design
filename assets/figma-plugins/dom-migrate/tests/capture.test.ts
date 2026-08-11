@@ -40,6 +40,9 @@ describe("deterministic Playwright capture", () => {
     expect(wordmark.layout.mode).toBe("horizontal");
     expect(wordmark.children.map((child) => child.text?.value)).toEqual(["Bonjour", "!"]);
     expect(wordmark.children[1].geometry.y).toBeCloseTo(wordmark.children[0].geometry.y, 1);
+    const fact = find(a.pages[0].root, "Fact")!;
+    expect(fact.layout).toMatchObject({ mode: "horizontal", align: "baseline" });
+    expect(fact.children.map((child) => child.text?.value)).toEqual(["Label", "Value"]);
     expect(find(a.pages[0].root, "Avatar")?.image?.fit).toBe("crop");
     const avatar = find(a.pages[0].root, "Avatar")!;
     const avatarAsset = Buffer.from(a.images[avatar.image!.assetKey], "base64");

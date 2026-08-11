@@ -12,6 +12,8 @@
   .title { font-size:24px; font-weight:700; }
   .wordmark { font-size:20px; font-weight:700; }
   .wordmark span { color:var(--brand); }
+  .fact { font-size:14px; line-height:22px; }
+  .fact span { margin-right:6px; color:#9aa0aa; font-size:12px; }
   .content { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:var(--space-md); padding-top:var(--space-md); }
   .card { position:relative; min-width:0; display:flex; flex-direction:column; padding:16px; border-radius:var(--radius-md); background:#f4f6fb; }
   .avatar { width:48px; height:48px; display:block; object-fit:cover; object-position:70% 20%; }
@@ -29,6 +31,7 @@
       <div class="mark" data-figma-name="Brand / Mark"></div>
       <h1 class="title" data-figma-text-style="Heading/Medium">Controlled UI</h1>
       <div class="wordmark" data-figma-name="Wordmark">Bonjour<span>!</span></div>
+      <p class="fact" data-figma-name="Fact"><span data-figma-name="Fact / Meta">Label</span>Value</p>
     </header>
     <section class="content" data-figma-name="Content / Grid">
       <article class="card" data-figma-component="Card">
