@@ -101,7 +101,8 @@ window.domMigrateSnapshotUI = async function (root) {
     if (cs.marginTop === "auto") out.marginTopAuto = true;
     if (cs.alignSelf && cs.alignSelf !== "auto" && cs.alignSelf !== "stretch") out.alignSelf = mapAlign(cs.alignSelf);
 
-    if (el.tagName === "IMG") return { kind: "image", name: el.getAttribute("alt") || "image", src: el.getAttribute("src"), ...out };
+    if (el.tagName === "IMG") return { kind: "image", name: el.getAttribute("alt") || "image", src: el.getAttribute("src"),
+      fit: cs.objectFit, pos: cs.objectPosition, ...out };
     if (el.tagName.toUpperCase() === "SVG") return { kind: "svg", name: "icon", svg: el.outerHTML, ...out };
 
     const hasOwnText = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
@@ -122,7 +123,7 @@ window.domMigrateSnapshotUI = async function (root) {
         if (parseFloat(cs.borderRadius) > 0) node.radius = px(parseFloat(cs.borderRadius));
         node.children = [
           ...inlineSvgs.map(c => ({ kind: "svg", name: "icon", svg: c.outerHTML })),
-          { ...t, text: t.text.trim() },
+          { ...t, text: t.text.trim(), hug: true },
         ];
         return node;
       }

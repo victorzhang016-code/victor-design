@@ -71,8 +71,32 @@ def main():
 
     svg_jobs = []
 
+    def cover_crop(path, box_w, box_h, pos):
+        """object-fit:cover + object-position -> exact crop bytes (PNG)."""
+        from PIL import Image
+        import io as _io
+        im = Image.open(path).convert("RGBA")
+        scale = max(box_w / im.width, box_h / im.height)
+        im = im.resize((int(round(im.width * scale)), int(round(im.height * scale))))
+        nums = re.findall(r"[\d.]+", pos or "50% 50%")
+        px_, py_ = (float(nums[0]), float(nums[1])) if len(nums) >= 2 else (50.0, 50.0)
+        max_x = max(im.width - box_w, 0)
+        max_y = max(im.height - box_h, 0)
+        left = int(round(max_x * px_ / 100))
+        top = int(round(max_y * py_ / 100))
+        crop = im.crop((left, top, left + int(box_w), top + int(box_h)))
+        buf = _io.BytesIO(); crop.save(buf, "PNG")
+        return buf.getvalue()
+
     def embed_node(n):
         """resolve and intern an image/src-bearing node; returns nothing (mutates)."""
+        src = n.get("src")
+        if n.get("fit") == "cover" and n.get("size") and src and not src.startswith("data:"):
+            n.pop("src", None)
+            n["imageKey"] = intern(cover_crop(resolve(src, args.base), n["size"]["w"], n["size"]["h"], n.get("pos")))
+            n.pop("fit", None); n.pop("pos", None)
+            if n.get("type") == "bgimage": n["type"] = "image"
+            return
         src = n.pop("src", None)
         if src is None:
             return

@@ -104,7 +104,7 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
     // single-line text hugs its content (never wraps); multi-line text keeps
     // the captured width and auto-fits height, matching browser wrapping
     const lh = node.lineHeight || node.fontSize * 1.4;
-    const singleLine = node.size && node.size.h <= lh * 1.35 && !node.text.includes("\n");
+    const singleLine = node.hug || (node.size && node.size.h <= lh * 1.35 && !node.text.includes("\n"));
     if (singleLine) {
       t.textAutoResize = "WIDTH_AND_HEIGHT";
     } else {
