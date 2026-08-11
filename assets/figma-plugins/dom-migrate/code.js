@@ -101,6 +101,10 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
     if (node.letterSpacing) t.letterSpacing = { unit: "PIXELS", value: node.letterSpacing };
     t.fills = [solid(node.color, node.opacity)];
     t.textAlignHorizontal = node.align === "center" ? "CENTER" : node.align === "right" ? "RIGHT" : "LEFT";
+    // wrap like the browser: fix the captured width, let height auto-fit
+    t.textAutoResize = "HEIGHT";
+    const tw = (node.size && node.size.w) || 100;
+    t.resize(Math.max(tw, 1), 10);
     for (const sp of (node.spans || [])) {
       if (sp.bold) t.setRangeFontName(sp.start, sp.end, await loadFontRobust(niceFamily(node.fontFamily), "Bold"));
       if (sp.color) t.setRangeFills(sp.start, sp.end, [solid(sp.color)]);
@@ -261,7 +265,9 @@ figma.ui.onmessage = async (msg) => {
         } else if (n.type === "image") {
           const r = figma.createRectangle();
           r.x = n.x; r.y = n.y; r.resize(Math.max(n.w, 0.1), Math.max(n.h, 0.1));
-          r.fills = [{ type: "IMAGE", imageHash: hash[n.imageKey], scaleMode: "FIT" }];
+          // CSS object-fit: cover is the snapshot default; "fit" only when the
+          // packager marked the node as contain (e.g. a full-bleed diagram plate)
+          r.fills = [{ type: "IMAGE", imageHash: hash[n.imageKey], scaleMode: n.fitMode === "fit" ? "FIT" : "FILL" }];
           frame.appendChild(r);
         } else if (n.type === "text") {
           const t = figma.createText();
