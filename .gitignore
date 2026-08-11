@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+node_modules/
+assets/figma-plugins/dom-migrate/dist/
+assets/figma-plugins/dom-migrate/test-results/
+assets/figma-plugins/dom-migrate/playwright-report/

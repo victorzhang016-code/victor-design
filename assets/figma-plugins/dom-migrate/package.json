@@ -1,0 +1,24 @@
+{
+  "name": "@victor-design/dom-migrate",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && vitest run",
+    "test:watch": "vitest",
+    "capture": "node dist/cli.js"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.117.0",
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.25.8",
+    "playwright": "^1.54.2",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

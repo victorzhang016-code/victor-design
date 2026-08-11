@@ -150,12 +150,14 @@ Every category ships a native editable deliverable, not just a render:
 | Slides / deck | PNG per page | Figma or PPTX (user's pick) | interactive HTML, restrained motion |
 | Product UI | PNG per state | Figma, one frame per state | interactive HTML, full state flow |
 
-The Figma route is a **migration, not a rebuild**: the bundled
-`assets/figma-plugins/dom-migrate` plugin snapshots the approved HTML master
-in a browser and creates native Figma frames from the DOM — text nodes with
-styled ranges, replaceable image fills, shapes with fills and strokes. Free,
-offline, no subscription. PPTX delivery rebuilds natively via python-pptx.
-Pipelines: `references/operations/delivery-implementations.md`.
+The Figma route is a **migration, not a rebuild**. DOM Migrate v3 captures
+controlled product UI through Playwright and CSSOM, then creates native Figma
+Auto Layout/Grid, legal Hug/Fill/Fixed sizing, editable text, vectors,
+replaceable images, components, scoped local variables, and text styles. It is
+free, offline, and ships with prebuilt plugin code. Complex CSS falls back only
+at the smallest declared effect layer. Flat poster packages retain the legacy
+visual route. See `assets/figma-plugins/dom-migrate/README.md` and
+`references/operations/delivery-implementations.md`.
 
 ## First use: fill the evidence layer
 

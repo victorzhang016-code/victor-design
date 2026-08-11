@@ -1,120 +1,139 @@
-# DOM Migrate — HTML → editable Figma
+# DOM Migrate v3
 
-Migrates an approved HTML master into native, editable Figma frames. This is a
-migration, not a reconstruction: text becomes TEXT nodes with styled ranges,
-images become replaceable IMAGE fills, shapes keep fills/strokes/radius.
+DOM Migrate v3 migrates controlled Victor Design System UI HTML into native,
+editable Figma structures. Its strict guarantee is intentionally narrow:
+browser fidelity at the declared viewport, resilient Auto Layout, native text,
+vectors, replaceable images, components, local variables, and text styles.
 
-## Pipeline
+It does not claim lossless conversion for arbitrary websites. Poster/flat
+packages remain supported through the legacy visual route.
 
-1. **Snapshot** — in the approved master's directory, copy
-   `snapshot-runner.html` beside the master and point its `src` at the master
-   file. Then run (headless Chrome):
-
-   ```bash
-   chrome --headless=new --allow-file-access-from-files \
-     --virtual-time-budget=15000 --dump-dom snapshot-runner.html > dump.html
-   ```
-
-   Extract the `<pre id="out">` JSON into `pages-raw.json`.
-   (Single-page masters without `section.page` wrappers: snapshot.js captures
-   `section.page` elements; wrap your pages accordingly.)
-
-2. **Package** — embed and dedupe the images:
-
-   ```bash
-   python package.py pages-raw.json --base <master-dir> -o figma-package.json
-   ```
-
-   If the master uses data-URI SVG backgrounds (e.g. repeating decorative
-   bands), the packager writes `*-svg-jobs.json`; rasterize each at its target
-   pixel size and rerun with `--svg-png key=path.png`.
-
-3. **Import** — Figma desktop → Plugins → Development → *Import plugin from
-   manifest* → select `manifest.json` in this folder. Then run **DOM Migrate**,
-   pick `figma-package.json`, and build. One frame per page/state, side by
-   side.
-
-4. **Repair pass** (mandatory, per `operations/figma-fidelity.md`) — rename
-   layers semantically, verify fonts, rebuild anything that arrived flattened,
-   then export each frame and compare against the approved render at equal
-   scale (`scripts/compare_renders.py`).
-
-## Testing
-
-`test-mock.js` runs code.js end-to-end in Node against a package file, with a
-mock Figma API that enforces the real constraints (no component nesting,
-ABSOLUTE positioning only inside auto-layout parents, text font loading
-order). Run it after every plugin change:
+## Quick start
 
 ```bash
-node test-mock.js code.js <package.json>
+cd assets/figma-plugins/dom-migrate
+npm install
+npm run build
+npm run capture -- \
+  --input /absolute/path/to/master.html \
+  --output /absolute/path/to/export \
+  --states view,sheet,profile,quiet \
+  --viewport 390x844
 ```
 
-## What it captures
+The capture command waits for the DOM, fonts, images, two animation frames,
+and the optional UI-ready signal before writing:
 
-- text blocks: content, family/weight/size/line-height/tracking/color/align,
-  inline bold & color spans as character ranges, `<br>` as line breaks
-- images: element bounds + file reference (embedded during packaging)
-- shapes: background fills (with opacity), borders, corner radius
-- page background: solid color or image
+- `dom-migrate.v3.json` — versioned IR and embedded image/effect assets;
+- `goldens/<state>.png` — deterministic browser truth per state;
+- `compatibility-report.json` — fonts, warnings, hard errors, raster layers.
 
-## Known limits
-
-- Absolutely-positioned nodes, not auto-layout. The output is editable, not
-  responsive.
-- Images default to `scaleMode: FILL` (CSS `object-fit: cover`); the packager
-  may mark a node `fitMode: "fit"` (contain) or `fitMode: "tile"` (repeating
-  texture, natural-size `TILE`). Where box geometry is available the packager
-  pre-crops `object-fit`/`object-position` exactly; otherwise verify focal
-  crops in the repair pass.
-- CSS filters, blends, gradients, pseudo-element layers (`::before/::after`
-  vignettes, fades, grain), and box-shadows are **not captured by the
-  snapshot**. The durable cross-target fix is the overlay pattern: pre-render
-  each effect layer to an alpha PNG and insert it as a picture node at the
-  same z-order it had in the HTML (see
-  `references/operations/delivery-implementations.md` → "Effect layers").
-  Rebuild natively in Figma only when the gradient itself must stay
-  parametrically editable.
-- Element backgrounds that sit on text blocks are captured as separate shape
-  nodes (correct z-order).
-- Top-only CSS borders migrate as 1px fill rects (not box outlines); full
-  borders keep their stroke with alpha preserved.
-- Single-line text nodes get 12% width slack to absorb Figma/browser font
-  metric drift; multi-line blocks keep their exact wrap width.
-- Images over 4000px/side are downscaled by the packager (Figma `createImage`
-  rejects >4096px); the original files stay untouched on disk.
-- The snapshot emits per-page `fxWarnings` for uncapturable effect layers;
-  the packager prints them as a to-do list for the overlay pattern.
-- Fonts must exist in the Figma environment; the plugin falls back
-  (family → Microsoft YaHei → Inter) and the repair pass must catch it.
-
-## UI structural mode (production-grade)
-
-For product UI, use `snapshot-ui.js` + `snapshot-runner-ui.html` instead of
-the flat snapshot. The runner takes the master with an explicit state query:
+To use a custom ready signal:
 
 ```bash
-chrome --headless=new --allow-file-access-from-files --virtual-time-budget=15000 \
-  --dump-dom "snapshot-runner-ui.html?src=master.html?state=view" > dump-view.html
+npm run capture -- --input master.html --output export \
+  --ready "window.__UI_READY__ === true"
 ```
 
-Run once per state and merge the outputs into one pages array before
-packaging. In this mode the plugin builds:
+Import `manifest.json` in Figma Desktop via **Plugins → Development → Import
+plugin from manifest**. Load `dom-migrate.v3.json`, review preflight, and build
+to the default `DOM Migrate v3 QA` page. The manifest ID is unchanged, so this
+overwrites an earlier local installation instead of creating a second plugin.
 
-- **auto-layout frames** — flex/grid containers map to HORIZONTAL/VERTICAL
-  layout mode with gap and padding; block containers with multiple children
-  become vertical auto-layout; `margin-top:auto` becomes SPACE_BETWEEN;
-  other child margins become named spacer nodes;
-- **chips/buttons as frames** — a text element with padding or fill becomes
-  an auto-layout frame wrapping a text node, not a flat label;
-- **components** — exact-duplicate subtrees (status bars, indicators,
-  repeated chips) become one component plus instances across state frames;
-- **icons as vectors** — inline SVG via `createNodeFromSvg`;
-- **overlays** — absolutely-positioned layers (sheets, backdrops, status
-  bars) become `layoutPositioning = ABSOLUTE` inside the screen frame.
+## Controlled HTML contract
 
-Still not production-complete without the repair pass: margins become spacer
-nodes (Figma has no margins), `object-position` crops are approximate,
-texts inside auto-layout stretch by block rules, and gradients/blends are not
-migrated. Verify against the approved render per state and fix in Figma.
+Automatic inference uses CSSOM rule matching, `getComputedStyle`, DOM geometry,
+and clipping. Add annotations when intent is ambiguous:
 
+```html
+<main data-figma-root data-figma-name="Screen">
+  <button
+    data-figma-name="Action / Continue"
+    data-figma-width="fill"
+    data-figma-height="fixed"
+    data-figma-component="Button/Primary">
+    <span
+      data-figma-property="Label:text"
+      data-figma-text-style="Body/Medium">Continue</span>
+  </button>
+</main>
+```
+
+Supported annotations:
+
+- `data-figma-name`
+- `data-figma-width="fixed|hug|fill"`
+- `data-figma-height="fixed|hug|fill"`
+- `data-figma-component="Component/Name"`
+- `data-figma-property="Label:text"`
+- `data-figma-text-style="Body/Medium"`
+- `data-figma-rasterize="reason"`
+- `data-figma-ignore`
+
+Every state must be reachable as `?state=<name>`. Hidden, transparent, and
+fully clipped inactive state nodes are excluded by default.
+
+## What v3 changes
+
+The implementation is TypeScript in three layers:
+
+1. `src/capture/` — browser capture using real CSSOM matches and final geometry;
+2. `src/planner/` — legal Figma sizing and semantic wrapper planning;
+3. `src/plugin/` — variables/styles/components and native Figma generation.
+
+The repository commits prebuilt `code.js` and `snapshot-ui.js`, so installation
+does not require a local build.
+
+Important invariants:
+
+- fixed parents are sized before Fill/Grow children;
+- `layoutSizingHorizontal/Vertical` is the final sizing interface;
+- a Hug axis cannot contain a Fill/Grow child on that axis;
+- CSS gap becomes `itemSpacing`; no anonymous pixel spacer rectangles exist;
+- `margin-top:auto` becomes one `Layout / Flexible Space` grow frame;
+- cross-axis centering uses a named alignment wrapper;
+- CSS Grid becomes Figma `GRID`; unsupported tracks are reported;
+- single-line text hugs; wrapped text uses fixed/fill width with auto height;
+- no font-width compensation is added;
+- missing fonts or weights are hard errors in strict v3 mode;
+- repeated exact semantic subtrees and explicitly marked components produce
+  components/instances; marked text becomes an instance text property;
+- CSS custom properties become scoped local variables; repeated type specs
+  become local text styles.
+
+## Effects and images
+
+Image elements and leaf CSS background images are captured at their exact
+visible crop and become replaceable Figma image fills. Inline SVG stays vector.
+
+Use `data-figma-rasterize` for an intentionally minimal effect layer. Gradients,
+filters, blends, masks, and pseudo-elements that cannot be represented natively
+are listed in the compatibility report. The UI structure and text remain native;
+only the smallest declared effect layer is rasterized.
+
+## Compatibility routes
+
+- `schemaVersion: 3` — strict production UI route;
+- v2 packages with `page.tree` — deprecated compatibility route;
+- flat/poster packages with `page.nodes` — legacy visual route.
+
+Legacy inputs still import, but they do not receive the v3 structural guarantee.
+The old Python packager remains in the folder only for those packages.
+
+## Development and verification
+
+```bash
+npm run typecheck
+npm test
+node test-mock.js code.js tests/fixtures/v3-package.json
+```
+
+The suite covers nested selectors, visibility, Grid, Hug/Fill invariants,
+semantic flexible space, centering wrappers, strict font mapping, compatibility
+routing, deterministic Playwright capture, and Figma API constraints. The mock
+auto-attaches newly created nodes like Figma and fails if a build produces zero
+top-level nodes.
+
+Release QA still compares every imported state against its golden at equal
+scale. Target thresholds are ≤1 px for non-text geometry, ≤2 px for text bounds,
+identical line wrapping, whole-frame SSIM ≥0.98, and image-region SSIM ≥0.995.

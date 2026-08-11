@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 3,
+  "generator": { "name": "test", "version": "3.0.0" },
+  "capturedAt": "2026-08-11T00:00:00.000Z",
+  "pages": [
+    {
+      "id": "quiet",
+      "name": "quiet",
+      "viewport": { "width": 390, "height": 844 },
+      "root": {
+        "id": "screen",
+        "name": "Screen",
+        "kind": "frame",
+        "geometry": { "x": 0, "y": 0, "width": 390, "height": 844 },
+        "visibleBounds": { "x": 0, "y": 0, "width": 390, "height": 844 },
+        "layout": { "mode": "vertical", "gap": 0, "padding": [14, 24, 26, 24], "justify": "start", "align": "stretch", "wrap": false },
+        "sizing": { "horizontal": "fixed", "vertical": "fixed", "grow": 0 },
+        "style": { "fills": [{ "type": "solid", "color": { "r": 1, "g": 1, "b": 1, "a": 1 } }], "opacity": 1, "clipsContent": true },
+        "children": [
+          {
+            "id": "quiet-wrap",
+            "name": "Quiet / Content",
+            "kind": "frame",
+            "geometry": { "x": 24, "y": 14, "width": 342, "height": 788 },
+            "visibleBounds": { "x": 24, "y": 14, "width": 342, "height": 788 },
+            "layout": { "mode": "vertical", "gap": 14, "padding": [0, 0, 0, 0], "justify": "center", "align": "center", "wrap": false },
+            "sizing": { "horizontal": "fill", "vertical": "fill", "grow": 1 },
+            "style": { "fills": [], "opacity": 1 },
+            "children": [
+              {
+                "id": "quiet-title",
+                "name": "Quiet / Title",
+                "kind": "text",
+                "geometry": { "x": 82, "y": 350, "width": 226, "height": 40 },
+                "visibleBounds": { "x": 82, "y": 350, "width": 226, "height": 40 },
+                "layout": { "mode": "none", "gap": 0, "padding": [0, 0, 0, 0], "justify": "start", "align": "start", "wrap": false },
+                "sizing": { "horizontal": "hug", "vertical": "hug", "grow": 0 },
+                "style": { "fills": [], "opacity": 1 },
+                "text": { "value": "Today is enough", "family": "Inter", "weight": 700, "style": "Normal", "size": 28, "lineHeight": 34, "letterSpacing": -0.3, "align": "center", "color": { "r": 0.04, "g": 0.04, "b": 0.05, "a": 1 }, "singleLine": true, "styleName": "Heading/Large" },
+                "children": []
+              },
+              {
+                "id": "action-a",
+                "name": "Action / Primary",
+                "kind": "frame",
+                "geometry": { "x": 120, "y": 410, "width": 150, "height": 44 },
+                "visibleBounds": { "x": 120, "y": 410, "width": 150, "height": 44 },
+                "layout": { "mode": "horizontal", "gap": 0, "padding": [10, 18, 10, 18], "justify": "center", "align": "center", "wrap": false },
+                "sizing": { "horizontal": "hug", "vertical": "hug", "grow": 0 },
+                "style": { "fills": [{ "type": "solid", "color": { "r": 0.16, "g": 0.36, "b": 0.89, "a": 1 } }], "opacity": 1, "radius": [12, 12, 12, 12] },
+                "component": { "name": "Button/Primary", "explicit": true },
+                "children": [{
+                  "id": "action-a-label", "name": "Action / Label", "kind": "text",
+                  "geometry": { "x": 156, "y": 422, "width": 78, "height": 20 }, "visibleBounds": { "x": 156, "y": 422, "width": 78, "height": 20 },
+                  "layout": { "mode": "none", "gap": 0, "padding": [0, 0, 0, 0], "justify": "start", "align": "start", "wrap": false },
+                  "sizing": { "horizontal": "hug", "vertical": "hug", "grow": 0 }, "style": { "fills": [], "opacity": 1 },
+                  "text": { "value": "Continue", "family": "Inter", "weight": 600, "style": "Normal", "size": 14, "lineHeight": 20, "letterSpacing": 0, "align": "center", "color": { "r": 1, "g": 1, "b": 1, "a": 1 }, "singleLine": true, "property": { "name": "Label", "type": "text" } },
+                  "children": []
+                }]
+              },
+              {
+                "id": "action-b",
+                "name": "Action / Primary 2",
+                "kind": "frame",
+                "geometry": { "x": 120, "y": 470, "width": 150, "height": 44 },
+                "visibleBounds": { "x": 120, "y": 470, "width": 150, "height": 44 },
+                "layout": { "mode": "horizontal", "gap": 0, "padding": [10, 18, 10, 18], "justify": "center", "align": "center", "wrap": false },
+                "sizing": { "horizontal": "hug", "vertical": "hug", "grow": 0 },
+                "style": { "fills": [{ "type": "solid", "color": { "r": 0.16, "g": 0.36, "b": 0.89, "a": 1 } }], "opacity": 1, "radius": [12, 12, 12, 12] },
+                "component": { "name": "Button/Primary", "explicit": true },
+                "children": [{
+                  "id": "action-b-label", "name": "Action / Label", "kind": "text",
+                  "geometry": { "x": 150, "y": 482, "width": 90, "height": 20 }, "visibleBounds": { "x": 150, "y": 482, "width": 90, "height": 20 },
+                  "layout": { "mode": "none", "gap": 0, "padding": [0, 0, 0, 0], "justify": "start", "align": "start", "wrap": false },
+                  "sizing": { "horizontal": "hug", "vertical": "hug", "grow": 0 }, "style": { "fills": [], "opacity": 1 },
+                  "text": { "value": "Longer label", "family": "Inter", "weight": 600, "style": "Normal", "size": 14, "lineHeight": 20, "letterSpacing": 0, "align": "center", "color": { "r": 1, "g": 1, "b": 1, "a": 1 }, "singleLine": true, "property": { "name": "Label", "type": "text" } },
+                  "children": []
+                }]
+              }
+            ]
+          },
+          {
+            "id": "footer",
+            "name": "Footer",
+            "kind": "text",
+            "geometry": { "x": 90, "y": 802, "width": 210, "height": 16 },
+            "visibleBounds": { "x": 90, "y": 802, "width": 210, "height": 16 },
+            "layout": { "mode": "none", "gap": 0, "padding": [0, 0, 0, 0], "justify": "start", "align": "start", "wrap": false },
+            "sizing": { "horizontal": "hug", "vertical": "hug", "grow": 0 },
+            "style": { "fills": [], "opacity": 1 },
+            "text": { "value": "DOM Migrate v3 QA", "family": "Inter", "weight": 400, "style": "Normal", "size": 11, "lineHeight": 16, "letterSpacing": 0.3, "align": "center", "color": { "r": 0.5, "g": 0.5, "b": 0.5, "a": 1 }, "singleLine": true },
+            "children": []
+          }
+        ]
+      }
+    }
+  ],
+  "images": {},
+  "variables": {
+    "colors": { "Ink": { "r": 0.04, "g": 0.04, "b": 0.05, "a": 1 } },
+    "spacing": { "Md": 16 },
+    "radius": { "Md": 12 }
+  },
+  "compatibility": {
+    "warnings": [],
+    "errors": [],
+    "fonts": [
+      { "family": "Inter", "weight": 400, "style": "Normal", "nodes": ["footer"] },
+      { "family": "Inter", "weight": 600, "style": "Normal", "nodes": ["action-a-label", "action-b-label"] },
+      { "family": "Inter", "weight": 700, "style": "Normal", "nodes": ["quiet-title"] }
+    ],
+    "rasterLayers": []
+  }
+}
