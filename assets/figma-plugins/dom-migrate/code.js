@@ -56,7 +56,15 @@ function sig(node) {
 
 const ALIGN_MAP = { MIN: "MIN", CENTER: "CENTER", MAX: "MAX", SPACE_BETWEEN: "SPACE_BETWEEN", BASELINE: "BASELINE", STRETCH: "STRETCH" };
 
-async function buildTreeNode(node, hash, components) {
+function countSigs(node, counts) {
+  if (node.name && (node.children || []).length) {
+    const s = sig(node);
+    counts.set(s, (counts.get(s) || 0) + 1);
+  }
+  for (const c of node.children || []) countSigs(c, counts);
+}
+
+async function buildTreeNode(node, hash, components, counts) {
   if (node.type === "shape" || node.kind === "shape") {
     const r = figma.createRectangle();
     r.resize(Math.max((node.w || (node.size && node.size.w) || 1), 0.1), Math.max((node.h || (node.size && node.size.h) || 1), 0.1));
@@ -113,14 +121,15 @@ async function buildTreeNode(node, hash, components) {
     f.counterAxisSizingMode = "AUTO";
     return f;
   }
-  // frame
+  // frame or component (repeated subtrees)
   const s = sig(node);
-  if (components.has(s)) {
+  const repeated = (counts.get(s) || 0) > 1;
+  if (repeated && components.has(s)) {
     const inst = components.get(s).createInstance();
     inst.name = node.name || "instance";
     return inst;
   }
-  const f = figma.createFrame();
+  const f = repeated ? figma.createComponent() : figma.createFrame();
   f.name = node.name || "frame";
   const L = node.layout || { mode: "NONE", pad: [0, 0, 0, 0] };
   f.layoutMode = L.mode || "NONE";
@@ -142,7 +151,7 @@ async function buildTreeNode(node, hash, components) {
   f.clipsContent = node.clips !== false && L.mode === "NONE" ? true : !!node.clips;
   if (L.mode === "NONE" && node.size) f.resize(node.size.w, node.size.h);
   for (const c of node.children || []) {
-    const child = await buildTreeNode(c, hash, components);
+    const child = await buildTreeNode(c, hash, components, counts);
     f.appendChild(child);
     if (c.absolute) {
       child.layoutPositioning = "ABSOLUTE";
@@ -160,8 +169,8 @@ async function buildTreeNode(node, hash, components) {
     }
   }
   if (L.mode !== "NONE") { f.primaryAxisSizingMode = "AUTO"; f.counterAxisSizingMode = "AUTO"; }
-  // exact-duplicate subtrees become components
-  if (node.name && (node.children || []).length) components.set(s, /** @type any */(f));
+  // exact-duplicate subtrees become components (first occurrence stores the component)
+  if (repeated) components.set(s, /** @type any */(f));
   return f;
 }
 
@@ -172,7 +181,14 @@ async function buildTreePages(pages, images) {
   const hash = {};
   for (const k of Object.keys(images)) hash[k] = figma.createImage(b64ToBytes(images[k])).hash;
   const components = new Map();
-  let x = 0, i = 0;
+  const counts = new Map();
+  for (const pg of pages) if (pg.tree) countSigs(pg.tree, counts);
+  // append after any existing canvas content instead of overlapping it
+  let x = 0;
+  if (figma.currentPage.children.length) {
+    x = Math.max(...figma.currentPage.children.map(n => n.x + n.width)) + 200;
+  }
+  let i = 0;
   for (const pg of pages) {
     const frame = figma.createFrame();
     frame.name = pg.name;
@@ -182,7 +198,7 @@ async function buildTreePages(pages, images) {
     frame.fills = pg.bgColor ? [solid(pg.bgColor)] : [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
     if (pg.tree) {
       for (const c of pg.tree.children || []) {
-        const child = await buildTreeNode(c, hash, components);
+        const child = await buildTreeNode(c, hash, components, counts);
         frame.appendChild(child);
         if (c.absolute) { child.layoutPositioning = "ABSOLUTE"; child.x = c.absolute.x; child.y = c.absolute.y; }
       }
@@ -211,6 +227,9 @@ figma.ui.onmessage = async (msg) => {
     }
 
     let x = 0;
+    if (figma.currentPage.children.length) {
+      x = Math.max(...figma.currentPage.children.map(n => n.x + n.width)) + 200;
+    }
     let frameCount = 0;
     for (const pg of pages) {
       const frame = figma.createFrame();
