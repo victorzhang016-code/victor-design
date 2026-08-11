@@ -156,7 +156,9 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
     const child = await buildTreeNode(c, hash, components, counts, inComponent || makeComponent);
     f.appendChild(child);
     if (c.absolute) {
-      child.layoutPositioning = "ABSOLUTE";
+      // ABSOLUTE positioning only exists inside auto-layout parents;
+      // in a NONE parent a plain x/y is already absolute
+      if (f.layoutMode !== "NONE") child.layoutPositioning = "ABSOLUTE";
       child.x = c.absolute.x; child.y = c.absolute.y;
     } else if (f.layoutMode !== "NONE") {
       if (c.marginTop) {
@@ -203,7 +205,7 @@ async function buildTreePages(pages, images) {
       for (const c of pg.tree.children || []) {
         const child = await buildTreeNode(c, hash, components, counts);
         frame.appendChild(child);
-        if (c.absolute) { child.layoutPositioning = "ABSOLUTE"; child.x = c.absolute.x; child.y = c.absolute.y; }
+        if (c.absolute) { child.x = c.absolute.x; child.y = c.absolute.y; } // top-level frames are NONE
       }
       frame.layoutMode = "NONE";
     }
