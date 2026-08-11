@@ -64,7 +64,7 @@ function countSigs(node, counts) {
   for (const c of node.children || []) countSigs(c, counts);
 }
 
-async function buildTreeNode(node, hash, components, counts) {
+async function buildTreeNode(node, hash, components, counts, inComponent) {
   if (node.type === "shape" || node.kind === "shape") {
     const r = figma.createRectangle();
     r.resize(Math.max((node.w || (node.size && node.size.w) || 1), 0.1), Math.max((node.h || (node.size && node.size.h) || 1), 0.1));
@@ -121,7 +121,8 @@ async function buildTreeNode(node, hash, components, counts) {
     f.counterAxisSizingMode = "AUTO";
     return f;
   }
-  // frame or component (repeated subtrees)
+  // frame or component (repeated subtrees; components cannot nest, so inside
+  // a component we either reuse an existing instance or stay a plain frame)
   const s = sig(node);
   const repeated = (counts.get(s) || 0) > 1;
   if (repeated && components.has(s)) {
@@ -129,7 +130,8 @@ async function buildTreeNode(node, hash, components, counts) {
     inst.name = node.name || "instance";
     return inst;
   }
-  const f = repeated ? figma.createComponent() : figma.createFrame();
+  const makeComponent = repeated && !inComponent;
+  const f = makeComponent ? figma.createComponent() : figma.createFrame();
   f.name = node.name || "frame";
   const L = node.layout || { mode: "NONE", pad: [0, 0, 0, 0] };
   f.layoutMode = L.mode || "NONE";
@@ -151,7 +153,7 @@ async function buildTreeNode(node, hash, components, counts) {
   f.clipsContent = node.clips !== false && L.mode === "NONE" ? true : !!node.clips;
   if (L.mode === "NONE" && node.size) f.resize(node.size.w, node.size.h);
   for (const c of node.children || []) {
-    const child = await buildTreeNode(c, hash, components, counts);
+    const child = await buildTreeNode(c, hash, components, counts, inComponent || makeComponent);
     f.appendChild(child);
     if (c.absolute) {
       child.layoutPositioning = "ABSOLUTE";
@@ -169,8 +171,8 @@ async function buildTreeNode(node, hash, components, counts) {
     }
   }
   if (L.mode !== "NONE") { f.primaryAxisSizingMode = "AUTO"; f.counterAxisSizingMode = "AUTO"; }
-  // exact-duplicate subtrees become components (first occurrence stores the component)
-  if (repeated) components.set(s, /** @type any */(f));
+  // register only real components (never one buried inside another component)
+  if (makeComponent) components.set(s, /** @type any */(f));
   return f;
 }
 
@@ -189,6 +191,7 @@ async function buildTreePages(pages, images) {
     x = Math.max(...figma.currentPage.children.map(n => n.x + n.width)) + 200;
   }
   let i = 0;
+  figma.ui.postMessage({ type: "status", text: `导入起点 x=${Math.round(x)}` });
   for (const pg of pages) {
     const frame = figma.createFrame();
     frame.name = pg.name;
