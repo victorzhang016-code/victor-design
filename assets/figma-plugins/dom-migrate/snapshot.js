@@ -34,13 +34,29 @@ window.domMigrateSnapshotAll = async function (root) {
 
       // own background/border first (stays below text in z-order)
       const bgA = (cs.backgroundColor || "").match(/[\d.]+/g);
-      const hasBg = bgA && bgA.length === 4 && parseFloat(bgA[3]) > 0.02;
-      const bw = parseFloat(cs.borderTopWidth) || 0;
-      if ((hasBg || bw > 0) && !["BODY", "HTML"].includes(el.tagName)) {
+      const hasBg = bgA && bgA.length >= 3 && (bgA.length === 3 || parseFloat(bgA[3]) > 0.02);
+      const bwT = parseFloat(cs.borderTopWidth) || 0;
+      const bwR = parseFloat(cs.borderRightWidth) || 0;
+      const bwB = parseFloat(cs.borderBottomWidth) || 0;
+      const bwL = parseFloat(cs.borderLeftWidth) || 0;
+      const topOnly = bwT > 0 && bwR === 0 && bwB === 0 && bwL === 0 && cs.borderTopStyle !== "none";
+      const fullBorder = bwT > 0 && !topOnly && cs.borderTopStyle !== "none";
+      if ((hasBg || fullBorder) && !["BODY", "HTML"].includes(el.tagName)) {
         const node = { type: "shape", ...rel(r), radius: parseFloat(cs.borderRadius) || 0 };
-        if (hasBg) node.fill = { color: rgbArr(cs.backgroundColor), opacity: parseFloat(bgA[3]) };
-        if (bw > 0 && cs.borderTopStyle !== "none") node.stroke = { color: rgbArr(cs.borderTopColor), weight: bw };
+        if (hasBg) node.fill = { color: rgbArr(cs.backgroundColor), opacity: bgA.length === 4 ? parseFloat(bgA[3]) : 1 };
+        if (fullBorder) {
+          const bc = (cs.borderTopColor || "").match(/[\d.]+/g) || [0, 0, 0];
+          node.stroke = { color: rgbArr(cs.borderTopColor), weight: bwT, opacity: bc.length === 4 ? parseFloat(bc[3]) : 1 };
+        }
         nodes.push(node);
+      }
+      if (topOnly) {
+        // a CSS border-top is a hairline, not a box: emit a 1px-tall fill rect,
+        // otherwise the importer draws a full rectangle outline around the block
+        const rr = rel(r);
+        const bc = (cs.borderTopColor || "").match(/[\d.]+/g) || [0, 0, 0];
+        nodes.push({ type: "shape", x: rr.x, y: rr.y, w: rr.w, h: Math.max(bwT, 1),
+          fill: { color: rgbArr(cs.borderTopColor), opacity: bc.length === 4 ? parseFloat(bc[3]) : 1 } });
       }
       const bgUrl = bgUrlOf(cs);
       if (bgUrl && !["BODY", "HTML"].includes(el.tagName)) {
@@ -73,8 +89,13 @@ window.domMigrateSnapshotAll = async function (root) {
         if (rebuilt.trim()) {
           const fams = (cs.fontFamily || "").split(",").map(s => s.trim().replace(/["']/g, ""));
           const w = parseInt(cs.fontWeight, 10) || 400;
+          const rr = rel(r);
+          const fs0 = parseFloat(cs.fontSize);
+          // single-line text: Figma's font metrics run wider than the browser's;
+          // a shrink-to-fit box would wrap, so give the line 12% slack
+          if (rr.h < fs0 * 2) rr.w = Math.min(rr.w * 1.12, pr.width - rr.x);
           nodes.push({
-            type: "text", ...rel(r), text: rebuilt,
+            type: "text", ...rr, text: rebuilt,
             fontFamily: fams[0] || "Microsoft YaHei",
             fontStyle: w >= 800 ? "Black" : w >= 600 ? "Bold" : w <= 300 ? "Light" : "Regular",
             fontSize: parseFloat(cs.fontSize),
@@ -95,6 +116,20 @@ window.domMigrateSnapshotAll = async function (root) {
     else { const bga = (pcs.backgroundColor || "").match(/[\d.]+/g); if (bga) out.bgColor = [bga[0] / 255, bga[1] / 255, bga[2] / 255]; }
     for (const c of page.children) await walk(c);
     out.nodes = nodes;
+    // effect-layer detection: pseudo-element backgrounds and CSS filters are
+    // invisible to this snapshot — flag them so the packager can pre-render
+    // alpha-PNG overlays (see delivery-implementations.md "Effect layers")
+    const fx = [];
+    [page, ...page.querySelectorAll("*")].forEach((el) => {
+      const pre = win.getComputedStyle(el, "::before").backgroundImage;
+      const post = win.getComputedStyle(el, "::after").backgroundImage;
+      const flt = win.getComputedStyle(el).filter;
+      const tag = el.id ? "#" + el.id : el.className && el.className.baseVal === undefined ? "." + String(el.className).split(" ")[0] : el.tagName;
+      if (pre && pre !== "none") fx.push(`${tag} ::before background`);
+      if (post && post !== "none") fx.push(`${tag} ::after background`);
+      if (flt && flt !== "none") fx.push(`${tag} filter:${flt}`);
+    });
+    if (fx.length) out.fxWarnings = fx;
     return out;
   }
 

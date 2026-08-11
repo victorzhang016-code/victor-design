@@ -70,7 +70,7 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
     r.resize(Math.max((node.w || (node.size && node.size.w) || 1), 0.1), Math.max((node.h || (node.size && node.size.h) || 1), 0.1));
     if (node.radius) r.cornerRadius = node.radius;
     r.fills = node.fill ? [solid(node.fill.color, node.fill.opacity)] : [];
-    if (node.stroke) { r.strokes = [solid(node.stroke.color)]; r.strokeWeight = node.stroke.weight; }
+    if (node.stroke) { r.strokes = [solid(node.stroke.color, node.stroke.opacity)]; r.strokeWeight = node.stroke.weight; }
     r.name = node.name || "shape";
     return r;
   }
@@ -91,7 +91,7 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
   }
   if (node.kind === "text") {
     // chip/button pattern: text with fill or padding becomes an auto-layout frame
-    const isChip = node.fill || (node.pad && node.pad.some(v => v > 0));
+    const isChip = node.chip || node.box || node.fill || (node.pad && node.pad.some(v => v > 0));
     const t = figma.createText();
     const base = await loadFontRobust(niceFamily(node.fontFamily), node.fontStyle);
     t.fontName = base;
@@ -120,16 +120,23 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
     const f = figma.createFrame();
     f.name = node.name || "chip";
     f.layoutMode = "HORIZONTAL";
-    f.primaryAxisAlignItems = "MIN";
+    f.primaryAxisAlignItems = node.box ? "CENTER" : "MIN";
     f.counterAxisAlignItems = "CENTER";
     const pad = node.pad || [0, 0, 0, 0];
     f.paddingTop = pad[0]; f.paddingRight = pad[1]; f.paddingBottom = pad[2]; f.paddingLeft = pad[3];
     f.fills = node.fill ? [solid(node.fill.color, node.fill.opacity)] : [];
-    if (node.stroke) { f.strokes = [solid(node.stroke.color)]; f.strokeWeight = node.stroke.weight; }
+    if (node.stroke) { f.strokes = [solid(node.stroke.color, node.stroke.opacity)]; f.strokeWeight = node.stroke.weight; }
     if (node.radius) f.cornerRadius = node.radius;
     f.appendChild(t);
-    f.primaryAxisSizingMode = "AUTO";
-    f.counterAxisSizingMode = "AUTO";
+    if (node.box && node.size) {
+      // block-level buttons keep their captured height and stretch horizontally
+      f.counterAxisSizingMode = "FIXED";
+      f.primaryAxisSizingMode = "FIXED";
+      f.resize(node.size.w, node.size.h);
+    } else {
+      f.primaryAxisSizingMode = "AUTO";
+      f.counterAxisSizingMode = "AUTO";
+    }
     return f;
   }
   // frame or component (repeated subtrees; components cannot nest, so inside
@@ -154,7 +161,11 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
   }
   const pad = L.pad || [0, 0, 0, 0];
   f.paddingTop = pad[0]; f.paddingRight = pad[1]; f.paddingBottom = pad[2]; f.paddingLeft = pad[3];
-  f.fills = node.fill ? [solid(node.fill.color, node.fill.opacity)] : [];
+  if (node.bgImageKey) {
+    f.fills = [{ type: "IMAGE", imageHash: hash[node.bgImageKey], scaleMode: "FILL" }];
+  } else {
+    f.fills = node.fill ? [solid(node.fill.color, node.fill.opacity)] : [];
+  }
   if (node.stroke) { f.strokes = [solid(node.stroke.color)]; f.strokeWeight = node.stroke.weight; }
   if (node.radius) f.cornerRadius = node.radius;
   if (node.shadow) {
@@ -179,7 +190,7 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
         f.insertChild(f.children.indexOf(child), sp);
       }
       if (c.layoutGrow) child.layoutGrow = c.layoutGrow;
-      if (f.layoutMode === "VERTICAL" && L.stretchChildren !== false && !c.chip && (child.type === "TEXT" || child.type === "FRAME"))
+      if (f.layoutMode === "VERTICAL" && L.stretchChildren !== false && !c.chip && (child.type === "TEXT" || child.type === "FRAME" || child.type === "COMPONENT" || child.type === "INSTANCE"))
         child.layoutAlign = "STRETCH";
     }
   }
@@ -271,14 +282,19 @@ figma.ui.onmessage = async (msg) => {
           r.x = n.x; r.y = n.y; r.resize(Math.max(n.w, 0.1), Math.max(n.h, 0.1));
           if (n.radius) r.cornerRadius = n.radius;
           r.fills = n.fill ? [solid(n.fill.color, n.fill.opacity)] : [];
-          if (n.stroke) { r.strokes = [solid(n.stroke.color)]; r.strokeWeight = n.stroke.weight; }
+          if (n.stroke) { r.strokes = [solid(n.stroke.color, n.stroke.opacity)]; r.strokeWeight = n.stroke.weight; }
           frame.appendChild(r);
         } else if (n.type === "image") {
           const r = figma.createRectangle();
           r.x = n.x; r.y = n.y; r.resize(Math.max(n.w, 0.1), Math.max(n.h, 0.1));
           // CSS object-fit: cover is the snapshot default; "fit" only when the
-          // packager marked the node as contain (e.g. a full-bleed diagram plate)
-          r.fills = [{ type: "IMAGE", imageHash: hash[n.imageKey], scaleMode: n.fitMode === "fit" ? "FIT" : "FILL" }];
+          // packager marked the node as contain (e.g. a full-bleed diagram plate);
+          // "tile" = repeating texture layer (grain/noise), natural-size tiling
+          const mode = n.fitMode === "fit" ? "FIT" : n.fitMode === "tile" ? "TILE" : "FILL";
+          const fill = { type: "IMAGE", imageHash: hash[n.imageKey], scaleMode: mode };
+          if (mode === "TILE") fill.scalingFactor = 1;
+          r.fills = [fill];
+          if (typeof n.alpha === "number") r.opacity = n.alpha;
           frame.appendChild(r);
         } else if (n.type === "text") {
           const t = figma.createText();

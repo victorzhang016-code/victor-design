@@ -15,9 +15,34 @@ Usage:
 import argparse
 import base64
 import hashlib
+import io
 import json
 import os
 import urllib.parse
+
+MAX_DIM = 4000  # Figma createImage rejects images beyond 4096px on a side
+
+
+def load_capped(path):
+    """Read an image file; downscale past Figma's createImage limit."""
+    raw = open(path, "rb").read()
+    try:
+        from PIL import Image
+    except ImportError:
+        return raw
+    im = Image.open(io.BytesIO(raw))
+    if max(im.size) <= MAX_DIM:
+        return raw
+    im2 = im.copy()
+    im2.thumbnail((MAX_DIM, MAX_DIM), Image.LANCZOS)
+    buf = io.BytesIO()
+    if im.mode in ("RGBA", "LA", "P"):
+        im2.convert("RGBA").save(buf, "PNG")
+    else:
+        im2.convert("RGB").save(buf, "JPEG", quality=88)
+    print(f"  downscaled >{MAX_DIM}px: {os.path.basename(path)} {im.size} -> {im2.size}")
+    return buf.getvalue()
+import re
 
 
 def resolve(src, base):
@@ -55,7 +80,7 @@ def main():
             svg = urllib.parse.unquote(src.split(",", 1)[1])
             key = f"svg-{len(svg_jobs)}"
             if key in svg_pngs:
-                n["imageKey"] = intern(open(svg_pngs[key], "rb").read())
+                n["imageKey"] = intern(load_capped(svg_pngs[key]))
                 n["type"] = "image"
                 if n.get("kind"): n["kind"] = "image"
             else:
@@ -63,7 +88,7 @@ def main():
                 n["svgPending"] = key
             n.pop("repeat", None)
         else:
-            n["imageKey"] = intern(open(resolve(src, args.base), "rb").read())
+            n["imageKey"] = intern(load_capped(resolve(src, args.base)))
             if n.get("type") == "bgimage":
                 n["type"] = "image"
                 n.pop("repeat", None)
@@ -74,15 +99,37 @@ def main():
         if n.get("kind") == "image" or "src" in n:
             embed_node(n)
         if "bgImage" in n and isinstance(n["bgImage"], dict) and "src" in n["bgImage"]:
-            embed_node(n["bgImage"])
-            n["bgImageKey"] = n["bgImage"].pop("imageKey", None)
-            n.pop("bgImage", None)
+            bg = n.pop("bgImage")
+            src = bg["src"]
+            # CSS sprite-crop (background-size/position in px) -> pre-crop with PIL
+            msize = re.match(r"^([\d.]+)px", bg.get("size") or "")
+            mpos = re.match(r"^(-?[\d.]+)px\s+(-?[\d.]+)px", bg.get("pos") or "")
+            if msize and mpos and n.get("size"):
+                from PIL import Image
+                path = resolve(src, args.base)
+                im = Image.open(path).convert("RGBA")
+                tw = float(msize.group(1))
+                scale = tw / im.width
+                im = im.resize((int(round(tw)), int(round(im.height * scale))))
+                ox, oy = -float(mpos.group(1)), -float(mpos.group(2))
+                box = (int(round(ox)), int(round(oy)),
+                       int(round(ox + n["size"]["w"])), int(round(oy + n["size"]["h"])))
+                crop = im.crop(box)
+                import io as _io
+                buf = _io.BytesIO(); crop.save(buf, "PNG")
+                n["bgImageKey"] = intern(buf.getvalue())
+            else:
+                embed_node(bg)
+                n["bgImageKey"] = bg.pop("imageKey", None)
         for c in n.get("children", []):
             walk_tree(c)
 
     for pg in pages:
         if "bgSrc" in pg:
-            pg["bgImageKey"] = intern(open(resolve(pg.pop("bgSrc"), args.base), "rb").read())
+            pg["bgImageKey"] = intern(load_capped(resolve(pg.pop("bgSrc"), args.base)))
+        if pg.get("fxWarnings"):
+            print(f"NOTE [{pg.get('name')}]: effect layers not captured by snapshot — pre-render alpha-PNG overlays "
+                  f"(delivery-implementations.md > Effect layers): {'; '.join(pg['fxWarnings'])}")
         if "tree" in pg:
             walk_tree(pg["tree"])
             continue

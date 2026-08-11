@@ -109,13 +109,15 @@ window.domMigrateSnapshotUI = async function (root) {
       const t = textPayload(el, cs);
       // chip / button / card style on text-bearing elements
       const bgA = (cs.backgroundColor || "").match(/[\d.]+/g);
-      if (bgA && bgA.length === 4 && parseFloat(bgA[3]) > 0.02) t.fill = { color: rgbArr(cs.backgroundColor), opacity: parseFloat(bgA[3]) };
+      if (bgA && bgA.length >= 3 && (bgA.length === 3 || parseFloat(bgA[3]) > 0.02)) t.fill = { color: rgbArr(cs.backgroundColor), opacity: bgA.length === 4 ? parseFloat(bgA[3]) : 1 };
       const bw = parseFloat(cs.borderTopWidth) || 0;
       if (bw > 0 && cs.borderTopStyle !== "none") t.stroke = { color: rgbArr(cs.borderTopColor), weight: bw };
       if (parseFloat(cs.borderRadius) > 0) t.radius = px(parseFloat(cs.borderRadius));
       const pad = [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].map(v => px(parseFloat(v) || 0));
       if (pad.some(v => v > 0)) t.pad = pad;
-      if (t.fill || (t.pad && t.pad.some(v => v > 0))) t.chip = true;
+      if (t.fill || (t.pad && t.pad.some(v => v > 0))) {
+        if ((cs.display || "").includes("inline")) t.chip = true; else t.box = true;
+      }
       Object.assign(t, out);
       return t;
     }
@@ -125,7 +127,7 @@ window.domMigrateSnapshotUI = async function (root) {
     for (const c of el.children) { const k = await walk(c, r); if (k) kids.push(k); }
 
     const bgA2 = (cs.backgroundColor || "").match(/[\d.]+/g);
-    const hasBg = bgA2 && bgA2.length === 4 && parseFloat(bgA2[3]) > 0.02;
+    const hasBg = bgA2 && bgA2.length >= 3 && (bgA2.length === 3 || parseFloat(bgA2[3]) > 0.02);
     const bw2 = parseFloat(cs.borderTopWidth) || 0;
     const hasBorder = bw2 > 0 && cs.borderTopStyle !== "none";
     const shadow = parseShadow(cs.boxShadow);
@@ -145,7 +147,7 @@ window.domMigrateSnapshotUI = async function (root) {
     } : { mode: "NONE", pad: [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].map(v => px(parseFloat(v) || 0)) };
     if (kids.some(k => k.marginTopAuto) && node.layout.mode === "VERTICAL") node.layout.primary = "SPACE_BETWEEN";
     if (node.layout.mode === "VERTICAL") node.layout.stretchChildren = !isFlex || ["stretch","normal"].includes(cs.alignItems || "stretch");
-    if (hasBg) node.fill = { color: rgbArr(cs.backgroundColor), opacity: parseFloat(bgA2[3]) };
+    if (hasBg) node.fill = { color: rgbArr(cs.backgroundColor), opacity: bgA2.length === 4 ? parseFloat(bgA2[3]) : 1 };
     if (hasBorder) node.stroke = { color: rgbArr(cs.borderTopColor), weight: bw2 };
     if (parseFloat(cs.borderRadius) > 0) node.radius = px(parseFloat(cs.borderTopLeftRadius));
     if (shadow) node.shadow = shadow;
