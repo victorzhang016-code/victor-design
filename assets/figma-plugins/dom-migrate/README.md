@@ -36,8 +36,9 @@ npm run capture -- --input master.html --output export \
 ```
 
 Import `manifest.json` in Figma Desktop via **Plugins → Development → Import
-plugin from manifest**. Load `dom-migrate.v3.json`, review preflight, and build
-to the default `DOM Migrate v3 QA` page. The manifest ID is unchanged, so this
+plugin from manifest**. Load `dom-migrate.v3.json`, review preflight, and leave
+the target page blank to build on the current Figma page; enter a name only to
+create or target a specific page. The manifest ID is unchanged, so this
 overwrites an earlier local installation instead of creating a second plugin.
 
 ## Controlled HTML contract

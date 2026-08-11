@@ -36,7 +36,7 @@
   <label for="file">迁移包</label>
   <input type="file" id="file" accept=".json,application/json">
   <label for="pageName">目标页面</label>
-  <input type="text" id="pageName" value="DOM Migrate v3 QA">
+  <input type="text" id="pageName" placeholder="留空则导入当前页面">
   <section id="preflight" class="hidden">
     <div class="summary" id="summary"></div>
     <div class="route" id="route"></div>
@@ -46,7 +46,7 @@
     <button class="secondary" id="download" disabled>下载审计报告</button>
     <button class="primary" id="build" disabled>构建到 Figma</button>
   </div>
-  <div id="status">请选择 dom-migrate.v3.json。</div>
+  <div id="status">选择迁移包以开始预检。</div>
 <script>
   let pkg = null;
   let report = null;
@@ -95,7 +95,7 @@
     build.disabled = true;
     file.disabled = true;
     setStatus("开始构建…");
-    parent.postMessage({ pluginMessage: { type: "build", pkg, pageName: document.getElementById("pageName").value.trim() || "DOM Migrate v3 QA" } }, "*");
+    parent.postMessage({ pluginMessage: { type: "build", pkg, pageName: document.getElementById("pageName").value.trim() || undefined } }, "*");
   });
 
   download.addEventListener("click", () => {

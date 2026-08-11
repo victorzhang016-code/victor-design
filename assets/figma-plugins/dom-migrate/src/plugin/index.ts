@@ -408,9 +408,12 @@ function collectGeometry(node: SceneNode, pageName: string, output: BuildContext
   if ("children" in node) for (const child of node.children) collectGeometry(child, pageName, output);
 }
 
-async function buildPackage(pkg: DomMigratePackageV3, fonts: FontMap, pageName: string): Promise<{ frameIds: string[]; componentIds: string[]; geometry: BuildContext["geometry"] }> {
-  let page = figma.root.children.find((candidate) => candidate.name === pageName);
-  if (!page) { page = figma.createPage(); page.name = pageName; }
+async function buildPackage(pkg: DomMigratePackageV3, fonts: FontMap, pageName?: string): Promise<{ frameIds: string[]; componentIds: string[]; geometry: BuildContext["geometry"] }> {
+  const requestedPage = pageName?.trim();
+  // An empty UI field is intentional: import beside the user's active work.
+  // Create/target another page only when its name was explicitly entered.
+  let page = requestedPage ? figma.root.children.find((candidate) => candidate.name === requestedPage) : figma.currentPage;
+  if (!page) { page = figma.createPage(); page.name = requestedPage!; }
   await figma.setCurrentPageAsync(page);
   const imageMap = new Map<string, string>();
   for (const [key, base64] of Object.entries(pkg.images)) imageMap.set(key, figma.createImage(bytes(base64)).hash);
@@ -468,7 +471,7 @@ figma.ui.onmessage = async (message: { type: string; pkg?: unknown; pageName?: s
     if (!result.pkg || !result.fontMap) throw new Error("Preflight did not produce a buildable package");
     if (result.report.errors.length) throw new Error(result.report.errors.map((item) => `${item.code}: ${item.message}`).join("\n"));
     figma.ui.postMessage({ type: "progress", text: "Preflight passed. Creating variables and text styles…" });
-    const built = await buildPackage(result.pkg, result.fontMap, message.pageName || "DOM Migrate v3 QA");
+    const built = await buildPackage(result.pkg, result.fontMap, message.pageName);
     figma.ui.postMessage({ type: "report", data: JSON.stringify({ schemaVersion: 3, frames: built.frameIds, components: built.componentIds, geometry: built.geometry }, null, 2) });
     figma.ui.postMessage({ type: "done", text: `Built ${built.frameIds.length} screen(s), ${built.componentIds.length} component(s).`, frameIds: built.frameIds, componentIds: built.componentIds });
   } catch (error) {

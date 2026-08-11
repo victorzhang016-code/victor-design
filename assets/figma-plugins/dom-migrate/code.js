@@ -4873,10 +4873,11 @@
     if ("children" in node) for (const child of node.children) collectGeometry(child, pageName, output);
   }
   async function buildPackage(pkg, fonts, pageName) {
-    let page = figma.root.children.find((candidate) => candidate.name === pageName);
+    const requestedPage = pageName?.trim();
+    let page = requestedPage ? figma.root.children.find((candidate) => candidate.name === requestedPage) : figma.currentPage;
     if (!page) {
       page = figma.createPage();
-      page.name = pageName;
+      page.name = requestedPage;
     }
     await figma.setCurrentPageAsync(page);
     const imageMap = /* @__PURE__ */ new Map();
@@ -4941,7 +4942,7 @@
       if (!result.pkg || !result.fontMap) throw new Error("Preflight did not produce a buildable package");
       if (result.report.errors.length) throw new Error(result.report.errors.map((item) => `${item.code}: ${item.message}`).join("\n"));
       figma.ui.postMessage({ type: "progress", text: "Preflight passed. Creating variables and text styles\u2026" });
-      const built = await buildPackage(result.pkg, result.fontMap, message.pageName || "DOM Migrate v3 QA");
+      const built = await buildPackage(result.pkg, result.fontMap, message.pageName);
       figma.ui.postMessage({ type: "report", data: JSON.stringify({ schemaVersion: 3, frames: built.frameIds, components: built.componentIds, geometry: built.geometry }, null, 2) });
       figma.ui.postMessage({ type: "done", text: `Built ${built.frameIds.length} screen(s), ${built.componentIds.length} component(s).`, frameIds: built.frameIds, componentIds: built.componentIds });
     } catch (error) {

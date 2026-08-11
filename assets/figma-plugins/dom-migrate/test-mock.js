@@ -115,13 +115,13 @@ const code = fs.readFileSync(codePath, "utf8");
 (0, eval)(code);
 const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8"));
 
-await figma.ui.onmessage({ type: "build", pkg, pageName: "DOM Migrate v3 QA" });
+await figma.ui.onmessage({ type: "build", pkg });
 const errors = figma.ui.messages.filter((message) => message.type === "error");
 if (errors.length) throw new Error(errors.map((error) => error.text).join("\n"));
-const qaPage = root.children.find((page) => page.name === "DOM Migrate v3 QA");
-const topLevel = qaPage?.children.length || 0;
+if (figma.currentPage.name !== "Baseline") throw new Error("empty target page should retain the current Figma page");
+const topLevel = figma.currentPage.children.length;
 if (topLevel === 0) throw new Error("top-level nodes: 0");
-const anonymousSpacers = qaPage.children.flatMap(function flatten(node) { return [node, ...(node.children || []).flatMap(flatten)]; }).filter((node) => /^spacer(?:-grow)?$/i.test(node.name));
+const anonymousSpacers = figma.currentPage.children.flatMap(function flatten(node) { return [node, ...(node.children || []).flatMap(flatten)]; }).filter((node) => /^spacer(?:-grow)?$/i.test(node.name));
 if (anonymousSpacers.length) throw new Error(`anonymous spacers: ${anonymousSpacers.length}`);
 const done = figma.ui.messages.find((message) => message.type === "done");
 if (!done?.componentIds?.length) throw new Error("explicit component did not produce a component and instances");
