@@ -62,10 +62,29 @@ node test-mock.js code.js <package.json>
 
 - Absolutely-positioned nodes, not auto-layout. The output is editable, not
   responsive.
-- CSS filters, blends, gradients, and complex masks are not migrated — the
-  repair pass owns them.
+- Images default to `scaleMode: FILL` (CSS `object-fit: cover`); the packager
+  may mark a node `fitMode: "fit"` (contain) or `fitMode: "tile"` (repeating
+  texture, natural-size `TILE`). Where box geometry is available the packager
+  pre-crops `object-fit`/`object-position` exactly; otherwise verify focal
+  crops in the repair pass.
+- CSS filters, blends, gradients, pseudo-element layers (`::before/::after`
+  vignettes, fades, grain), and box-shadows are **not captured by the
+  snapshot**. The durable cross-target fix is the overlay pattern: pre-render
+  each effect layer to an alpha PNG and insert it as a picture node at the
+  same z-order it had in the HTML (see
+  `references/operations/delivery-implementations.md` → "Effect layers").
+  Rebuild natively in Figma only when the gradient itself must stay
+  parametrically editable.
 - Element backgrounds that sit on text blocks are captured as separate shape
-  nodes (correct z-order), but box-shadows are not migrated.
+  nodes (correct z-order).
+- Top-only CSS borders migrate as 1px fill rects (not box outlines); full
+  borders keep their stroke with alpha preserved.
+- Single-line text nodes get 12% width slack to absorb Figma/browser font
+  metric drift; multi-line blocks keep their exact wrap width.
+- Images over 4000px/side are downscaled by the packager (Figma `createImage`
+  rejects >4096px); the original files stay untouched on disk.
+- The snapshot emits per-page `fxWarnings` for uncapturable effect layers;
+  the packager prints them as a to-do list for the overlay pattern.
 - Fonts must exist in the Figma environment; the plugin falls back
   (family → Microsoft YaHei → Inter) and the repair pass must catch it.
 

@@ -107,6 +107,32 @@ function only, `prefers-reduced-motion` honored, no autoplay loops.
 - Each state must also render standalone (`?state=name`) for the per-state
   PNG export.
 
+## Effect layers (gradients, grain, vignettes, photo filters)
+
+CSS effect layers are the first thing every translation loses: gradients and
+vignettes usually live on `::before/::after` pseudo-elements, grain is often
+an SVG filter, and photo treatment is a CSS `filter`. None of these survive
+HTML → Figma/PPTX migration by default. The durable, cross-target pattern:
+
+1. At packaging time, pre-render each effect layer to an alpha PNG at its
+   target pixel size (linear fades, radial vignettes, noise/grain, pre-filtered
+   photo variants). Keep the math from the CSS, not an eyeball approximation —
+   then verify the layer against the master render numerically (mean/std of
+   the affected region). Hand-tuned alphas have measured up to 7× off the CSS
+   spec (波光墀影 MVT, 2026-08). Note that browsers composite SVG noise in
+   linear-light while most office targets composite in sRGB: the same grain
+   overlay lifts a dark field noticeably less there — generate a separately
+   calibrated dark-field variant rather than accepting the mismatch.
+2. Insert each PNG as a native picture node at the **same z-order** the effect
+   had in the HTML (e.g. page grain under content, hero fade above the photo).
+   In Figma the overlay stays a replaceable, toggleable layer; in PPTX it is a
+   replaceable picture part.
+3. Rebuild a gradient natively (Figma gradient fill / PPTX gradFill XML) only
+   when the gradient itself must stay parametrically editable — record that
+   choice in the node audit.
+4. Verification renders must show the effect diff shrinking versus the master;
+   if the diff grows, suspect z-order inversion first.
+
 ## Release verification
 
 - `compare_renders.py` at equal scale for every translated frame/page.

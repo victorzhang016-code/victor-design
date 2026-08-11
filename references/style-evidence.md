@@ -54,6 +54,11 @@ Use these categories as prompts. Write observations, not aspirations.
 
 - Default voice and its reason; when serif, mono, tracking, or all caps are
   allowed and what source voice justifies them.
+- What voice inscriptions and furniture use by default. Record whether
+  tracked mono is earned: even when every value is factual, corner-annotation
+  clusters in tracked mono read as technical costume. When a page feels
+  over-annotated, cut the number of annotations, never their size — a type
+  floor is a minimum, not a target.
 - How text roles are assigned (title / explanation / evidence / action) and
   which text gets deleted.
 
@@ -64,6 +69,9 @@ Use these categories as prompts. Write observations, not aspirations.
   pressure.
 - What a legitimate material relationship looks like (host, evidence, shared
   rule, revealed meaning) versus a decorative connector.
+- How clean a cropped excerpt must be before it may enter a canvas: neighbor-
+  frame bleed, header fragments, or clipped labels make it unclean input —
+  re-crop it or drop it. A missing material node beats a dirty one.
 
 ### Density anchor
 
