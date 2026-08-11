@@ -39,6 +39,17 @@ images become replaceable IMAGE fills, shapes keep fills/strokes/radius.
    then export each frame and compare against the approved render at equal
    scale (`scripts/compare_renders.py`).
 
+## Testing
+
+`test-mock.js` runs code.js end-to-end in Node against a package file, with a
+mock Figma API that enforces the real constraints (no component nesting,
+ABSOLUTE positioning only inside auto-layout parents, text font loading
+order). Run it after every plugin change:
+
+```bash
+node test-mock.js code.js <package.json>
+```
+
 ## What it captures
 
 - text blocks: content, family/weight/size/line-height/tracking/color/align,
