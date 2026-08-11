@@ -110,7 +110,7 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
     } else {
       t.textAutoResize = "HEIGHT";
       const tw = (node.size && node.size.w) || 100;
-      t.resize(Math.max(tw, 1), 10);
+      t.resize(Math.max(tw, 1), Math.max(t.height, 1)); // height stays auto-computed
     }
     for (const sp of (node.spans || [])) {
       if (sp.bold) t.setRangeFontName(sp.start, sp.end, await loadFontRobust(niceFamily(node.fontFamily), "Bold"));
@@ -177,6 +177,18 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
   }
   f.clipsContent = node.clips !== false && L.mode === "NONE" ? true : !!node.clips;
   if (L.mode === "NONE" && node.size) f.resize(node.size.w, node.size.h);
+  if (node.absolute && node.size) {
+    // overlays keep the captured geometry — set BEFORE children so stretch/grow
+    // on children resolves against the final parent size
+    f.primaryAxisSizingMode = "FIXED"; f.counterAxisSizingMode = "FIXED";
+    f.resize(node.size.w, node.size.h);
+  } else if (node.fixW || node.fixH) {
+    if (node.fixW && L.mode === "VERTICAL") { f.primaryAxisSizingMode = "FIXED"; }
+    if (node.fixH && L.mode === "VERTICAL") { f.primaryAxisSizingMode = "FIXED"; }
+    if (node.fixH && L.mode !== "VERTICAL") { f.counterAxisSizingMode = "FIXED"; }
+    if (node.fixW && L.mode !== "VERTICAL") { f.primaryAxisSizingMode = "FIXED"; }
+    f.resize(node.fixW || node.size.w, node.fixH || node.size.h);
+  }
   let prevSiblingGeom = null;
   for (const c of node.children || []) {
     const child = await buildTreeNode(c, hash, components, counts, inComponent || makeComponent);
@@ -225,11 +237,7 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
       child.x = c.pos.x; child.y = c.pos.y;
     }
   }
-  if (node.absolute && node.size) {
-    // overlays keep the captured geometry
-    f.primaryAxisSizingMode = "FIXED"; f.counterAxisSizingMode = "FIXED";
-    f.resize(node.size.w, node.size.h);
-  } else if (L.mode !== "NONE") { f.primaryAxisSizingMode = "AUTO"; f.counterAxisSizingMode = "AUTO"; }
+  if (!(node.absolute && node.size) && !(node.fixW || node.fixH) && L.mode !== "NONE") { f.primaryAxisSizingMode = "AUTO"; f.counterAxisSizingMode = "AUTO"; }
   // register only real components (never one buried inside another component)
   if (makeComponent) components.set(s, /** @type any */(f));
   return f;

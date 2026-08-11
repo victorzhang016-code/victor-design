@@ -121,7 +121,17 @@ window.domMigrateSnapshotUI = async function (root) {
       if (/margin-left\s*:\s*auto/.test(body) && /margin-right\s*:\s*auto/.test(body)) mxAuto = true;
       if (/margin\s*:\s*0\s+auto/.test(body)) mxAuto = true;
     }
-    return { mtAuto, mxAuto };
+    // explicit px dimensions declared in the stylesheet (fixed-size blocks)
+    let fixW = null, fixH = null;
+    for (const c of cls) {
+      const body = ruleCache.get(c);
+      if (!body) continue;
+      const hm = body.match(/(?:^|;)\s*height\s*:\s*([\d.]+)px/);
+      const wm = body.match(/(?:^|;)\s*width\s*:\s*([\d.]+)px/);
+      if (hm) fixH = parseFloat(hm[1]);
+      if (wm) fixW = parseFloat(wm[1]);
+    }
+    return { mtAuto, mxAuto, fixW, fixH };
   }
 
   async function walk(el, parentRect) {
@@ -145,6 +155,8 @@ window.domMigrateSnapshotUI = async function (root) {
     const mf = marginFlags(el);
     if (mf.mtAuto) out.marginTopAuto = true;
     if (mf.mxAuto) out.centerSelf = true;
+    if (mf.fixW) out.fixW = mf.fixW;
+    if (mf.fixH) out.fixH = mf.fixH;
     if (cs.alignSelf && cs.alignSelf !== "auto" && cs.alignSelf !== "stretch") out.alignSelf = mapAlign(cs.alignSelf);
 
     if (el.tagName === "IMG") return { kind: "image", name: el.getAttribute("alt") || "image", src: el.getAttribute("src"),
