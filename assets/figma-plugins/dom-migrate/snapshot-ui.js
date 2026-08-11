@@ -106,6 +106,26 @@ window.domMigrateSnapshotUI = async function (root) {
 
     const hasOwnText = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
     if (hasOwnText) {
+      const inlineSvgs = [...el.children].filter(c => c.tagName && c.tagName.toUpperCase() === "SVG");
+      if (inlineSvgs.length && (cs.display || "").includes("flex")) {
+        // icon + text chip: a real frame with vector icon and hugging text.
+        // fill/stroke/radius/pad are computed HERE (textPayload does not set them)
+        const t = textPayload(el, cs);
+        const pad = [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].map(v => px(parseFloat(v) || 0));
+        const node = { kind: "frame", name: nameOf(el), ...out,
+          layout: { mode: "HORIZONTAL", gap: px(parseFloat(cs.gap) || parseFloat(cs.columnGap) || 0),
+                    pad, primary: mapAlign(cs.justifyContent), counter: mapAlign(cs.alignItems) } };
+        const bgc = (cs.backgroundColor || "").match(/[\d.]+/g);
+        if (bgc && bgc.length >= 3 && (bgc.length === 3 || parseFloat(bgc[3]) > 0.02)) node.fill = { color: rgbArr(cs.backgroundColor), opacity: bgc.length === 4 ? parseFloat(bgc[3]) : 1 };
+        const bw0 = parseFloat(cs.borderTopWidth) || 0;
+        if (bw0 > 0 && cs.borderTopStyle !== "none") node.stroke = { color: rgbArr(cs.borderTopColor), weight: bw0 };
+        if (parseFloat(cs.borderRadius) > 0) node.radius = px(parseFloat(cs.borderRadius));
+        node.children = [
+          ...inlineSvgs.map(c => ({ kind: "svg", name: "icon", svg: c.outerHTML })),
+          { ...t, text: t.text.trim() },
+        ];
+        return node;
+      }
       const t = textPayload(el, cs);
       // chip / button / card style on text-bearing elements
       const bgA = (cs.backgroundColor || "").match(/[\d.]+/g);

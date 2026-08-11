@@ -117,6 +117,8 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
       if (sp.color) t.setRangeFills(sp.start, sp.end, [solid(sp.color)]);
     }
     if (!isChip) { t.name = node.name || "text"; return t; }
+    // chip/box text hugs its content; the frame's alignment does the placement
+    t.textAutoResize = "WIDTH_AND_HEIGHT";
     const f = figma.createFrame();
     f.name = node.name || "chip";
     f.layoutMode = "HORIZONTAL";
