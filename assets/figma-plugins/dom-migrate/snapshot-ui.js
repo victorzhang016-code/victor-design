@@ -20,6 +20,20 @@ window.domMigrateSnapshotUI = async function (root) {
   const INLINE = new Set(["B", "STRONG", "SPAN", "EM", "I", "A", "SMALL"]);
 
   function rgbArr(c) { const m = c.match(/[\d.]+/g) || [0, 0, 0]; return [m[0] / 255, m[1] / 255, m[2] / 255]; }
+  function resolveFamily(fontFamily) {
+    // fonts.check() lies in headless Chrome; measure against a bogus baseline instead
+    const ctx = doc.createElement("canvas").getContext("2d");
+    const probe = "mmmmmmmmmmlli WWW 中文测试字 0123456789";
+    ctx.font = '16px "DefinitelyMissingXYZ123"';
+    const base = ctx.measureText(probe).width;
+    const fams = (fontFamily || "").split(",").map(x => x.trim().replace(/["']/g, "")).filter(Boolean);
+    for (const f of fams) {
+      if (["sans-serif", "serif", "monospace"].includes(f)) break;
+      ctx.font = `16px "${f}", "DefinitelyMissingXYZ123"`;
+      if (ctx.measureText(probe).width !== base) return f;
+    }
+    return null; // caller keeps its own fallback
+  }
   function alphaOf(c) { const m = c.match(/[\d.]+/g); return m && m.length === 4 ? parseFloat(m[3]) : 1; }
   function nameOf(el) {
     const cls = (el.className && el.className.baseVal !== undefined ? el.className.baseVal : el.className || "").toString().trim().split(/\s+/)[0];
@@ -72,7 +86,7 @@ window.domMigrateSnapshotUI = async function (root) {
     const w = parseInt(cs.fontWeight, 10) || 400;
     return {
       kind: "text", name: nameOf(el), text: rebuilt.replace(/[ \t]+$/, ""),
-      fontFamily: fams[0] || "Inter",
+      fontFamily: resolveFamily(cs.fontFamily) || fams[0] || "Inter",
       fontStyle: w >= 800 ? "Black" : w >= 600 ? "Bold" : w <= 300 ? "Light" : "Regular",
       fontSize: parseFloat(cs.fontSize),
       lineHeight: cs.lineHeight === "normal" ? null : parseFloat(cs.lineHeight),

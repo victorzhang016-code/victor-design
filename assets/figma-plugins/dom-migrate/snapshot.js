@@ -13,6 +13,14 @@ window.domMigrateSnapshotAll = async function (root) {
   const INLINE = new Set(["B", "STRONG", "SPAN", "EM", "I", "A", "SMALL"]);
 
   function rgbArr(c) { const m = c.match(/[\d.]+/g) || [0, 0, 0]; return [m[0] / 255, m[1] / 255, m[2] / 255]; }
+  function resolveFamily(fontFamily) {
+    const fams = (fontFamily || "").split(",").map(x => x.trim().replace(/["']/g, "")).filter(Boolean);
+    for (const f of fams) {
+      if (["sans-serif", "serif", "monospace"].includes(f)) break;
+      try { if (doc.fonts && doc.fonts.check(`12px "${f}"`)) return f; } catch (e) {}
+    }
+    return null; // caller keeps its own fallback
+  }
   function bgUrlOf(cs) {
     const bi = cs.backgroundImage || "";
     if (!bi.startsWith("url(")) return null;
@@ -96,7 +104,7 @@ window.domMigrateSnapshotAll = async function (root) {
           if (rr.h < fs0 * 2) rr.w = Math.min(rr.w * 1.12, pr.width - rr.x);
           nodes.push({
             type: "text", ...rr, text: rebuilt,
-            fontFamily: fams[0] || "Microsoft YaHei",
+            fontFamily: resolveFamily(cs.fontFamily) || fams[0] || "Microsoft YaHei",
             fontStyle: w >= 800 ? "Black" : w >= 600 ? "Bold" : w <= 300 ? "Light" : "Regular",
             fontSize: parseFloat(cs.fontSize),
             lineHeight: cs.lineHeight === "normal" ? null : parseFloat(cs.lineHeight),
