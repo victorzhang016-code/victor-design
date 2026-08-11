@@ -169,11 +169,25 @@ function parseGridTrackList(value: string): Array<{ kind: "fixed" | "fraction" |
   });
 }
 
-function layoutFor(el: Element, cs: CSSStyleDeclaration, childCount: number): IrLayout {
+function hasSingleInlineFlowLine(el: Element, children: IrNode[]): boolean {
+  if (children.length < 2) return false;
+  const meaningful = Array.from(el.childNodes).filter((child) => child.nodeType === Node.TEXT_NODE ? Boolean(child.textContent?.trim()) : child.nodeType === Node.ELEMENT_NODE);
+  if (meaningful.length < 2) return false;
+  const everyChildIsInline = meaningful.every((child) => child.nodeType === Node.TEXT_NODE || getComputedStyle(child as Element).display.startsWith("inline"));
+  if (!everyChildIsInline) return false;
+  const firstY = children[0].geometry.y;
+  // Browser inline flow is only safely modelled as one horizontal Auto Layout
+  // line when every captured item shares the same baseline band. Multi-line
+  // prose remains a normal block/vertical container.
+  return children.every((child) => Math.abs(child.geometry.y - firstY) <= 2);
+}
+
+function layoutFor(el: Element, cs: CSSStyleDeclaration, children: IrNode[]): IrLayout {
   let mode: IrLayout["mode"] = "none";
   if (cs.display === "flex" || cs.display === "inline-flex") mode = cs.flexDirection.startsWith("row") ? "horizontal" : "vertical";
   else if (cs.display === "grid" || cs.display === "inline-grid") mode = "grid";
-  else if (childCount > 0 && cs.display !== "inline") mode = "vertical";
+  else if (hasSingleInlineFlowLine(el, children)) mode = "horizontal";
+  else if (children.length > 0 && cs.display !== "inline") mode = "vertical";
   const value: IrLayout = {
     mode,
     gap: number(mode === "horizontal" ? cs.columnGap : cs.rowGap),
@@ -311,7 +325,7 @@ function captureElement(el: Element, viewport: Rect, warnings: CompatibilityItem
     kind,
     geometry: rect,
     visibleBounds: intersectRect(rect, clip),
-    layout: layoutFor(el, cs, children.length),
+    layout: layoutFor(el, cs, children),
     sizing: {
       horizontal: inferAxisSizing({ display: cs.display, flexGrow: cs.flexGrow, width: cs.width, position: cs.position }, "horizontal", authoredWidth, axisAnnotation(el, "width")),
       vertical: inferAxisSizing({ display: cs.display, flexGrow: cs.flexGrow, height: cs.height, position: cs.position }, "vertical", authoredHeight, axisAnnotation(el, "height")),
