@@ -44,6 +44,24 @@ face, and finally an explicitly reported global fallback so the job remains
 buildable. Fallbacks are warnings and are recorded in the compatibility report;
 they must never be silent.
 
+## First-pass import rules
+
+Write the source so its intended layout is unambiguous before capture:
+
+- Mark a full-width card, image, input, or button inside a column with
+  `data-figma-width="fill"`; mark a full-height flex region with
+  `data-figma-height="fill"`. This is essential for vertically centred empty,
+  loading, and completion states.
+- Keep centring on the parent (`justify-content` / `align-items`) and let text
+  use its real `text-align`; do not imitate it with absolute coordinates.
+- Use a source `<img>` for content imagery whenever possible. DOM Migrate
+  captures its visible crop at 3× device resolution into a replaceable Figma
+  image fill. Keep CSS effects on a separate named effect layer.
+- Use negative margins only for a documented visual overlap. Prefer gap,
+  padding, and a semantic wrapper for ordinary spacing.
+- Name the four most revealing states: default, overlay/sheet, information
+  dense, and empty/recovery. They are the minimum first-pass visual sample.
+
 ## Figma acceptance
 
 - one fixed-size root frame per state;

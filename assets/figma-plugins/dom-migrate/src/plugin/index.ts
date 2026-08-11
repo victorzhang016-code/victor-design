@@ -4,6 +4,7 @@ import { planFigmaNode, type PlannedNode } from "../planner/plan";
 import { fontRequirementKey, resolveFontRequirements } from "./fonts";
 import { convertLegacyPackage, detectPackageRoute, type PackageRoute } from "./legacy";
 import { calculateImportOrigin } from "./placement";
+import { containerAxisSizing } from "./axis-sizing";
 
 type FontMap = Map<string, FontName>;
 type VariableMap = Map<string, Variable>;
@@ -227,14 +228,13 @@ function setupContainer(frame: FrameNode | ComponentNode, node: PlannedNode): vo
   frame.resize(Math.max(node.geometry.width, 0.1), Math.max(node.geometry.height, 0.1));
   frame.layoutMode = layoutMode(node.layout.mode);
   if (frame.layoutMode !== "NONE") {
-    const primarySizing = frame.layoutMode === "HORIZONTAL" ? node.sizing.horizontal : node.sizing.vertical;
-    const counterSizing = frame.layoutMode === "HORIZONTAL" ? node.sizing.vertical : node.sizing.horizontal;
     // layoutSizing* controls this node in its parent. These properties control
     // the frame's own internal auto-layout axis. Without the latter, a fixed
     // flex:1 container such as Quiet Wrap silently hugs its contents and
     // primary-axis centering has no free space to operate in.
-    frame.primaryAxisSizingMode = primarySizing === "hug" ? "AUTO" : "FIXED";
-    frame.counterAxisSizingMode = counterSizing === "hug" ? "AUTO" : "FIXED";
+    const axisSizing = containerAxisSizing(node.layout.mode, node.sizing);
+    frame.primaryAxisSizingMode = axisSizing.primary;
+    frame.counterAxisSizingMode = axisSizing.counter;
     frame.paddingTop = node.layout.padding[0]; frame.paddingRight = node.layout.padding[1]; frame.paddingBottom = node.layout.padding[2]; frame.paddingLeft = node.layout.padding[3];
     frame.itemSpacing = node.layout.gap;
     frame.primaryAxisAlignItems = node.layout.justify === "center" ? "CENTER" : node.layout.justify === "end" ? "MAX" : node.layout.justify === "space-between" ? "SPACE_BETWEEN" : "MIN";

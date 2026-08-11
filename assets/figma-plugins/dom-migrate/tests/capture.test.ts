@@ -37,6 +37,12 @@ describe("deterministic Playwright capture", () => {
     expect(find(a.pages[0].root, "Inactive")).toBeUndefined();
     expect(find(a.pages[0].root, "Content / Grid")?.layout.mode).toBe("grid");
     expect(find(a.pages[0].root, "Avatar")?.image?.fit).toBe("crop");
+    const avatar = find(a.pages[0].root, "Avatar")!;
+    const avatarAsset = Buffer.from(a.images[avatar.image!.assetKey], "base64");
+    // Element crops are captured at 3x device resolution: they remain sharp
+    // when placed as editable Figma image fills, while the golden stays CSS-sized.
+    expect(avatarAsset.readUInt32BE(16)).toBe(144);
+    expect(avatarAsset.readUInt32BE(20)).toBe(144);
     expect(find(a.pages[0].root, "Status / Online")?.position).toBe("absolute");
     expect(find(a.pages[0].root, "Action")?.autoMargin?.top).toBe(true);
     expect(a.compatibility.rasterLayers).toHaveLength(2);

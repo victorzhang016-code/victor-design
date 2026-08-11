@@ -4499,6 +4499,16 @@
     return { x: minX, y: maxY + gap };
   }
 
+  // src/plugin/axis-sizing.ts
+  function containerAxisSizing(mode, sizing) {
+    const primary = mode === "horizontal" ? sizing.horizontal : sizing.vertical;
+    const counter = mode === "horizontal" ? sizing.vertical : sizing.horizontal;
+    return {
+      primary: primary === "hug" ? "AUTO" : "FIXED",
+      counter: counter === "hug" ? "AUTO" : "FIXED"
+    };
+  }
+
   // src/plugin/index.ts
   figma.showUI(__html__, { width: 520, height: 640, themeColors: true });
   function color(value) {
@@ -4687,10 +4697,9 @@
     frame.resize(Math.max(node.geometry.width, 0.1), Math.max(node.geometry.height, 0.1));
     frame.layoutMode = layoutMode(node.layout.mode);
     if (frame.layoutMode !== "NONE") {
-      const primarySizing = frame.layoutMode === "HORIZONTAL" ? node.sizing.horizontal : node.sizing.vertical;
-      const counterSizing = frame.layoutMode === "HORIZONTAL" ? node.sizing.vertical : node.sizing.horizontal;
-      frame.primaryAxisSizingMode = primarySizing === "hug" ? "AUTO" : "FIXED";
-      frame.counterAxisSizingMode = counterSizing === "hug" ? "AUTO" : "FIXED";
+      const axisSizing = containerAxisSizing(node.layout.mode, node.sizing);
+      frame.primaryAxisSizingMode = axisSizing.primary;
+      frame.counterAxisSizingMode = axisSizing.counter;
       frame.paddingTop = node.layout.padding[0];
       frame.paddingRight = node.layout.padding[1];
       frame.paddingBottom = node.layout.padding[2];

@@ -61,11 +61,12 @@ show a deprecation warning. Flat/poster packages stay on the legacy route.
 
 ### 4. Build and audit
 
-Build into a dedicated `DOM Migrate v3 QA` page. Preserve any failed baseline
-frames as evidence. The generator creates fixed screen roots, native flex/grid
-containers, legal axis sizing, semantic spacing/alignment wrappers, vectors,
-replaceable images, components/instances, scoped local variables, and text
-styles. Download the Figma geometry audit from the plugin.
+Build into a dedicated `DOM Migrate v3 QA` page, or the explicit target page
+named by the user. Preserve any failed baseline frames as evidence when they
+exist. The generator creates fixed screen roots, native flex/grid containers,
+legal axis sizing, semantic spacing/alignment wrappers, vectors, replaceable
+images, components/instances, scoped local variables, and text styles. Download
+the Figma geometry audit from the plugin.
 
 ### 5. Verify
 
@@ -78,6 +79,16 @@ styles. Download the Figma geometry audit from the plugin.
   redistributes space without overlap or accidental clipping.
 - Confirm component instance properties, variable bindings, text styles, and
   semantic names.
+
+### First-pass quality gate
+
+Before handing an editable UI over, run `npm test` and `npm run typecheck`, then
+capture the current master once in strict mode. Import and compare at least the
+default, overlay/sheet, densest-information, and empty/recovery state against
+their goldens. Check that centred fill containers retain their available height,
+full-width controls remain Fill, and content image crops are sharp at normal
+zoom. Fix a mismatch in the source/IR/importer before asking the user to repair
+it by hand in Figma.
 
 ## Minimal raster effect layers
 

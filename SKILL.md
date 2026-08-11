@@ -127,6 +127,10 @@ confirmed task, and name any exception.
 - Treat the approved render as Gate 3's golden source. Inventory custom fonts,
   CSS masks/blends/repeating textures, and perspective composites before
   translation; these are fidelity risks, not acceptable silent approximations.
+- For controlled VDS product UI, treat DOM Migrate v3 as a first-pass quality
+  gate: author the exact viewport states with semantic flex/grid and the
+  importer annotations, capture the golden package, then compare the imported
+  Figma states before release. A build that merely completes is not a pass.
 - A control record proves a decision happened; it never replaces user approval
   or authored visual judgment.
 
