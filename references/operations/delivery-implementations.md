@@ -54,9 +54,10 @@ Import `manifest.json`, load `dom-migrate.v3.json`, and review:
 - component, variable, text-style, and raster-layer counts;
 - warnings and hard errors.
 
-Strict v3 blocks missing fonts, illegal sizing, malformed IR, and unsupported
-packages. v2 UI packages show a deprecation warning. Flat/poster packages stay
-on the legacy route.
+Strict v3 blocks illegal sizing, malformed IR, and unsupported packages.
+Missing fonts or weights remain visible warnings with deterministic
+same-family/global fallback so a delivery can still complete. v2 UI packages
+show a deprecation warning. Flat/poster packages stay on the legacy route.
 
 ### 4. Build and audit
 

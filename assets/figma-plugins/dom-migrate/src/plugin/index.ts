@@ -121,7 +121,7 @@ async function preflightPackage(input: unknown): Promise<{ report: Preflight; pk
     variables: Object.values(pkg.variables || {}).reduce((total, group) => total + Object.keys(group).length, 0),
     textStyles: Object.keys(pkg.textStyles || {}).length,
     rasterLayers: pkg.compatibility.rasterLayers.length,
-    warnings: [...pkg.compatibility.warnings, ...validation.warnings, ...(route === "v3" ? [] : [{ code: "DEPRECATED_ROUTE", message: route === "ui-v2" ? "UI v2 is supported for compatibility only; production structure is not guaranteed." : "Flat/poster mode remains a visual legacy route." }])].map(({ code, message }) => ({ code, message })),
+    warnings: [...pkg.compatibility.warnings, ...validation.warnings, ...(route === "v3" ? fontResolution.warnings : []), ...(route === "v3" ? [] : [{ code: "DEPRECATED_ROUTE", message: route === "ui-v2" ? "UI v2 is supported for compatibility only; production structure is not guaranteed." : "Flat/poster mode remains a visual legacy route." }])].map(({ code, message }) => ({ code, message })),
     errors: [...pkg.compatibility.errors, ...validation.errors, ...(route === "v3" ? fontResolution.errors : [])].map(({ code, message }) => ({ code, message }))
   };
   return { report, pkg, fontMap: fontResolution.map };

@@ -38,9 +38,11 @@ properties for reusable color/spacing/radius values. Do not introduce empty
 DOM elements as visual spacers. `margin-top:auto` is allowed for a single grow
 region. Hidden and inactive state nodes must be genuinely invisible or clipped.
 
-Font family and numeric weight are part of the source contract. A strict import
-stops when Figma lacks the required family/style; it never silently substitutes
-Regular.
+Font family and numeric weight are part of the source contract. The importer
+uses the exact family and weight when available, then the nearest same-family
+face, and finally an explicitly reported global fallback so the job remains
+buildable. Fallbacks are warnings and are recorded in the compatibility report;
+they must never be silent.
 
 ## Figma acceptance
 

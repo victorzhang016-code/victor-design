@@ -95,7 +95,7 @@ Important invariants:
 - CSS Grid becomes Figma `GRID`; unsupported tracks are reported;
 - single-line text hugs; wrapped text uses fixed/fill width with auto height;
 - no font-width compensation is added;
-- missing fonts or weights are hard errors in strict v3 mode;
+- missing fonts or weights use a visible, reportable fallback so the import remains buildable; exact family/weight matches are always preferred;
 - repeated exact semantic subtrees and explicitly marked components produce
   components/instances; marked text becomes an instance text property;
 - CSS custom properties become scoped local variables; repeated type specs

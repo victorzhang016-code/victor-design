@@ -4313,21 +4313,48 @@
   function resolveFontRequirements(requirements, available) {
     const map = /* @__PURE__ */ new Map();
     const errors = [];
+    const warnings = [];
+    const globalFallback = available.find((item) => item.fontName.family === "Inter" && item.fontName.style === "Regular")?.fontName || available[0]?.fontName;
     for (const requirement of requirements) {
       const familyFonts = available.filter((item) => item.fontName.family.toLowerCase() === requirement.family.toLowerCase());
       if (!familyFonts.length) {
-        errors.push({ code: "FONT_FAMILY_MISSING", message: `Font family ${requirement.family} is not available in Figma`, detail: requirement.nodes.join(", ") });
+        if (globalFallback) {
+          map.set(key(requirement.family, requirement.weight, requirement.style), globalFallback);
+          warnings.push({ code: "FONT_FAMILY_FALLBACK", message: `${requirement.family} is not available; mapped to ${globalFallback.family} ${globalFallback.style}`, detail: "Fallback keeps the import buildable; text metrics may differ" });
+        } else {
+          errors.push({ code: "FONT_UNAVAILABLE", message: `No loadable fonts are available in Figma for ${requirement.family}`, detail: requirement.nodes.join(", ") });
+        }
         continue;
       }
       const italic = /italic|oblique/i.test(requirement.style);
       const exact = familyFonts.find((item) => fontStyleWeight(item.fontName.style) === requirement.weight && /italic|oblique/i.test(item.fontName.style) === italic);
-      if (!exact) {
-        errors.push({ code: "FONT_WEIGHT_MISSING", message: `${requirement.family} weight ${requirement.weight}${italic ? " italic" : ""} is not available in Figma`, detail: familyFonts.map((item) => item.fontName.style).join(", ") });
+      if (exact) {
+        map.set(key(requirement.family, requirement.weight, requirement.style), exact.fontName);
         continue;
       }
-      map.set(key(requirement.family, requirement.weight, requirement.style), exact.fontName);
+      const candidates = familyFonts.filter((item) => /italic|oblique/i.test(item.fontName.style) === italic).map((item) => ({ item, weight: fontStyleWeight(item.fontName.style) })).sort((a, b) => {
+        const distance = Math.abs(a.weight - requirement.weight) - Math.abs(b.weight - requirement.weight);
+        if (distance !== 0) return distance;
+        return requirement.weight >= 600 ? b.weight - a.weight : a.weight - b.weight;
+      });
+      const aliased = candidates[0] || familyFonts.map((item) => ({ item, weight: fontStyleWeight(item.fontName.style) })).sort((a, b) => Math.abs(a.weight - requirement.weight) - Math.abs(b.weight - requirement.weight))[0];
+      if (aliased) {
+        map.set(key(requirement.family, requirement.weight, requirement.style), aliased.item.fontName);
+        warnings.push({
+          code: "FONT_WEIGHT_FALLBACK",
+          message: `${requirement.family} weight ${requirement.weight} mapped to native ${aliased.item.fontName.style} (${aliased.weight})`,
+          detail: "Same-family fallback; no cross-family substitution"
+        });
+        continue;
+      }
+      if (globalFallback) {
+        map.set(key(requirement.family, requirement.weight, requirement.style), globalFallback);
+        warnings.push({ code: "FONT_FALLBACK", message: `${requirement.family} weight ${requirement.weight} mapped to ${globalFallback.family} ${globalFallback.style}`, detail: "No compatible face was available" });
+      } else {
+        errors.push({ code: "FONT_UNAVAILABLE", message: `No loadable fonts are available in Figma for ${requirement.family}`, detail: requirement.nodes.join(", ") });
+      }
     }
-    return { map, errors };
+    return { map, errors, warnings };
   }
   function fontRequirementKey(family, weight, style) {
     return key(family, weight, style);
@@ -4520,7 +4547,7 @@
       variables: Object.values(pkg.variables || {}).reduce((total, group) => total + Object.keys(group).length, 0),
       textStyles: Object.keys(pkg.textStyles || {}).length,
       rasterLayers: pkg.compatibility.rasterLayers.length,
-      warnings: [...pkg.compatibility.warnings, ...validation.warnings, ...route === "v3" ? [] : [{ code: "DEPRECATED_ROUTE", message: route === "ui-v2" ? "UI v2 is supported for compatibility only; production structure is not guaranteed." : "Flat/poster mode remains a visual legacy route." }]].map(({ code, message }) => ({ code, message })),
+      warnings: [...pkg.compatibility.warnings, ...validation.warnings, ...route === "v3" ? fontResolution.warnings : [], ...route === "v3" ? [] : [{ code: "DEPRECATED_ROUTE", message: route === "ui-v2" ? "UI v2 is supported for compatibility only; production structure is not guaranteed." : "Flat/poster mode remains a visual legacy route." }]].map(({ code, message }) => ({ code, message })),
       errors: [...pkg.compatibility.errors, ...validation.errors, ...route === "v3" ? fontResolution.errors : []].map(({ code, message }) => ({ code, message }))
     };
     return { report, pkg, fontMap: fontResolution.map };
