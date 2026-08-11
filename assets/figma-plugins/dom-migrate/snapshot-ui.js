@@ -81,6 +81,35 @@ window.domMigrateSnapshotUI = async function (root) {
     };
   }
 
+  // Chrome's getComputedStyle resolves auto margins to used pixels, so
+  // detect `auto` from the stylesheet text instead (single-file masters).
+  const styleText = [...doc.querySelectorAll("style")].map(st => st.textContent).join("\n");
+  const ruleCache = new Map();
+  function marginFlags(el) {
+    const cls = (el.className && el.className.baseVal !== undefined ? el.className.baseVal : el.className || "").toString().trim().split(/\s+/).filter(Boolean);
+    let mtAuto = false, mxAuto = false;
+    for (const c of cls) {
+      if (!ruleCache.has(c)) {
+        const bodies = [];
+        const re = new RegExp("\\." + c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![\\w-])[^}]*\\{([^}]*)\\}", "g");
+        let m; while ((m = re.exec(styleText))) bodies.push(m[1]);
+        ruleCache.set(c, bodies.join(";"));
+      }
+      const body = ruleCache.get(c);
+      if (!body) continue;
+      if (/margin-top\s*:\s*auto/.test(body)) mtAuto = true;
+      const short = body.match(/margin\s*:\s*([^;]+)/);
+      if (short) {
+        const parts = short[1].trim().split(/\s+/);
+        if (parts[0] === "auto") mtAuto = true;
+        if ((parts.length === 1 && parts[0] === "auto") || (parts.length >= 2 && parts[1] === "auto")) mxAuto = true;
+      }
+      if (/margin-left\s*:\s*auto/.test(body) && /margin-right\s*:\s*auto/.test(body)) mxAuto = true;
+      if (/margin\s*:\s*0\s+auto/.test(body)) mxAuto = true;
+    }
+    return { mtAuto, mxAuto };
+  }
+
   async function walk(el, parentRect) {
     if (!(el instanceof win.Element)) return null;
     const cs = win.getComputedStyle(el);
@@ -98,8 +127,9 @@ window.domMigrateSnapshotUI = async function (root) {
     if (flexGrow > 0) out.layoutGrow = flexGrow;
     const mTop = parseFloat(cs.marginTop) || 0;
     if (mTop > 0 && cs.marginTop !== "auto") out.marginTop = px(mTop);
-    if (cs.marginTop === "auto") out.marginTopAuto = true;
-    if (cs.marginLeft === "auto" && cs.marginRight === "auto") out.centerSelf = true;
+    const mf = marginFlags(el);
+    if (mf.mtAuto) out.marginTopAuto = true;
+    if (mf.mxAuto) out.centerSelf = true;
     if (cs.alignSelf && cs.alignSelf !== "auto" && cs.alignSelf !== "stretch") out.alignSelf = mapAlign(cs.alignSelf);
 
     if (el.tagName === "IMG") return { kind: "image", name: el.getAttribute("alt") || "image", src: el.getAttribute("src"),
