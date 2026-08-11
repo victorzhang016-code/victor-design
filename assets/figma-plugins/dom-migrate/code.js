@@ -237,12 +237,19 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
 
 function niceFamily(f) { return f || "Inter"; }
 
+function collectGeom(node, out, pageName, path) {
+  const p = (path ? path + "/" : "") + (node.name || node.type);
+  out.push({ page: pageName, path: p, type: node.type, x: Math.round(node.x * 10) / 10, y: Math.round(node.y * 10) / 10, w: Math.round(node.width * 10) / 10, h: Math.round(node.height * 10) / 10 });
+  for (const c of node.children || []) collectGeom(c, out, pageName, p);
+}
+
 async function buildTreePages(pages, images) {
   figma.ui.postMessage({ type: "status", text: "解码图片…" });
   const hash = {};
   for (const k of Object.keys(images)) hash[k] = figma.createImage(b64ToBytes(images[k])).hash;
   const components = new Map();
   const counts = new Map();
+  const builtFrames = [];
   for (const pg of pages) if (pg.tree) countSigs(pg.tree, counts);
   // append after any existing canvas content instead of overlapping it
   let x = 0;
@@ -266,9 +273,14 @@ async function buildTreePages(pages, images) {
       }
       frame.layoutMode = "NONE";
     }
+    builtFrames.push(frame);
     i++; x += pg.width + 160;
     figma.ui.postMessage({ type: "status", text: `已建 ${i}/${pages.length} 屏…` });
   }
+  // geometry report for numeric fidelity diffing
+  const report = [];
+  for (const fr of builtFrames) collectGeom(fr, report, fr.name, "");
+  figma.ui.postMessage({ type: "report", data: JSON.stringify(report) });
   return { components: components.size };
 }
 

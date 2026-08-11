@@ -42,6 +42,15 @@
       if (m.type === "status" || m.type === "done") status(m.text);
       if (m.type === "error") { status("错误：" + m.text); document.getElementById("go").disabled = false; }
       if (m.type === "done") document.getElementById("go").disabled = false;
+      if (m.type === "report") {
+        const blob = new Blob([m.data], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "figma-geometry-report.json";
+        a.click();
+        status(status.textContent + "
+几何报告已下载 figma-geometry-report.json");
+      }
     };
   </script>
 </body>
