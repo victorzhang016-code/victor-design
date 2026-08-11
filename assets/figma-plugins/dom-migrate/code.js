@@ -101,10 +101,17 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
     if (node.letterSpacing) t.letterSpacing = { unit: "PIXELS", value: node.letterSpacing };
     t.fills = [solid(node.color, node.opacity)];
     t.textAlignHorizontal = node.align === "center" ? "CENTER" : node.align === "right" ? "RIGHT" : "LEFT";
-    // wrap like the browser: fix the captured width, let height auto-fit
-    t.textAutoResize = "HEIGHT";
-    const tw = (node.size && node.size.w) || 100;
-    t.resize(Math.max(tw, 1), 10);
+    // single-line text hugs its content (never wraps); multi-line text keeps
+    // the captured width and auto-fits height, matching browser wrapping
+    const lh = node.lineHeight || node.fontSize * 1.4;
+    const singleLine = node.size && node.size.h <= lh * 1.35 && !node.text.includes("\n");
+    if (singleLine) {
+      t.textAutoResize = "WIDTH_AND_HEIGHT";
+    } else {
+      t.textAutoResize = "HEIGHT";
+      const tw = (node.size && node.size.w) || 100;
+      t.resize(Math.max(tw, 1), 10);
+    }
     for (const sp of (node.spans || [])) {
       if (sp.bold) t.setRangeFontName(sp.start, sp.end, await loadFontRobust(niceFamily(node.fontFamily), "Bold"));
       if (sp.color) t.setRangeFills(sp.start, sp.end, [solid(sp.color)]);
@@ -176,7 +183,11 @@ async function buildTreeNode(node, hash, components, counts, inComponent) {
         child.layoutAlign = "STRETCH";
     }
   }
-  if (L.mode !== "NONE") { f.primaryAxisSizingMode = "AUTO"; f.counterAxisSizingMode = "AUTO"; }
+  if (node.absolute && node.size) {
+    // overlays keep the captured geometry
+    f.primaryAxisSizingMode = "FIXED"; f.counterAxisSizingMode = "FIXED";
+    f.resize(node.size.w, node.size.h);
+  } else if (L.mode !== "NONE") { f.primaryAxisSizingMode = "AUTO"; f.counterAxisSizingMode = "AUTO"; }
   // register only real components (never one buried inside another component)
   if (makeComponent) components.set(s, /** @type any */(f));
   return f;
