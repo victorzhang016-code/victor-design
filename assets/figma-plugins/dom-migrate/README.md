@@ -57,3 +57,34 @@ images become replaceable IMAGE fills, shapes keep fills/strokes/radius.
   nodes (correct z-order), but box-shadows are not migrated.
 - Fonts must exist in the Figma environment; the plugin falls back
   (family → Microsoft YaHei → Inter) and the repair pass must catch it.
+
+## UI structural mode (production-grade)
+
+For product UI, use `snapshot-ui.js` + `snapshot-runner-ui.html` instead of
+the flat snapshot. The runner takes the master with an explicit state query:
+
+```bash
+chrome --headless=new --allow-file-access-from-files --virtual-time-budget=15000 \
+  --dump-dom "snapshot-runner-ui.html?src=master.html?state=view" > dump-view.html
+```
+
+Run once per state and merge the outputs into one pages array before
+packaging. In this mode the plugin builds:
+
+- **auto-layout frames** — flex/grid containers map to HORIZONTAL/VERTICAL
+  layout mode with gap and padding; block containers with multiple children
+  become vertical auto-layout; `margin-top:auto` becomes SPACE_BETWEEN;
+  other child margins become named spacer nodes;
+- **chips/buttons as frames** — a text element with padding or fill becomes
+  an auto-layout frame wrapping a text node, not a flat label;
+- **components** — exact-duplicate subtrees (status bars, indicators,
+  repeated chips) become one component plus instances across state frames;
+- **icons as vectors** — inline SVG via `createNodeFromSvg`;
+- **overlays** — absolutely-positioned layers (sheets, backdrops, status
+  bars) become `layoutPositioning = ABSOLUTE` inside the screen frame.
+
+Still not production-complete without the repair pass: margins become spacer
+nodes (Figma has no margins), `object-position` crops are approximate,
+texts inside auto-layout stretch by block rules, and gradients/blends are not
+migrated. Verify against the approved render per state and fix in Figma.
+

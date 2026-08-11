@@ -45,30 +45,51 @@ def main():
         return h
 
     svg_jobs = []
+
+    def embed_node(n):
+        """resolve and intern an image/src-bearing node; returns nothing (mutates)."""
+        src = n.pop("src", None)
+        if src is None:
+            return
+        if src.startswith("data:image/svg"):
+            svg = urllib.parse.unquote(src.split(",", 1)[1])
+            key = f"svg-{len(svg_jobs)}"
+            if key in svg_pngs:
+                n["imageKey"] = intern(open(svg_pngs[key], "rb").read())
+                n["type"] = "image"
+                if n.get("kind"): n["kind"] = "image"
+            else:
+                svg_jobs.append({"key": key, "svg": svg, "w": n.get("w"), "h": n.get("h")})
+                n["svgPending"] = key
+            n.pop("repeat", None)
+        else:
+            n["imageKey"] = intern(open(resolve(src, args.base), "rb").read())
+            if n.get("type") == "bgimage":
+                n["type"] = "image"
+                n.pop("repeat", None)
+
+    def walk_tree(n):
+        if not isinstance(n, dict):
+            return
+        if n.get("kind") == "image" or "src" in n:
+            embed_node(n)
+        if "bgImage" in n and isinstance(n["bgImage"], dict) and "src" in n["bgImage"]:
+            embed_node(n["bgImage"])
+            n["bgImageKey"] = n["bgImage"].pop("imageKey", None)
+            n.pop("bgImage", None)
+        for c in n.get("children", []):
+            walk_tree(c)
+
     for pg in pages:
         if "bgSrc" in pg:
             pg["bgImageKey"] = intern(open(resolve(pg.pop("bgSrc"), args.base), "rb").read())
+        if "tree" in pg:
+            walk_tree(pg["tree"])
+            continue
         for n in pg["nodes"]:
-            src = n.pop("src", None)
-            if src is None:
-                continue
-            if src.startswith("data:image/svg"):
-                svg = urllib.parse.unquote(src.split(",", 1)[1])
-                key = f"svg-{len(svg_jobs)}"
-                if key in svg_pngs:
-                    n["imageKey"] = intern(open(svg_pngs[key], "rb").read())
-                    n["type"] = "image"
-                else:
-                    svg_jobs.append({"key": key, "svg": svg, "w": n["w"], "h": n["h"]})
-                    n["svgPending"] = key
-                n.pop("repeat", None)
-            else:
-                n["imageKey"] = intern(open(resolve(src, args.base), "rb").read())
-                if n["type"] == "bgimage":
-                    n["type"] = "image"
-                    n.pop("repeat", None)
+            embed_node(n)
 
-    pending = [n for pg in pages for n in pg["nodes"] if n.get("svgPending")]
+    pending = [j for j in svg_jobs]
     if pending:
         json.dump(svg_jobs, open(args.out.replace(".json", "-svg-jobs.json"), "w", encoding="utf-8"), ensure_ascii=False)
         print(f"WARNING: {len(pending)} svg background(s) need rasterizing -> see {args.out.replace('.json','-svg-jobs.json')}")

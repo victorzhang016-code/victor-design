@@ -61,3 +61,17 @@ Per the matrix in `operations/execution.md`:
 - Ship one PNG per state for review, plus an editable Figma file with one
   frame per state: native text and components, replaceable image fills.
 - A single static screen recording or a flattened mockup is not delivery.
+
+Production-grade Figma acceptance for UI (check all before release):
+
+- frames use auto-layout with real gap/padding, not absolute stacks;
+- repeated elements (chips, buttons, bars) exist as components with
+  instances, not copies;
+- icons are vectors, images are replaceable fills;
+- layer names are semantic (the DOM's class names), no "Frame 127";
+- every declared state has its own frame, and each frame passes the
+  equal-scale comparison against its approved render.
+
+The bundled dom-migrate plugin's UI structural mode
+(`assets/figma-plugins/dom-migrate/`, README › UI structural mode) produces
+this shape from the approved HTML master; the repair pass closes the rest.

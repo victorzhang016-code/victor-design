@@ -42,11 +42,168 @@ function solid(rgb, opacity) {
 
 figma.showUI(__html__, { width: 380, height: 200 });
 
+/* ---------- UI structural mode ---------- */
+
+function sig(node) {
+  // subtree signature for component detection — structure + text, no positions
+  const strip = (n) => {
+    const { absolute, size, marginTop, ...rest } = n;
+    if (rest.children) rest.children = rest.children.map(strip);
+    return rest;
+  };
+  return JSON.stringify(strip(node));
+}
+
+const ALIGN_MAP = { MIN: "MIN", CENTER: "CENTER", MAX: "MAX", SPACE_BETWEEN: "SPACE_BETWEEN", BASELINE: "BASELINE", STRETCH: "STRETCH" };
+
+async function buildTreeNode(node, hash, components) {
+  if (node.type === "shape" || node.kind === "shape") {
+    const r = figma.createRectangle();
+    r.resize(Math.max((node.w || (node.size && node.size.w) || 1), 0.1), Math.max((node.h || (node.size && node.size.h) || 1), 0.1));
+    if (node.radius) r.cornerRadius = node.radius;
+    r.fills = node.fill ? [solid(node.fill.color, node.fill.opacity)] : [];
+    if (node.stroke) { r.strokes = [solid(node.stroke.color)]; r.strokeWeight = node.stroke.weight; }
+    r.name = node.name || "shape";
+    return r;
+  }
+  if (node.kind === "image" || node.type === "image") {
+    const r = figma.createRectangle();
+    const w = node.w || (node.size && node.size.w) || 1, h = node.h || (node.size && node.size.h) || 1;
+    r.resize(Math.max(w, 0.1), Math.max(h, 0.1));
+    if (node.radius) r.cornerRadius = node.radius;
+    r.fills = [{ type: "IMAGE", imageHash: hash[node.imageKey], scaleMode: "FILL" }];
+    r.name = node.name || "image";
+    return r;
+  }
+  if (node.kind === "svg") {
+    const g = figma.createNodeFromSvg(node.svg);
+    if (node.size) g.resize(node.size.w, node.size.h);
+    g.name = node.name || "icon";
+    return g;
+  }
+  if (node.kind === "text") {
+    // chip/button pattern: text with fill or padding becomes an auto-layout frame
+    const isChip = node.fill || (node.pad && node.pad.some(v => v > 0));
+    const t = figma.createText();
+    const base = await loadFontRobust(niceFamily(node.fontFamily), node.fontStyle);
+    t.fontName = base;
+    t.characters = node.text;
+    t.fontSize = node.fontSize;
+    t.lineHeight = node.lineHeight ? { unit: "PIXELS", value: node.lineHeight } : { unit: "AUTO" };
+    if (node.letterSpacing) t.letterSpacing = { unit: "PIXELS", value: node.letterSpacing };
+    t.fills = [solid(node.color, node.opacity)];
+    t.textAlignHorizontal = node.align === "center" ? "CENTER" : node.align === "right" ? "RIGHT" : "LEFT";
+    for (const sp of (node.spans || [])) {
+      if (sp.bold) t.setRangeFontName(sp.start, sp.end, await loadFontRobust(niceFamily(node.fontFamily), "Bold"));
+      if (sp.color) t.setRangeFills(sp.start, sp.end, [solid(sp.color)]);
+    }
+    if (!isChip) { t.name = node.name || "text"; return t; }
+    const f = figma.createFrame();
+    f.name = node.name || "chip";
+    f.layoutMode = "HORIZONTAL";
+    f.primaryAxisAlignItems = "MIN";
+    f.counterAxisAlignItems = "CENTER";
+    const pad = node.pad || [0, 0, 0, 0];
+    f.paddingTop = pad[0]; f.paddingRight = pad[1]; f.paddingBottom = pad[2]; f.paddingLeft = pad[3];
+    f.fills = node.fill ? [solid(node.fill.color, node.fill.opacity)] : [];
+    if (node.stroke) { f.strokes = [solid(node.stroke.color)]; f.strokeWeight = node.stroke.weight; }
+    if (node.radius) f.cornerRadius = node.radius;
+    f.appendChild(t);
+    f.primaryAxisSizingMode = "AUTO";
+    f.counterAxisSizingMode = "AUTO";
+    return f;
+  }
+  // frame
+  const s = sig(node);
+  if (components.has(s)) {
+    const inst = components.get(s).createInstance();
+    inst.name = node.name || "instance";
+    return inst;
+  }
+  const f = figma.createFrame();
+  f.name = node.name || "frame";
+  const L = node.layout || { mode: "NONE", pad: [0, 0, 0, 0] };
+  f.layoutMode = L.mode || "NONE";
+  if (L.mode !== "NONE") {
+    f.primaryAxisAlignItems = ALIGN_MAP[L.primary] || "MIN";
+    f.counterAxisAlignItems = L.counter === "STRETCH" ? "MIN" : (ALIGN_MAP[L.counter] || "MIN");
+    if (L.counter === "STRETCH") f.counterAxisAlignItems = "MIN";
+    if (L.gap) f.itemSpacing = L.gap;
+  }
+  const pad = L.pad || [0, 0, 0, 0];
+  f.paddingTop = pad[0]; f.paddingRight = pad[1]; f.paddingBottom = pad[2]; f.paddingLeft = pad[3];
+  f.fills = node.fill ? [solid(node.fill.color, node.fill.opacity)] : [];
+  if (node.stroke) { f.strokes = [solid(node.stroke.color)]; f.strokeWeight = node.stroke.weight; }
+  if (node.radius) f.cornerRadius = node.radius;
+  if (node.shadow) {
+    f.effects = [{ type: "DROP_SHADOW", color: { r: node.shadow.color[0], g: node.shadow.color[1], b: node.shadow.color[2], a: node.shadow.opacity },
+                   offset: { x: node.shadow.x, y: node.shadow.y }, radius: node.shadow.blur, spread: node.shadow.spread || 0, visible: true, blendMode: "NORMAL" }];
+  }
+  f.clipsContent = node.clips !== false && L.mode === "NONE" ? true : !!node.clips;
+  if (L.mode === "NONE" && node.size) f.resize(node.size.w, node.size.h);
+  for (const c of node.children || []) {
+    const child = await buildTreeNode(c, hash, components);
+    f.appendChild(child);
+    if (c.absolute) {
+      child.layoutPositioning = "ABSOLUTE";
+      child.x = c.absolute.x; child.y = c.absolute.y;
+    } else if (f.layoutMode !== "NONE") {
+      if (c.marginTop) {
+        const sp = figma.createRectangle();
+        sp.name = "spacer"; sp.fills = [];
+        sp.resize(1, c.marginTop);
+        f.insertChild(f.children.indexOf(child), sp);
+      }
+      if (c.layoutGrow) child.layoutGrow = c.layoutGrow;
+      if (f.layoutMode === "VERTICAL" && L.stretchChildren !== false && !c.chip && (child.type === "TEXT" || child.type === "FRAME"))
+        child.layoutAlign = "STRETCH";
+    }
+  }
+  if (L.mode !== "NONE") { f.primaryAxisSizingMode = "AUTO"; f.counterAxisSizingMode = "AUTO"; }
+  // exact-duplicate subtrees become components
+  if (node.name && (node.children || []).length) components.set(s, /** @type any */(f));
+  return f;
+}
+
+function niceFamily(f) { return f || "Inter"; }
+
+async function buildTreePages(pages, images) {
+  figma.ui.postMessage({ type: "status", text: "解码图片…" });
+  const hash = {};
+  for (const k of Object.keys(images)) hash[k] = figma.createImage(b64ToBytes(images[k])).hash;
+  const components = new Map();
+  let x = 0, i = 0;
+  for (const pg of pages) {
+    const frame = figma.createFrame();
+    frame.name = pg.name;
+    frame.resize(pg.width, pg.height);
+    frame.x = x; frame.y = 0;
+    frame.clipsContent = true;
+    frame.fills = pg.bgColor ? [solid(pg.bgColor)] : [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
+    if (pg.tree) {
+      for (const c of pg.tree.children || []) {
+        const child = await buildTreeNode(c, hash, components);
+        frame.appendChild(child);
+        if (c.absolute) { child.layoutPositioning = "ABSOLUTE"; child.x = c.absolute.x; child.y = c.absolute.y; }
+      }
+      frame.layoutMode = "NONE";
+    }
+    i++; x += pg.width + 160;
+    figma.ui.postMessage({ type: "status", text: `已建 ${i}/${pages.length} 屏…` });
+  }
+  return { components: components.size };
+}
+
 figma.ui.onmessage = async (msg) => {
   if (msg.type !== "build") return;
   const t0 = Date.now();
   try {
     const { pages, images } = msg.pkg;
+    if (pages.length && pages[0].tree) {
+      const r = await buildTreePages(pages, images);
+      figma.ui.postMessage({ type: "done", text: `完成：${pages.length} 屏（auto-layout 结构），组件 ${r.components} 个，耗时 ${(Date.now() - t0) / 1000}s` });
+      return;
+    }
     figma.ui.postMessage({ type: "status", text: "解码图片…" });
     const hash = {};
     for (const k of Object.keys(images)) {

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- dom-migrate UI snapshot runner.
+     chrome --headless=new --allow-file-access-from-files --virtual-time-budget=15000 \
+       --dump-dom "snapshot-runner-ui.html?src=master.html?state=view" > dump.html
+     Run once per state; merge the outputs into one pages array for package.py. -->
+<html>
+<head><meta charset="UTF-8"><style>body{margin:0}iframe{border:0;display:block}</style></head>
+<body>
+<iframe id="f" width="1300" height="1700"></iframe>
+<pre id="out"></pre>
+<script>
+const src = new URLSearchParams(location.search).get("src") || "master.html";
+const f = document.getElementById("f");
+f.src = src;
+f.addEventListener("load", async () => {
+  const win = f.contentWindow;
+  const code = await fetch("snapshot-ui.js").then(r => r.text());
+  win.eval(code);
+  const page = await win.domMigrateSnapshotUI();
+  const st = new URLSearchParams(src.split("?")[1] || "").get("state");
+  if (st) page.name = st;
+  document.getElementById("out").textContent = JSON.stringify([page]);
+  document.title = "SNAPSHOT-DONE";
+}, { once: true });
+</script>
+</body>
+</html>
