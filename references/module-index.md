@@ -2,6 +2,10 @@
 
 ## Default chain
 
+0. Lane check — a small single-canvas task with the user present may qualify
+   for the light lane (see `../SKILL.md`); it then needs only
+   `aesthetic-core.md`, `style-evidence.md`, `copy-discipline.md`, and one
+   adapter, with records kept inline.
 1. `workflow/task-brief.md` — establish the current task's authority, facts,
    reader, material boundary, asset necessity, and form questions. Use before
    substantial, ambiguous, branded, or unattended design work.
