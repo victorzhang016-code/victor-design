@@ -3,12 +3,6 @@
 Use `operations/execution.md` for the fields and release criteria. A control
 record is evidence of a decision, never a replacement for it.
 
-On the light lane, the gates compress but never disappear: Gate 1 is one
-confirmed proposition recorded in the dialogue; Gate 2 is one master
-direction and explicit rendered approval; Gate 3 defaults to flattened
-output with editable source offered, and any editable request escalates to
-the full chain below.
-
 ## Gate 1 — Proposition
 
 Release only after explicit user confirmation of the subject, human stake,

@@ -60,40 +60,6 @@ layer, run the form and asset counterfactuals, and leave remaining risk visible
 for review. Never invent user approval, product facts, assets, or a visual
 preference to keep moving.
 
-## Light lane — small single-canvas tasks
-
-The full chain below is the default for substantial work. A task may run
-the light lane when **all** of these hold: one canvas or one screen; the
-user is present to confirm; no named brand campaign, product launch,
-editable-source requirement, or unattended controller; and the form sanity
-backstop confirms a single canvas is the right carrier.
-
-The light lane keeps the discipline and drops the ceremony:
-
-- Keep: the form sanity backstop; a proposition stated and confirmed in one
-  grouped exchange covering subject, soul, required copy, canvas, source
-  route, and the delivery-format choice — asking only what the request has
-  not already established; `references/aesthetic-core.md`,
-  `references/style-evidence.md`, `references/copy-discipline.md`, and one
-  adapter; every refusal rule; a caused field with a protagonist and real
-  content — never title-only emptiness; explicit user approval of the
-  rendered master before delivery. The compressed path is still the three
-  gates: proposition confirmed, master approved, then delivery — with their
-  records kept inline.
-- Drop: the `TASK_BRIEF.md` and `DESIGN_CONTROL.md` files — record the same
-  answers inline in the dialogue; the contact sheet and asset ledger when
-  few assets are involved — name each source in the reply instead; the
-  three-direction requirement — present one master direction and let the
-  user ask for alternatives; the full Gate record field list.
-- Delivery: offer flattened output as the default and editable source as an
-  option; record the user's choice in the dialogue. An editable request
-  exits to the full chain's delivery rules.
-
-Escalate to the full chain the moment any entry condition breaks: a second
-page or state, a named brand or product, an unattended run, an
-editable-source request, or a form conflict. The light lane is a shorter
-path to the same standard, never a lower one.
-
 ## Evidence, not a preset
 
 Read `references/style-evidence.md` for every task. It ships with a default
@@ -107,9 +73,6 @@ pair, or layout template. Use only the evidence that fits the confirmed
 task, and name any exception.
 
 ## Required execution chain
-
-This is the full lane. A task that meets every light-lane condition above
-follows that shorter path instead; everything else runs this chain.
 
 1. Run the form sanity and task-grounding backstops above. Then read
    `references/aesthetic-core.md`, `references/style-evidence.md`,
