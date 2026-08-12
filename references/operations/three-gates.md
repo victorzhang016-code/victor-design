@@ -5,10 +5,29 @@ record is evidence of a decision, never a replacement for it.
 
 ## Gate 1 — Proposition
 
+Treat Gate 1 as a visible state machine, not a sentence the executor can write
+after the fact:
+
+- **Image role pending/approved** — the user has confirmed whether the image is
+  the base/hero, project evidence, supporting material, or reference. No adapter,
+  web search, generation, or composition begins before this state is approved.
+- **Brief pending/approved** — the user has confirmed task, copy, surface,
+  audience, source boundary, and output form.
+- **Direction pending/approved** — the user has seen three rendered, genuinely
+  different direction options and selected one by ID. A single direction is
+  allowed only when the user explicitly instructs it ("就按这个做"); the
+  executor's own judgment that "visual intent is unambiguous" never waives
+  the three-direction comparison.
+- **Released** — both approvals exist. Only this state may enter high-fidelity
+  master production.
+
+Never promote a model recommendation to an approved role or direction. Never
+interpret “确认/生成/PNG/手机竖版” as a role or direction selection.
+
 Release only after explicit user confirmation of the subject, human stake,
 audience task, unique soul, required content, refusal list, output surface, and
 source route. Require a contact sheet, asset ledger, hero-source declaration,
-and a documented local → web → unmet-role → generation trail.
+and a documented local → web → unmet-role → generation → code trail.
 
 For a controlled unattended run, record the controller path and explicit
 interaction policy in `TASK_BRIEF.md` instead of fabricating confirmation. The
@@ -23,6 +42,20 @@ layer inventory are missing from the record, a previous project is
 being used as palette/type evidence without a current-task cause, the primary
 source is unclear, or generation is proposed without explicit user
 authorization.
+
+For an uploaded image whose approved role is `base` on a poster/key visual,
+also block title-only treatment, unchanged full-bleed placement, and any master
+whose image-hidden view collapses to a blank field. These are P0 quality
+failures, not optional polish. Do not apply this poster-specific rule to a
+reference image or to a project-evidence image routed into a deck, social set,
+or product surface.
+
+At direction stage, block any shown direction that is copy over a merely
+graded or cropped photo, whose declared craft family, operations, or type
+levels are not visible in the rendered preview, or whose type system is a
+stack of same-register prose blocks. A direction is where the craft begins,
+not where it is promised — claims must be pointable in pixels before the
+user is asked to choose.
 
 Run the form challenge from `operations/execution.md` as a separate pass before
 release. A concept that declares a poster while the controller asks for slides,
@@ -44,6 +77,12 @@ costume, AI-image-led composition, exhibition-board structure, title-only
 emptiness, tasteless/untested type, batch production of a multi-page output
 before pilot-page approval, pages that fall below the recorded density
 target, or unresolved P0/P1 review findings.
+
+For v3.1 high-fidelity directions, also block user-visible rough sketches,
+fewer than four concrete design acts, missing reference decomposition when the
+user supplied benchmarks, and over-restraint that leaves only a title,
+untreated asset, and weak furniture. Apply this across poster, graphic-text,
+slides, and UI with carrier-specific density.
 
 For slides, release the deck master only after every declared page has a
 rendered review image, the page count matches the surface lock, and each page

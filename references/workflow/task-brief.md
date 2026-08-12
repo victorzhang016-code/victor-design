@@ -18,6 +18,13 @@ only facts available to every permitted entrant.
 - Deliverable surface, count, canvas, editable-source requirement:
 - Interaction policy: user approval | controlled unattended run
 
+## Image role preflight
+- Image role status: pending | approved
+- Image role: base | project-evidence | supporting | reference | mixed | pending
+- Image placement: background | hero | replaceable-image | not-placed | per-asset | pending
+- Image role approval evidence:
+- Image role source/rights:
+
 ## Reader and truth
 - Reader action and viewing condition:
 - Required facts, copy, and refusals:
@@ -59,6 +66,10 @@ only facts available to every permitted entrant.
    record and a visible risk note. Continue only on the least-assumptive path
    allowed by the control layer. Never create fake approval, fake assets, or
    fake certainty.
+5. When an image is attached, resolve its role before choosing an adapter.
+   A base image on a poster may activate the conditional image-as-carrier
+   protocol; project-evidence, supporting, and reference images keep their
+   declared routes.
 
 ## Boundaries
 

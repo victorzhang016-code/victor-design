@@ -1,0 +1,1 @@
+Reference image analysis only; no image placement in the final output.

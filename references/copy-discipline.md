@@ -4,6 +4,21 @@ Copy is evidence-shaped speech. Every sentence must either carry a verifiable
 fact, a real human voice, or a deliberate structural role (title, label,
 caption, action). If a sentence only makes the work sound designed, delete it.
 
+Classify additions before layout:
+
+- `factual` — supplied by the user, recorded in project files, or verified from
+  an allowed source; preserve the claim and source;
+- `interpretive draft` — newly written title, synopsis, transition, or mood
+  copy; mark it visibly in the control record and obtain approval before final
+  delivery;
+- `decorative/semantic` — non-factual words or graphics used for orientation,
+  rhythm, category, or interaction; it must not impersonate metadata or proof.
+
+When source content is thin, it is valid to draft bilingual titles, synopsis,
+quotes, captions, chapter words, or explanations appropriate to the carrier.
+Do not solve thin content by inventing credits, dates, coordinates, parameters,
+statistics, product functions, or institutions.
+
 ## Voice rules
 
 - Facts, numbers, quotes, and URLs stay verbatim-sourced. Never paraphrase a
@@ -23,6 +38,10 @@ caption, action). If a sentence only makes the work sound designed, delete it.
 - Structural frames come from the source content. Comparisons, rankings,
   versus-pairings, and winner/loser emphasis may appear only when the source
   states them; never invent one for drama.
+- At most one lyrical line per canvas. In a multi-level type system each
+  level has a distinct job — orientation, definition, human stake,
+  annotation, credit. Several poetic sentences in the same register are not
+  levels; additional lines are plain, factual, or structural.
 - User-supplied corrections are applied verbatim. Every sentence in a
   deliverable is either approved source copy or explicitly flagged as newly
   drafted, so the user can veto it.

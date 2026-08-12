@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="zh-CN" data-vds-schema="v3.1" data-view="full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1080, initial-scale=1">
+  <title>夜班之后</title>
+  <script>
+    document.documentElement.dataset.view = new URLSearchParams(location.search).get("view") || "full";
+    const SOURCE_IMAGE = "data:,";
+    window.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("img[data-source]").forEach((image) => { image.src = SOURCE_IMAGE; });
+    });
+  </script>
+  <style>
+    @font-face {
+      font-family: "Night Sans";
+      src: url("data:,") format("truetype");
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "Night Serif";
+      src: url("data:,") format("truetype");
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: block;
+    }
+
+    :root {
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 32px;
+      --space-4: 64px;
+      --ink: #f5ecdf;
+      --amber: #ffc477;
+      --ember: #d64b24;
+      --deep-blue: #03142c;
+      --cold-blue: #07528c;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 1080px;
+      height: 1440px;
+      margin: 0;
+      overflow: hidden;
+      background: #020711;
+    }
+
+    body { font-family: "Night Sans", sans-serif; }
+
+    .poster {
+      position: relative;
+      isolation: isolate;
+      width: 1080px;
+      height: 1440px;
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 78% 64% at 63% 56%, rgba(111, 37, 20, .5), transparent 58%),
+        linear-gradient(112deg, #020914 0%, #041a37 32%, #2e100d 66%, #07152d 100%);
+    }
+
+    .photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 53%;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .photo-reference {
+      z-index: 1;
+      display: none;
+      filter: none;
+    }
+
+    .photo-base {
+      z-index: 2;
+      filter: brightness(.61) contrast(1.15) saturate(.66) hue-rotate(-2deg);
+      transform: scale(1.026);
+      transform-origin: 50% 53%;
+    }
+
+    .field-pressure {
+      position: absolute;
+      z-index: 4;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0, 12, 30, .61) 0%, rgba(0, 21, 48, .34) 31%, transparent 55%),
+        linear-gradient(180deg, rgba(1, 7, 17, .48), transparent 34%, transparent 69%, rgba(1, 6, 14, .45));
+    }
+
+    .plane-field {
+      position: absolute;
+      z-index: 5;
+      inset: 0;
+      clip-path: polygon(33% 24%, 90% 17%, 95% 83%, 29% 88%);
+      background:
+        radial-gradient(circle at 66% 36%, rgba(255, 206, 116, .68), transparent 23%),
+        linear-gradient(156deg, rgba(223, 63, 27, .78), rgba(111, 22, 14, .56) 70%, rgba(255, 149, 62, .32));
+      opacity: .22;
+      mix-blend-mode: screen;
+    }
+
+    .plane-bleed {
+      z-index: 6;
+      clip-path: polygon(33% 24%, 90% 17%, 95% 83%, 29% 88%);
+      -webkit-mask-image: linear-gradient(138deg, transparent 0%, #000 14%, #000 84%, transparent 100%);
+      mask-image: linear-gradient(138deg, transparent 0%, #000 14%, #000 84%, transparent 100%);
+      filter: brightness(.88) contrast(1.2) saturate(1.68) hue-rotate(-10deg);
+      opacity: .34;
+      transform: scale(1.039) translate(-7px, 2px);
+      transform-origin: 62% 52%;
+      mix-blend-mode: screen;
+    }
+
+    .photo-warm {
+      z-index: 7;
+      clip-path: polygon(33% 24%, 90% 17%, 95% 83%, 29% 88%);
+      -webkit-mask-image: linear-gradient(138deg, transparent 0%, #000 17%, #000 82%, transparent 100%);
+      mask-image: linear-gradient(138deg, transparent 0%, #000 17%, #000 82%, transparent 100%);
+      filter: brightness(1.11) contrast(1.08) saturate(1.3);
+      transform: scale(1.039);
+      transform-origin: 62% 52%;
+    }
+
+    .threshold-shadow {
+      position: absolute;
+      z-index: 9;
+      inset: 0 auto 0 0;
+      width: 362px;
+      clip-path: polygon(0 0, 84% 0, 79% 38%, 89% 72%, 70% 100%, 0 100%);
+      background: linear-gradient(90deg, rgba(1, 6, 15, .72), rgba(1, 22, 49, .12));
+      mix-blend-mode: multiply;
+    }
+
+    .lamp-halo {
+      position: absolute;
+      z-index: 10;
+      left: 548px;
+      top: 372px;
+      width: 492px;
+      height: 690px;
+      clip-path: polygon(33% 0, 68% 0, 100% 100%, 0 100%);
+      background: radial-gradient(ellipse 78% 92% at 52% 0%, rgba(255, 229, 170, .26), rgba(247, 107, 45, .07) 52%, transparent 82%);
+      filter: blur(30px);
+      mix-blend-mode: screen;
+      opacity: .46;
+    }
+
+    .lamp-stem-rule {
+      position: absolute;
+      z-index: 24;
+      left: 624px;
+      top: 909px;
+      width: 7px;
+      height: 173px;
+      background: linear-gradient(180deg, rgba(255, 219, 152, .94), rgba(244, 101, 43, .32), transparent);
+      transform: skewY(-11deg);
+      transform-origin: top;
+      box-shadow: 0 0 20px rgba(255, 163, 75, .2);
+    }
+
+    .floor-residue {
+      position: absolute;
+      z-index: 12;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 506px;
+      background:
+        repeating-linear-gradient(177deg, transparent 0 76px, rgba(255, 171, 82, .07) 78px, transparent 82px),
+        linear-gradient(180deg, transparent, rgba(92, 21, 11, .24));
+      mix-blend-mode: screen;
+      opacity: .72;
+    }
+
+    .title-world {
+      position: absolute;
+      z-index: 26;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .title-world h1 {
+      position: absolute;
+      left: 72px;
+      top: 66px;
+      width: 780px;
+      margin: 0;
+      font-family: "Night Serif", serif;
+      font-size: 174px;
+      font-weight: 770;
+      line-height: .89;
+      letter-spacing: -.058em;
+      color: #f5eadc;
+      text-shadow: 0 12px 44px rgba(0, 5, 16, .67);
+    }
+
+    .title-world h1 span { display: block; }
+    .title-world h1 span:last-child { margin-left: 176px; }
+
+    .title-echo {
+      z-index: 27;
+      clip-path: polygon(33% 24%, 90% 17%, 95% 83%, 29% 88%);
+      mix-blend-mode: screen;
+      opacity: .68;
+      transform: translateX(2px);
+    }
+
+    .title-echo h1 {
+      color: #ffc783;
+      text-shadow: 7px 0 0 rgba(213, 63, 26, .24);
+    }
+
+    .proposition {
+      position: absolute;
+      z-index: 28;
+      left: 654px;
+      top: 918px;
+      width: 366px;
+      margin: 0;
+      font-family: "Night Serif", serif;
+      font-size: 33px;
+      font-weight: 560;
+      line-height: 1.6;
+      letter-spacing: 0;
+      color: #fff0da;
+      text-shadow: 0 4px 26px rgba(49, 7, 1, .76);
+      text-wrap: balance;
+    }
+
+    .proposition span { display: block; }
+    .proposition span:last-child { white-space: nowrap; }
+
+    .credit {
+      position: absolute;
+      z-index: 28;
+      right: 72px;
+      bottom: 60px;
+      margin: 0;
+      font-family: "Night Sans", sans-serif;
+      font-size: 20px;
+      font-weight: 540;
+      letter-spacing: .045em;
+      color: rgba(245, 236, 223, .68);
+      text-shadow: 0 2px 14px rgba(0, 0, 0, .56);
+    }
+
+    .edge-falloff {
+      position: absolute;
+      z-index: 18;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 190px 54px rgba(0, 0, 0, .36);
+    }
+
+    .grain {
+      position: absolute;
+      z-index: 40;
+      inset: -7%;
+      pointer-events: none;
+      opacity: .17;
+      mix-blend-mode: soft-light;
+      transform: rotate(.35deg);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.84' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.95'/%3E%3C/svg%3E");
+    }
+
+    html[data-view="copy-hidden"] .title-world,
+    html[data-view="copy-hidden"] .proposition,
+    html[data-view="copy-hidden"] .credit,
+    html[data-view="copy-hidden"] .lamp-stem-rule { display: none; }
+
+    html[data-view="image-hidden"] .photo-base,
+    html[data-view="image-hidden"] .photo-warm,
+    html[data-view="image-hidden"] .plane-bleed,
+    html[data-view="image-hidden"] .photo-reference { display: none; }
+
+    html[data-view="image-hidden"] .plane-field { opacity: .88; }
+    html[data-view="image-hidden"] .field-pressure { opacity: .95; }
+    html[data-view="image-hidden"] .lamp-halo { opacity: .9; }
+    html[data-view="image-hidden"] .threshold-shadow { opacity: .86; }
+
+    html[data-view="source-only"] .poster > * { display: none; }
+    html[data-view="source-only"] .photo-reference {
+      display: block;
+      object-position: 50% 53%;
+      filter: none;
+      transform: none;
+    }
+
+    html[data-view="thumbnail"],
+    html[data-view="thumbnail"] body { width: 270px; height: 360px; }
+    html[data-view="thumbnail"] .poster { transform: scale(.25); transform-origin: 0 0; }
+
+    html[data-view="bottom"],
+    html[data-view="bottom"] body { width: 1080px; height: 360px; }
+    html[data-view="bottom"] .poster { transform: translateY(-1080px); }
+  </style>
+</head>
+<body>
+  <main class="poster" data-vds-layer="field" data-vds-action="authored-cold-warm-field">
+    <img class="photo photo-reference" data-source alt="原始照片的同尺度裁切" data-vds-role="evidence">
+    <img class="photo photo-base" data-source alt="冷蓝走廊尽头，一名疲惫的人坐在暖黄灯光下" data-vds-role="evidence" data-vds-layer="event" data-vds-action="decisive-3x4-crop split-exposure-grading">
+    <div class="field-pressure" data-vds-layer="field" data-vds-action="corridor-pressure-grading"></div>
+    <div class="plane-field" data-vds-layer="field" data-vds-action="perspective-warm-shelter"></div>
+    <img class="photo plane-bleed" data-source alt="" aria-hidden="true" data-vds-role="atmosphere" data-vds-layer="material" data-vds-action="same-source-chromatic-boundary">
+    <img class="photo photo-warm" data-source alt="" aria-hidden="true" data-vds-role="evidence" data-vds-layer="event" data-vds-action="same-source-perspective-mask local-warm-exposure">
+    <div class="threshold-shadow" data-vds-layer="field" data-vds-action="doorframe-occlusion"></div>
+    <div class="lamp-halo" data-vds-layer="material" data-vds-action="lamp-cone-light-integration"></div>
+    <div class="lamp-stem-rule" data-vds-layer="furniture" data-vds-cause="continuation of the photographed lamp stand into the reading zone"></div>
+    <div class="floor-residue" data-vds-layer="material" data-vds-cause="horizontal rhythm inherited from the wooden floor reflection" data-vds-action="floor-reflection-rhythm"></div>
+    <div class="title-world" data-vds-layer="inscription">
+      <h1 data-vds-role="title" data-vds-action="staggered-serif-title"><span>夜班</span><span>之后</span></h1>
+    </div>
+    <div class="title-world title-echo" aria-hidden="true" data-vds-layer="material" data-vds-action="title-crosses-light-boundary">
+      <h1><span>夜班</span><span>之后</span></h1>
+    </div>
+    <p class="proposition" data-vds-role="explanation" data-vds-layer="inscription" data-vds-action="copy-seated-in-warm-plane"><span>夜班结束以后，</span><span>他被家里的一盏灯接住。</span></p>
+    <p class="credit" data-vds-role="evidence" data-vds-layer="inscription">design by victor</p>
+    <div class="edge-falloff" data-vds-layer="field" data-vds-action="low-light-edge-falloff"></div>
+    <div class="grain" data-vds-layer="material" data-vds-action="low-light-grain-integration"></div>
+  </main>
+</body>
+</html>

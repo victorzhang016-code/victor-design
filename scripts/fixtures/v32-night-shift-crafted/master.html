@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>夜班之后｜影像 × 印刷</title>
+  <style>
+    @font-face{font-family:NotoSerifSC;src:url("file:///C:/Windows/Fonts/NotoSerifSC-VF.ttf") format("truetype");font-weight:100 900;font-display:block}
+    @font-face{font-family:NotoSansSC;src:url("file:///C:/Windows/Fonts/NotoSansSC-VF.ttf") format("truetype");font-weight:100 900;font-display:block}
+    :root{
+      --w:1440px;--h:2560px;
+      --source:url("sources/original.jpg");
+      --ink:#05070b;--blue:#002b57;--cyan:#00a7c7;--red:#ff3d26;--orange:#ff7b2c;--cream:#f3ead6;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;width:var(--w);height:var(--h);overflow:hidden;background:var(--ink)}
+    body{font-family:NotoSansSC,"Microsoft YaHei",sans-serif;text-rendering:geometricPrecision}
+    .poster{position:absolute;inset:0;width:var(--w);height:var(--h);overflow:hidden;isolation:isolate;background:var(--ink);color:var(--cream)}
+    body[data-poster="02A"] #poster-03A,body[data-poster="03A"] #poster-02A{display:none}
+    .photo{position:absolute;background-image:var(--source);background-repeat:no-repeat}
+    .scene{inset:-8px;background-size:cover;background-position:center;z-index:1}
+    .grade,.vignette,.light-leak,.print-glow,.grain,.paper{position:absolute;pointer-events:none}
+    .grade,.vignette{inset:0}
+    .title-cn{position:absolute;z-index:20;height:210px;font-family:NotoSerifSC,serif;font-weight:760;color:var(--cream);white-space:nowrap}
+    .title-cn span{position:absolute;top:0;display:block;font-size:176px;line-height:.95}
+    .title-en{position:absolute;z-index:20;font-size:37px;line-height:1;font-weight:650;letter-spacing:.15em;color:var(--cream);white-space:nowrap}
+    .body-copy{position:absolute;z-index:20;font-family:NotoSerifSC,serif;font-size:32px;line-height:1.72;font-weight:520;letter-spacing:.015em;color:var(--cream)}
+    .support-en{position:absolute;z-index:20;font-size:24px;line-height:1.45;font-weight:620;letter-spacing:.06em;color:var(--cream)}
+    .grain{inset:0;z-index:40;opacity:.17;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.95'/%3E%3C/svg%3E")}
+
+    /* 02A — film development */
+    #poster-02A .scene{filter:contrast(1.12) saturate(1.17) brightness(.73)}
+    #poster-02A .grade{z-index:2;background:
+      radial-gradient(ellipse 45% 30% at 71% 48%,rgba(255,132,48,.24),transparent 68%),
+      linear-gradient(90deg,rgba(0,34,82,.68),rgba(0,19,46,.08) 55%,transparent 78%),
+      linear-gradient(0deg,rgba(2,4,9,.84),transparent 39%,rgba(3,6,12,.23) 100%);mix-blend-mode:multiply}
+    #poster-02A .vignette{z-index:3;box-shadow:inset 0 0 230px 88px rgba(0,0,0,.48)}
+    #poster-02A .light-leak{z-index:9;right:-145px;top:-70px;width:545px;height:2700px;opacity:.66;filter:blur(32px);mix-blend-mode:screen;background:
+      radial-gradient(ellipse at 35% 48%,rgba(255,176,70,.58),rgba(255,73,31,.3) 34%,transparent 70%),
+      linear-gradient(180deg,transparent 7%,rgba(255,73,31,.22) 36%,rgba(255,169,55,.38) 58%,transparent 91%)}
+    .film{position:absolute;z-index:8;width:724px;height:1260px;background:rgba(7,8,12,.34);box-shadow:0 28px 90px rgba(0,0,0,.28),inset 0 0 0 2px rgba(245,233,210,.25);transform-origin:center;backdrop-filter:blur(1px)}
+    .film .frame-image{position:absolute;left:29px;right:29px;top:22px;bottom:22px;background-image:var(--source);background-repeat:no-repeat;background-size:250%;background-position:68% 56%;filter:contrast(1.18) saturate(1.13) brightness(.96);opacity:.86;mix-blend-mode:screen}
+    .film .perfs{position:absolute;top:17px;bottom:17px;width:10px;opacity:.5;background:repeating-linear-gradient(to bottom,rgba(244,234,214,.76) 0 22px,transparent 22px 54px)}
+    .film .perfs.left{left:9px}.film .perfs.right{right:9px}
+    #poster-02A .film.echo{left:620px;top:660px;transform:rotate(2.2deg);opacity:.18;mix-blend-mode:screen;filter:blur(1.3px)}
+    #poster-02A .film.main{left:552px;top:607px;transform:rotate(-1.2deg);mix-blend-mode:screen}
+    #poster-02A .film.main .frame-image:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 52% 34% at 62% 49%,rgba(255,184,76,.28),transparent 66%);mix-blend-mode:screen}
+    #poster-02A .motion-smear{left:225px;top:940px;width:1170px;height:500px;z-index:7;background-size:230%;background-position:68% 55%;filter:blur(15px) contrast(1.15) saturate(1.35);opacity:.31;mix-blend-mode:screen;transform:scaleX(1.18);-webkit-mask-image:linear-gradient(90deg,transparent,#000 18% 77%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18% 77%,transparent)}
+    #poster-02A .scan-residue{left:-30px;top:770px;width:1500px;height:750px;z-index:6;background-size:cover;background-position:center 47%;filter:blur(3px) saturate(1.2);opacity:.1;mix-blend-mode:screen;transform:translateX(38px);-webkit-mask-image:repeating-linear-gradient(to bottom,#000 0 18px,transparent 18px 42px);mask-image:repeating-linear-gradient(to bottom,#000 0 18px,transparent 18px 42px)}
+    #poster-02A .title-cn{left:84px;top:110px;width:700px}
+    #poster-02A .title-cn .g1{left:0}#poster-02A .title-cn .g2{left:158px}#poster-02A .title-cn .g3{left:321px}#poster-02A .title-cn .g4{left:477px}
+    #poster-02A .title-en{left:90px;top:330px}
+    #poster-02A .body-copy{left:88px;bottom:150px;width:665px;text-shadow:0 4px 26px rgba(0,0,0,.82)}
+    #poster-02A .support-en{right:72px;bottom:164px;width:330px;text-align:right;text-shadow:0 3px 18px rgba(0,0,0,.82)}
+
+    /* 03A — print misregistration */
+    #poster-03A .scene{filter:contrast(1.38) saturate(1.22) brightness(.80)}
+    #poster-03A .grade{z-index:2;background:
+      radial-gradient(ellipse 44% 31% at 69% 48%,rgba(255,145,45,.43),transparent 67%),
+      linear-gradient(100deg,rgba(0,40,96,.66),transparent 62%),
+      linear-gradient(0deg,rgba(2,5,11,.82),transparent 46%,rgba(2,5,11,.2) 100%);mix-blend-mode:multiply}
+    #poster-03A .vignette{z-index:3;box-shadow:inset 0 0 245px 92px rgba(0,0,0,.52)}
+    #poster-03A .plate{position:absolute;z-index:7;background-image:var(--source);background-repeat:no-repeat;mix-blend-mode:screen}
+    #poster-03A .plate.person{left:520px;top:720px;width:830px;height:980px;background-size:240%;background-position:68% 56%;-webkit-mask-image:radial-gradient(ellipse 58% 50% at 66% 52%,#000 0 34%,rgba(0,0,0,.62) 55%,transparent 78%);mask-image:radial-gradient(ellipse 58% 50% at 66% 52%,#000 0 34%,rgba(0,0,0,.62) 55%,transparent 78%)}
+    #poster-03A .plate.cyan{filter:grayscale(1) sepia(1) saturate(9) hue-rotate(135deg) contrast(1.3);opacity:.38;transform:translateX(-18px)}
+    #poster-03A .plate.red{filter:grayscale(1) sepia(1) saturate(10) hue-rotate(320deg) contrast(1.3);opacity:.36;transform:translateX(19px)}
+    #poster-03A .exposure{left:500px;top:690px;width:880px;height:1040px;background-size:240%;background-position:68% 56%;filter:contrast(1.38) saturate(1.38) brightness(1.31) blur(2.6px);opacity:.35;mix-blend-mode:screen;z-index:9;-webkit-mask-image:radial-gradient(ellipse 58% 52% at 67% 51%,#000 0 27%,rgba(0,0,0,.56) 51%,transparent 78%);mask-image:radial-gradient(ellipse 58% 52% at 67% 51%,#000 0 27%,rgba(0,0,0,.56) 51%,transparent 78%)}
+    #poster-03A .reflection{left:-90px;right:-90px;bottom:-360px;height:1210px;background-size:cover;background-position:center bottom;filter:contrast(1.28) saturate(1.22) brightness(1.05) blur(2px);transform:scaleY(-1) scaleX(1.08);opacity:.36;mix-blend-mode:screen;z-index:5;-webkit-mask-image:linear-gradient(to bottom,#000 0 34%,rgba(0,0,0,.48) 58%,transparent 92%);mask-image:linear-gradient(to bottom,#000 0 34%,rgba(0,0,0,.48) 58%,transparent 92%)}
+    #poster-03A .floor-plate{left:0;right:0;bottom:0;height:1040px;background-size:cover;background-position:center bottom;z-index:8;mix-blend-mode:screen;-webkit-mask-image:linear-gradient(to top,#000 0 56%,transparent 94%);mask-image:linear-gradient(to top,#000 0 56%,transparent 94%)}
+    #poster-03A .floor-plate.cyan{filter:grayscale(1) sepia(1) saturate(9) hue-rotate(135deg) contrast(1.28);opacity:.15;transform:translateX(-11px)}
+    #poster-03A .floor-plate.red{filter:grayscale(1) sepia(1) saturate(10) hue-rotate(320deg) contrast(1.28);opacity:.16;transform:translateX(12px)}
+    #poster-03A .ink-dots{position:absolute;left:430px;bottom:70px;width:840px;height:880px;z-index:10;opacity:.27;mix-blend-mode:screen;background-image:radial-gradient(circle,rgba(243,234,214,.8) 0 4px,transparent 4.8px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse 48% 60% at 63% 57%,#000 0 22%,rgba(0,0,0,.46) 45%,transparent 73%);mask-image:radial-gradient(ellipse 48% 60% at 63% 57%,#000 0 22%,rgba(0,0,0,.46) 45%,transparent 73%)}
+    #poster-03A .print-glow{z-index:11;left:475px;top:900px;width:930px;height:1250px;opacity:.80;filter:blur(32px);mix-blend-mode:screen;background:radial-gradient(ellipse at 64% 40%,rgba(255,196,78,.58),rgba(255,58,30,.20) 36%,transparent 68%)}
+    #poster-03A .paper{inset:0;z-index:39;opacity:.075;mix-blend-mode:screen;background-image:repeating-linear-gradient(7deg,rgba(255,255,255,.17) 0 1px,transparent 1px 5px)}
+    #poster-03A .title-cn{left:84px;top:110px;width:700px;text-shadow:-5px 2px rgba(0,167,199,.55),5px -2px rgba(255,61,38,.48)}
+    #poster-03A .title-cn .g1{left:0}#poster-03A .title-cn .g2{left:158px}#poster-03A .title-cn .g3{left:321px}#poster-03A .title-cn .g4{left:477px}
+    #poster-03A .title-en{left:90px;top:330px;color:var(--cream);text-shadow:-3px 1px rgba(0,167,199,.55),3px -1px rgba(255,61,38,.45)}
+    #poster-03A .body-copy{right:76px;bottom:118px;width:900px;font-size:48px;line-height:1.56;font-weight:560;letter-spacing:.008em;text-align:right;text-shadow:0 4px 30px rgba(0,0,0,.9)}
+    #poster-03A .support-en{left:76px;top:1568px;width:650px;font-size:29px;line-height:1.48;letter-spacing:.025em;text-shadow:0 3px 22px rgba(0,0,0,.9)}
+    #poster-03A .film-proposition{position:absolute;right:72px;top:116px;width:390px;z-index:20;font-size:24px;line-height:1.44;font-weight:650;letter-spacing:.04em;text-align:right;color:var(--cream);text-shadow:0 3px 18px rgba(0,0,0,.68)}
+    #poster-03A .logline{position:absolute;left:76px;top:1792px;width:660px;z-index:20;font-family:NotoSerifSC,serif;font-size:36px;line-height:1.56;font-weight:540;color:var(--cream);text-shadow:0 3px 23px rgba(0,0,0,.9)}
+
+    body[data-view="thumbnail"]{width:360px;height:640px}body[data-view="thumbnail"] .poster{transform:scale(.25);transform-origin:0 0}
+    body[data-view="copy-hidden"] [data-vds-role="title"],body[data-view="copy-hidden"] [data-vds-role="explanation"]{visibility:hidden!important}
+    body[data-view="image-hidden"] [data-vds-role="atmosphere"],body[data-view="image-hidden"] [data-vds-role="evidence"]{visibility:hidden!important}
+    body[data-view="bottom"]{height:360px}body[data-view="bottom"] .poster{transform:translateY(-2200px)}
+  </style>
+</head>
+<body data-poster="02A" data-view="full">
+  <section id="poster-02A" class="poster" aria-label="夜班之后 02A 胶片显影">
+    <div class="photo scene" data-vds-role="atmosphere" data-vds-layer="field" aria-label="原始冷蓝走廊与暖黄灯下人物"></div>
+    <div class="grade" data-vds-cause="冷蓝暗场与原照片暖灯建立夜班和慰藉的色义"></div>
+    <div class="vignette" data-vds-cause="胶片暗角压缩走廊边缘并把视线推向人物"></div>
+    <div class="photo scan-residue" data-vds-role="evidence" aria-label="同源画面的条带式扫描残影"></div>
+    <div class="photo motion-smear" data-vds-role="evidence" aria-label="人物与灯区的同源长曝光拖影"></div>
+    <div class="film echo" data-vds-role="evidence" aria-label="低透明度错位胶片叠曝">
+      <div class="frame-image"></div><div class="perfs left"></div><div class="perfs right"></div>
+    </div>
+    <div class="film main" data-vds-role="evidence" data-vds-layer="event" aria-label="人物与灯区的胶片显影窗口">
+      <div class="frame-image"></div><div class="perfs left"></div><div class="perfs right"></div>
+    </div>
+    <div class="light-leak" data-vds-cause="沿胶片边缘进入的暖色光漏，与真实灯区共享色温"></div>
+    <div class="title-cn" data-vds-role="title" aria-label="夜班之后"><span class="g1">夜</span><span class="g2">班</span><span class="g3">之</span><span class="g4">后</span></div>
+    <div class="title-en" data-vds-role="title">AFTER THE NIGHT SHIFT</div>
+    <div class="body-copy" data-vds-role="explanation">回到家，他在灯下坐了很久。<br>暖黄的光落在肩上，房间安静下来。</div>
+    <div class="support-en" data-vds-role="explanation" data-vds-layer="inscription">HE SAT UNDER THE LAMP<br>FOR A WHILE.</div>
+    <div class="grain" data-vds-layer="material" data-vds-cause="胶片颗粒统一原照片、显影窗口与文字层"></div>
+  </section>
+
+  <section id="poster-03A" class="poster" aria-label="夜班之后 03A 印刷错版">
+    <div class="photo scene" data-vds-role="atmosphere" data-vds-layer="field" aria-label="原始冷蓝走廊与暖黄灯下人物"></div>
+    <div class="grade" data-vds-cause="深蓝、焦橙与米白建立受控的印刷色场"></div>
+    <div class="vignette" data-vds-cause="暗角保留印刷场的中心压力"></div>
+    <div class="plate person cyan" data-vds-role="evidence" aria-label="人物灯区的青色局部套版"></div>
+    <div class="plate person red" data-vds-role="evidence" aria-label="人物灯区的红色局部套版"></div>
+    <div class="photo exposure" data-vds-role="evidence" data-vds-layer="event" aria-label="灯区与人物的高曝光显影层"></div>
+    <div class="photo reflection" data-vds-role="evidence" aria-label="地板反光的扫描式倒影延伸"></div>
+    <div class="photo floor-plate cyan" data-vds-role="evidence" aria-label="倒影区域的青色墨版"></div>
+    <div class="photo floor-plate red" data-vds-role="evidence" aria-label="倒影区域的红色墨版"></div>
+    <div class="ink-dots" data-vds-cause="粗网点只在倒影亮区模拟油墨密度变化"></div>
+    <div class="print-glow" data-vds-cause="保留用户认可的暖色炫光并与套版重叠"></div>
+    <div class="title-cn" data-vds-role="title" aria-label="夜班之后"><span class="g1">夜</span><span class="g2">班</span><span class="g3">之</span><span class="g4">后</span></div>
+    <div class="title-en" data-vds-role="title">AFTER THE NIGHT SHIFT</div>
+    <div class="film-proposition" data-vds-role="explanation">A VISUAL STUDY OF<br>FATIGUE, HOME, AND LIGHT.</div>
+    <div class="logline" data-vds-role="explanation">夜班散场以后，<br>回家的走廊显得格外漫长。</div>
+    <div class="body-copy" data-vds-role="explanation">回到家，他在灯下坐了很久。<br>暖黄的光落在肩上，房间安静下来。</div>
+    <div class="support-en" data-vds-role="explanation" data-vds-layer="inscription">AFTER A NIGHT SHIFT, HE RETURNS HOME<br>AND SITS BENEATH A WARM LAMP.</div>
+    <div class="paper" data-vds-layer="material" data-vds-cause="轻微纸纤维将照片、墨版与标题统一为印刷表面"></div>
+    <div class="grain" data-vds-cause="印刷颗粒统一图像版层与文字套色"></div>
+  </section>
+  <script>
+    const p=new URLSearchParams(location.search);document.body.dataset.poster=p.get("poster")==="03A"?"03A":"02A";
+    const views=new Set(["full","thumbnail","copy-hidden","image-hidden","bottom"]);document.body.dataset.view=views.has(p.get("view"))?p.get("view"):"full";
+  </script>
+</body>
+</html>

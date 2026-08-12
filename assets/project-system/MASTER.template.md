@@ -59,6 +59,21 @@ One-line direction:
 | Block/background | | | |
 | Whitespace | | | |
 
+### Technique rationale
+
+| Technique | Subject cause | Surface job | Relationship | Generic treatment refused |
+| --- | --- | --- | --- | --- |
+| Image | | | | |
+| Type | | | | |
+| Composition / information | | | | |
+| Material / interaction | | | | |
+
+- Reference family:
+- Target relational density:
+- Four concrete design acts per high-fidelity page/state:
+- Interpretive draft copy and approval status:
+- Revision contract — preserve / remove / strengthen / locked / reference level:
+
 ### Layout scaffold
 
 - Boundary logic: framed / bleed / hybrid
@@ -172,6 +187,10 @@ Asset ladder completed:
 - No CSS-drawn imitation of complex devices, objects, documents, or material textures.
 - No generated hero image without an explicit user-approved exception.
 - [project-specific refusals]
+
+These are refusals only when uncaused or weakly drawn. Lines, icons, blocks,
+small type, and material are valid when they carry semantic or compositional
+work. Also refuse over-restraint that leaves the artifact visibly unfinished.
 
 ## 9. Open hypotheses
 

@@ -1,5 +1,5 @@
 interface:
-  display_name: "Victor Design"
-  short_description: "Evidence-led authored visual direction and delivery"
+  display_name: "Victor Design System"
+  short_description: "Reference-led craft across posters, decks, editorial, and UI"
   brand_color: "#C24127"
-  default_prompt: "Use $victor-design-system to turn this subject and its real evidence into an authored visual artifact."
+  default_prompt: "Use $victor-design-system to build a reference-level, richly authored visual artifact for this carrier."

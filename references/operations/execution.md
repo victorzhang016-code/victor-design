@@ -6,6 +6,25 @@ work.
 
 ## Gate 1 — proposition and evidence
 
+If an image is attached, Gate 1 begins with a user-visible image-role
+checkpoint. `Image role: base` means the image is the background or hero;
+`project-evidence` and `supporting` remain asset-driven roles; `reference` is
+not placed by default. The role must be approved before choosing an adapter,
+searching for missing assets, or composing.
+
+Gate 1 then has two further user-visible checkpoints. `Brief status: approved`
+confirms scope, copy, form, and source policy only. `Direction status: approved`
+means the user saw the direction preview and explicitly selected a direction.
+The first status never implies the second. A generic reply such as “确认”,
+“生成”, “PNG”, or “手机竖版” cannot release a direction.
+
+Load the "Confirmed image-as-carrier input" branch of `adapters/poster.md`
+only when the approved role is `base`
+and the declared form is `poster` or `key visual`. Do not create a high-fidelity
+master or final export until the required role, brief, and direction evidence
+are recorded. A model recommendation remains `Proposed direction`, never
+`Approved direction`.
+
 Before the proposition is released, create or update `TASK_BRIEF.md` using
 `workflow/task-brief.md`. Its scope, source authority, asset policy, and form
 answers are inputs to this gate. A concept cannot use its own aesthetic
@@ -16,6 +35,46 @@ Before high-fidelity work, obtain the user's explicit confirmation. Record it in
 unattended run, record the controller and interaction policy in `TASK_BRIEF.md`
 instead; never treat a request for a visual, a controller, or self-written
 assumptions as approval of an inferred visual preference.
+
+The Gate 1 record must include these state fields:
+
+```markdown
+Gate 1 status: pending | released
+Image role status: pending | approved
+Image role: base | project-evidence | supporting | reference | mixed | pending
+Image placement: background | hero | replaceable-image | not-placed | per-asset | pending
+Image role approval evidence:
+Image role source/rights:
+Brief status: pending | approved
+Direction status: pending | approved
+Direction preview shown: yes/no — path or hash
+Proposed direction: stable ID or none
+Approved direction: stable ID or none
+Brief approval evidence:
+Direction approval evidence:
+```
+
+For v3.1 records, use arbitrary stable direction IDs such as `02A`, `03A`,
+`cover-editorial`, or `data-story-dark`; do not remap them to A/B/C. When
+attached files carry different roles, record `Image role: mixed`,
+`Image placement: per-asset`, and put every file's actual role and placement in
+`ASSET_LEDGER.md`.
+
+Also record:
+
+```markdown
+Design schema: v3.1
+Reference family:
+Technique rationale:
+Target density:
+Revision contract: preserve / remove / strengthen / locked / reference level
+Interpretive copy status: none | pending | approved — evidence
+```
+
+`Gate 1 status: released` is valid only when image role, brief, and direction
+are approved, a preview was shown to the user, an explicit direction ID is
+recorded, and the evidence quotes the user's selections. If any item is
+missing, keep the gate pending and stop before the master.
 
 Record all of the following:
 
@@ -33,12 +92,12 @@ Record all of the following:
   or "one proposition" is not such a reason. If the brief implies a medium,
   state the assumption in one sentence so the user can veto it;
 - **density target and layer inventory**: when a reference artifact is named,
-  count its components (layers per page, inscription instances, material
-  effects, type-scale ratios, furniture) and record the counts as the density
-  target; with no reference, record the default anchor from
-  `workflow/density-and-care.md`. Also record which layers each page type will
-  carry. Gate 1 does not release a proposition that declares only a field, a
-  palette, and a type voice — that is a direction, not a design;
+  record its type hierarchy, image operations, supporting elements, material,
+  visual weight, dense/quiet regions, and relational density. Translate these
+  into at least four concrete design acts per high-fidelity page or state;
+  component count alone is not a density target. With no reference, record the
+  carrier anchor from `workflow/density-and-care.md`. Gate 1 does not release a
+  proposition that declares only a field, palette, and type voice;
 - **surface lock**: record the controlling page/state count, canvas, reading
   mode, and editable source requirement before concept work. A later note that
   says "at most six slides" overrides every earlier poster inference;
@@ -55,7 +114,7 @@ Record all of the following:
   which is canonical and why before compositing;
 - contact sheet path and `ASSET_LEDGER.md` path;
 - primary/hero source, source status, and each selected asset's role;
-- the local → licensed web → unmet role → generation decision trail.
+- the local → licensed web → unmet role → generation → code decision trail.
 
 Generation is blocked until the ledger names an unmet role and the user
 explicitly authorizes it. A generated hero image is blocked unless that approval
@@ -96,7 +155,8 @@ Before asking for approval, provide:
 - a selected master render at full size, thumbnail, copy-hidden, and same-scale
   reference view, plus image-hidden when an image or generated carrier is
   visually dominant;
-- a review record from `operations/review.md`.
+- a review record from `operations/review.md`, including the required
+  `## Benchmark comparison` section (a hard gate there).
 
 For a multi-page or multi-state output, make a low-detail content thumbnail or
 role map before decoration. Name every page/state's job, dominant evidence or
@@ -174,9 +234,16 @@ its duration). For the concrete build pipelines, read
 
 ```markdown
 ## Gate 1 — Proposition
+Image role status: pending | approved
+Image role: base | project-evidence | supporting | reference | mixed | pending
+Image placement: background | hero | replaceable-image | not-placed | per-asset | pending
+Image role approval evidence:
+Image role source/rights:
 Decision:
 User approval:
 Approval evidence:
+Brief approval evidence:
+Direction approval evidence:
 Source route:
 Source policy:
 Contact sheet:
@@ -191,6 +258,7 @@ Approved render:
 User approval:
 Approval evidence:
 Visual review:
+Benchmark comparison:
 
 ## Gate 3 — Delivery
 Decision:

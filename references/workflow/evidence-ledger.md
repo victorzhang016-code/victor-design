@@ -1,92 +1,155 @@
-# Evidence ledger — default base
+# Evidence ledger
 
 Historical source expansion. The active runtime summary is
 `../style-evidence.md`; update both files together when a newly approved work
-changes the owner's durable design evidence. This ledger preserves the longer
+changes Victor's durable design evidence. This ledger preserves the longer
 source rationale and must not be treated as an optional substitute for the
 active evidence layer.
 
-**This file ships with the same default evidence base as
-`../style-evidence.md`,** distilled from the author's approved shipped work
-and recorded without any private file paths. An adopter may replace the
-tiers with their own work.
-
 ## Why this exists
 
-This system is inferred from selected works across time. Presence alone does
-not make a recurring rule. Weight each source by:
+This system is inferred from selected works across time. Presence alone does not make a recurring rule. Weight each source by:
 
 1. recency;
 2. authorship;
 3. degree of control;
 4. repetition across media;
-5. the user's explicit endorsement.
+5. The user's explicit endorsement.
 
 Explicit statements from the user outrank inference.
 
-## Weighting tiers
+## Weighting
 
 ### Tier A: current/core authored evidence
 
-The latest approved authored work. Record its location, its specific
-evidence, and what it must not degenerate into. This tier is the primary
-evidence for current tasks.
+#### Current/core authored work
 
-- Source: AR product documentation (default base)
-- Evidence: actual spatial photography, interface, and research evidence;
-  truthful product claims; dense crafted factual detail on one canvas
-- Do not turn into: a general-purpose retro-tech visual language
+Use the latest approved authored work supplied for the current system as primary
+evidence for narrative product interfaces, dark spectral color, editorial
+hierarchy, and emotionally charged interaction. Preserve its specific evidence,
+but do not convert a historical serif choice into a current default: use clear
+sans-serif typography unless a task-specific exception is discussed and
+approved.
 
-### Tier B: mature authored evidence
+#### 模子の衣柜 / 衣LOG
 
-Earlier work with proven control. Record groups, locations, and the strengths
-worth translating (sequence logic, hierarchy, material truth).
+Location: `E:\个人项目\衣柜\模子の衣柜`
 
-- Group / location: industrial launch graphics (default base)
-- Evidence: industrial photography, hard black/white/gray contrast, bold
-  wordmark, one precise electric color event, printed-poster completion
-- Correction to apply when reusing: the palette and grid belong to that
-  subject; translate the contrast discipline, not the colors
+Evidence:
 
-- Group / location: architectural presentation (default base)
-- Evidence: spatial sequence, threshold, macro-to-micro evidence, strong
-  image scale, color courage, architectural figure-field
-- Correction to apply when reusing: never reproduce an exhibition board on
-  another surface; translate sequence and scale, not panels
+- physical hangtag as a product-specific visual mother object;
+- paper, textile, ink, stamp, string, and archive material system;
+- warm neutrals with ink and rust-red event color;
+- explicit task grouping, one primary action, progressive disclosure, mobile recomposition;
+- typography chosen by display, story, metadata, and operation role;
+- direct rejection of generic SaaS and AI-front-end tropes.
 
-- Group / location: tactile archive/product UI (default base)
-- Evidence: paper, textile, ink, stamp, string; semantic material systems;
-  usable editorial UI
-- Correction to apply when reusing: tactility must come from the current
-  subject's materials, not from generic scrapbook nostalgia
+Use as primary evidence for material systems, editorial product UI, semantic tokens, usability, and anti-AI rules.
 
-### Tier C: early authored evidence
+#### Bonjour! BUILD2026 visual work
 
-Formative work. Record the energy worth keeping and the excess worth
-correcting (over-density, small text, competing modules). The default base
-records none publicly; adopters fill this tier from their own history.
+Location: `E:\Bonjour!\预告`
+
+Evidence:
+
+- industrial photography and real physical props;
+- hard black/white/gray contrast;
+- sparse structured metadata;
+- bold wordmark and asymmetric editorial placement;
+- electric blue used as a precise event signal;
+- physical print/poster sensibility rather than generic digital campaign cards.
+
+Use as primary evidence for posters, launch communication, industrial material, and single-event accent.
+
+### Tier B: mature undergraduate authored evidence
+
+Location: `E:\个人项目\排版阶段性总结`
+
+Higher-weight groups include:
+
+- 毕设;
+- 欧洲营;
+- 城市设计;
+- 真实建造;
+- 绿建改造;
+- 高层建筑.
+
+Evidence:
+
+- stronger concept-to-sequence logic;
+- hero atmosphere supported by diagrams and proof;
+- macro/micro alternation;
+- spatial fields, zones, thresholds, and movement;
+- growing control of image scale and information hierarchy.
+
+Translate architecture-specific moves into sequence, attention, relational layout, and evidence hierarchy.
+
+### Tier C: early and middle undergraduate authored evidence
+
+Groups include:
+
+- 宿营地;
+- 东湖书吧;
+- 儿童之家;
+- evolo;
+- 养老院;
+- 卫生站;
+- 图书馆;
+- 孵化器.
+
+Evidence:
+
+- bright orange, teal, salmon, blue, and multicolor zoning;
+- energetic bands, diagrams, collage, and image fields;
+- high density and strong appetite for visual storytelling;
+- experimental typography and board composition.
+
+Use as evidence of color courage, energy, and ambition. Correct for over-density, small text, excessive bands, and competing modules.
 
 ### Tier D: adaptation or secondary evidence
 
-Collaboration templates, platform-driven graphics, adapted identities. Use to
-understand production range. Do not treat a gradient, font, or component
-pattern here as core style without repetition or explicit endorsement.
+Examples include collaboration templates, platform-driven recruitment graphics, and work where the user adapted an existing visual identity.
 
-### Spiritual references (optional)
+Use to understand production range and constraint handling. Do not treat a gradient, font, or component pattern in these works as core style without repetition or explicit endorsement.
 
-Works the owner explicitly names as spiritual sources (films, games, books,
-other designers). Extract atmosphere and principle; never claim their visual
-language as the owner's authorship or reproduce it literally.
+### Spiritual reference: Disco Elysium
 
-- Source:
-- What to extract:
-- What never to do:
+Source includes selected screenshots and artbook material in the workspace inspiration folders.
 
-## Stable conclusions vs working hypotheses
+The user explicitly identifies its visual and atmospheric character as a spiritual source.
 
-Keep two lists and update them only after rendered work and user feedback:
+Extract:
 
-- **High confidence** — conclusions repeatedly proven across approved work.
-- **Working hypotheses** — open questions to test through future work
-  (e.g. tolerated asymmetry in dense UI, preferred type families across
-  emotional modes, how much texture high-frequency screens should carry).
+- dirty painterly material;
+- emotional and political atmosphere;
+- text as world;
+- semantic voices and colors;
+- ruin paired with luminous thought;
+- friction and ambiguity held by structured reading.
+
+Do not claim its copyrighted visual language as the user's authorship or reproduce it literally.
+
+## Stable conclusions
+
+High confidence:
+
+- feeling and atmosphere lead;
+- concept becomes narrative sequence;
+- layout and color are primary authored strengths;
+- vivid color remains valid when semantic;
+- later work prefers more editorial control and material truth;
+- product usability is a hard requirement;
+- generic AI aesthetic is explicitly rejected.
+- information density must follow content complexity and viewing context;
+- substantial image-led work requires explicit image roles, crop logic, and text-image hierarchy;
+- current typography defaults to clear sans-serif.
+
+Working hypotheses to test through future work:
+
+- degree of tolerated asymmetry in dense operational UI;
+- preferred Chinese type families across different emotional modes;
+- how much texture remains desirable in high-frequency product screens;
+- whether bright narrative fields should enter core product surfaces or remain campaign/content modes;
+- how literal physical metaphors should be in future AI products.
+
+Update these hypotheses only after rendered work and the user's feedback.

@@ -64,14 +64,14 @@ The project master records:
 - unresolved hypotheses.
 
 It must also identify the selected style-evidence rows and any exception. A
-project may inherit a principle from the owner's history; it may not silently
-copy an unrelated palette, font treatment, or material motif.
+project may inherit a principle from Victor's history; it may not silently copy
+an unrelated palette, font treatment, or material motif.
 
 It is a decision source, not a mood board.
 
 The project master may be drafted only after the user has confirmed the design proposition. It records the dialogue; it cannot replace the dialogue.
 
-Record whether confirmation came through the native structured question interface or through an explicit statement the user had already made. Never reopen a confirmed decision without new evidence.
+In Codex, record whether confirmation came through the native structured question interface or through an explicit statement the user had already made. Never reopen a confirmed decision without new evidence.
 
 ## Surface override responsibilities
 

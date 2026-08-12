@@ -1,10 +1,38 @@
 # Product/UI adapter
 
+If an image is attached, resolve `workflow/image-role-routing.md` before this
+adapter. A project-evidence or supporting image may enter a declared UI slot;
+an approved reference image remains out of the product surface by default. A
+base image is allowed only when the UI brief explicitly defines it as the
+surface background or hero content.
+
 ## Job
 
 Make the next task, current state, and recovery path unmistakable while keeping
 the authored visual world intact. UI is a state system, not a decorated static
 screen.
+
+Apply the cross-carrier theme and reference workflow, then control richness by
+task efficiency. Use adjacent human-made product, data, editorial, or immersive
+interface references. Translate their hierarchy and care into states and
+feedback; never turn an operational surface into a poster.
+
+The benchmark obligation in `workflow/density-and-care.md` applies here too:
+when the user supplies no references, calibrate against the built-in base.
+This carrier's own density sources are the brand field, data visualization,
+state feedback, and recovery surfaces.
+
+Review two densities together:
+
+- **functional density:** task, information, action, status, feedback, and
+  recovery are complete without redundant controls;
+- **aesthetic completion:** brand field, typography, imagery, visualization,
+  motion, material, and state transitions receive authored treatment.
+
+High visual density is most useful in brand entrances, immersive content,
+empty states, data stories, and decisive completion states. Forms, settings,
+errors, and recovery surfaces remain calm; their completion appears through
+hierarchy, state clarity, feedback, spacing, and precise details.
 
 ## Product hardening
 
@@ -15,9 +43,27 @@ screen.
 - honest separation of user input, evidence, inference, and generated output;
 - both outcomes of every decision, with a path onward or back.
 
+Icons must communicate a function, state, category, or brand meaning. Added
+copy must help comprehension, decision, trust, or recovery. Do not add controls,
+labels, or explanations merely to occupy space. Distinguish content as
+`factual`, `interpretive draft`, or `decorative/semantic`; UI may not invent a
+feature, metric, or system state for visual richness.
+
 Every declared state must render independently as `?state=<name>` for golden
 capture. Waiting, empty, error, accept, and decline states receive the same
 typographic and interaction care as the happy path.
+
+## DOM Migrate v3 as a first-pass quality gate
+
+For controlled VDS product UI, treat DOM Migrate v3 as a first-pass quality
+gate: author the exact viewport states with semantic flex/grid and the
+importer annotations, capture the golden package, then compare the imported
+Figma states before release. A build that merely completes is not a pass.
+
+When an AI product UI may need editable Figma delivery, author export-ready
+controlled HTML from the first draft. Do not defer DOM Migrate annotations,
+state routes, reusable tokens, or semantic layer names until after visual
+approval; they are part of the UI's authored structure.
 
 ## DOM Migrate v3 authoring contract
 

@@ -3,7 +3,7 @@
 ## Gate 1 — Proposition
 
 Decision: Confirmed editorial project poster using the subject's own spatial photograph.
-User approval: The user approved the proposition and real-source route.
+User approval: Victor approved the proposition and real-source route.
 Approval evidence: User message dated 2026-07-28: “Use the actual spatial photograph as the primary evidence.”
 Source route: From-zero; local real evidence first, no web or generation required.
 Source policy: Local project screenshot is the hero; all interpretive material remains secondary.
@@ -14,10 +14,10 @@ Generation exception: Not used.
 
 ## Gate 2 — Master
 
-Decision: The user approved the rendered HTML master after full-size, thumbnail, copy-hidden, and reference review.
+Decision: Victor approved the rendered HTML master after full-size, thumbnail, copy-hidden, and reference review.
 HTML master: master.html
 Approved render: approved-render.txt
-User approval: The user approved the selected master.
+User approval: Victor approved the selected master.
 Approval evidence: User message dated 2026-07-28: “Approved the HTML master for Figma transfer.”
 Visual review: visual-review.txt
 

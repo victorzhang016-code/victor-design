@@ -24,6 +24,15 @@ for a required narrated sequence.
 - Does the material relationship use contact, transform, light, crop, scale, or
   perspective instead of a decorative connector?
 
+### Single-image poster veto
+
+For a poster whose approved image role is `base`, reject the render as P0 when
+the image is unchanged or nearly unchanged and the only authored addition is a
+title. The full-size, thumbnail, and image-hidden views must show a treated
+field, a decisive image relation, real project content, and a caused furniture
+or material layer. “The photo is strong” is not evidence that the poster is
+finished.
+
 ## Slide sequence review
 
 - Does the number of rendered pages exactly match the surface lock, including
@@ -49,6 +58,40 @@ for a required narrated sequence.
   intended voice?
 - Would a different generic "retro", serif, mono, pixel, or technical face
   change little? If so, the type choice is not specific enough.
+
+## Benchmark-comparison gate — hard
+
+Before any completion claim, place the rendered master beside the benchmark
+(user-supplied references, or the built-in base from
+`workflow/density-and-care.md` when none were supplied) at equal scale and
+record a `## Benchmark comparison` section in the master review:
+
+- type levels: benchmark count vs master count;
+- text anchor regions and the reading loop they form;
+- operations performed inside the main image;
+- craft family: named or absent;
+- dense and quiet zone distribution.
+
+Falling below the density targets in `workflow/density-and-care.md` on any
+measure is a P1 — return to production. "It met the layer floor" is not a
+pass, and a validator PASS is supporting evidence only.
+
+## Reference-level completion review
+
+- Was an adjacent human-made reference family selected and decomposed — from
+  user benchmarks, or from the built-in base when none were supplied?
+- Can the designer name at least four concrete acts in each high-fidelity page
+  or state, beyond placing supplied content?
+- Does the work reach comparable hierarchy, relational density, close-reading
+  detail, and visual weight without copying a reference's signature surface?
+- Did a removal pass preserve completion, or did fear of AI decoration reduce
+  the surface to title + untreated asset + faint furniture?
+- Does every region serve protagonist, information, transition, rhythm,
+  operation, or intentional quiet?
+
+Element categories are neutral. Lines, icons, blocks, small type, marks, and
+material pass only when their drawing, weight, rhythm, semantic role, and
+relationships are authored.
 
 ## Task-grounding and asset review
 
@@ -85,6 +128,18 @@ Reject and revise when any of the following is true:
 - generated imagery is carrying factual proof or unapproved visual dominance.
 - a screen/interface is a flat rectangle inside a perspectival host;
 - complex background material has collapsed into a uniform translucent block.
+- the user-visible draft is visibly under-designed relative to its selected
+  reference: untreated image, title, and isolated light decoration;
+- all elements are thin, small, transparent, and visually weightless, creating
+  generic AI-editorial polish instead of a hierarchy;
+- an icon, line, label, glow, or block has neither semantic function nor a
+  composition relationship;
+- several same-register prose blocks stand in for a type system — levels must
+  be distinct roles with visible size contrast, and at most one lyrical line;
+- a named craft family or declared image operation is not visible in the
+  render — declarations in the control record do not count as execution;
+- Chinese copy breaks mid-phrase, dangles a single character, or strands
+  punctuation at a line start.
 
 ## Density, rhythm, and closing gate
 
@@ -133,6 +188,19 @@ When writing an HTML master, mark meaningful text/image elements with
 `data-vds-role="title|explanation|evidence|action|atmosphere"`. Mark any line,
 bar, border, or connector that remains with `data-vds-cause="…"`. The audit
 flags undeclared microcopy, decorative rails, and rules for human review.
+
+For v3.1 controlled masters, also set `data-vds-schema="v3.1"`, declare
+`data-vds-layer="field|event|inscription|material|furniture"`, and name at
+least four concrete authored operations through whitespace- or comma-separated
+`data-vds-action` values. The audit verifies declarations and cannot judge
+whether those actions are tasteful; visually reconcile them against the chosen
+references.
+
+Under `--single-image-poster`, the audit also counts observable structure:
+distinct font-size levels, positioned text anchors, and floating polygon
+windows on the main image. Counts below the density targets in
+`workflow/density-and-care.md` fail the audit. These numbers catch thinness;
+they still cannot certify taste.
 
 ## Figma review
 

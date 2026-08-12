@@ -61,6 +61,29 @@
 - Visible fallback or duplicate source layers:
 - Native Figma text/geometry/mask/image-fill audit:
 
+## Reference-level completion audit
+
+- Reference family and adjacent task:
+- First attention and reading path compared at equal scale:
+- Type hierarchy and scale ratio:
+- Operations inside images/evidence:
+- Added content, lines, icons, blocks, shapes, or material and their jobs:
+- Dense and quiet regions:
+- Four or more concrete design acts:
+- Over-restraint veto — title + untreated asset + faint furniture:
+- AI-formula veto — floating hairlines, default blocks, fake labels, weak glow:
+- Region jobs — protagonist / information / transition / rhythm / operation / quiet:
+- Revision contract honored:
+
+## Benchmark comparison
+
+- Benchmark used (user reference or built-in base):
+- Type levels — benchmark vs master:
+- Text anchor regions and reading loop:
+- Operations inside the main image:
+- Craft family — named or absent:
+- Dense and quiet zone distribution:
+
 ## Decision
 
 - Implementation quality: pending

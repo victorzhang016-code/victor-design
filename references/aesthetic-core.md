@@ -2,9 +2,7 @@
 
 ## 1. Discover the cause
 
-Use the native structured question interface when callable; otherwise ask in
-plain prose, grouping the questions so the user can answer in one reply. Ask
-only what has
+Use the native structured question interface when callable. Ask only what has
 not already been established, then confirm a proposition before substantial
 production. Establish:
 
@@ -18,8 +16,9 @@ production. Establish:
 - **content truth** — required title, language, evidence, mechanism, identity,
   and refusal list.
 
-When several directions are genuinely defensible, make up to three low-fidelity
-previews with real copy lengths and output geometry. Do not ask for a style
+Make three low-fidelity direction previews with real copy lengths and output
+geometry — the comparison is mandatory, and only an explicit user instruction
+may reduce it. Do not ask for a style
 label when the subject already suggests a direction.
 
 ## 2. Translate meaning into form
@@ -46,14 +45,34 @@ empty, the page is not designed. Restraint is a choice among crafted
 elements, not their absence — see `workflow/density-and-care.md` for the
 positive layer model and density calibration.
 
+### Theme-to-technique chain
+
+Before high-fidelity work, answer in order:
+
+1. What is true about the subject and what must remain visible?
+2. What must the audience feel, understand, compare, or do at this surface?
+3. What pressure and reading rhythm should the surface sustain?
+4. Which family of strong human-made work solves a genuinely similar problem?
+5. Which image, type, composition, material, and interaction techniques fit?
+6. How does each technique support the subject and contact another layer?
+
+Choose a coherent combination, not a lone effect. Richness is required, but it
+may appear as visual density, information density, state depth, or interaction
+care depending on the carrier. A technique table should name its cause,
+surface job, relationship, and the generic treatment it refuses.
+
+Every high-fidelity page or state must meet the design-act density target
+defined in `workflow/density-and-care.md`; keep rough sketches internal until
+that floor is met.
+
 ## 3. Compose an authored world
 
 Build a field before placing modules. Let one dominant relation interrupt it,
 then place text, evidence, and quiet space around the same pressure. A title
 may anchor, interrupt, or enter the world; it is not a default header card.
 
-Compose in layers — treated field, dominant event, evidence, factual
-inscription, furniture, and at most one material node — using
+Compose in layers — treated field, dominant event, evidence, inscription,
+furniture, and material — using
 `workflow/density-and-care.md`. Quiet space belongs between crafted layers;
 it is not a substitute for them.
 
@@ -79,8 +98,9 @@ replace material contact with a line joining separate pictures.
 
 ## 4. Type, color, and refusal
 
-Choose type by voice, language support, reading distance, and role. Test the
-actual title, proposition, and necessary body copy before layout. Declare a
+Choose type by voice, language support, reading distance, and role; test the
+real copy as a specimen before layout (protocol in `adapters/poster.md`,
+"Typography is structural imagery"). Declare a
 small fixed type ladder before composing — a handful of steps with assigned
 roles, used identically on every page or screen; per-page sizes invented on
 the fly are a defect. Character
@@ -98,6 +118,17 @@ a visual identity.
 Ask first whether the work could only belong to this subject. Then test first
 attention, hierarchy, spacing, reading distance, content truth, and task
 clarity. Deterministic checks may find defects; they cannot certify taste.
+
+Run both vetoes before approval:
+
+- **AI-formula veto:** reject floating hairlines, default translucent blocks,
+  fake labels, meaningless icons, cheap glow, and swappable template grammar.
+- **Over-restraint veto:** reject a surface reduced by fear of decoration to an
+  untreated asset, a title, and a few weak elements. If reference-level work
+  carries more authored relationships, the draft is unfinished.
+
+Do not classify element types as tasteful or tasteless in isolation. Judge
+their subject cause, drawing quality, visual weight, rhythm, and relationship.
 
 ### Retained external mechanisms
 

@@ -6,6 +6,14 @@
 | Supporting evidence | | | | | |
 | Unmet role, if any | | | | | |
 
+## Content provenance
+
+| Content | Status | Source or approval | Delivery rule |
+| --- | --- | --- | --- |
+| | factual | | preserve claim exactly |
+| | interpretive draft | | obtain approval before final delivery |
+| | decorative/semantic | | must not imply a fact |
+
 ## Source chain
 
 - Local workspace search:

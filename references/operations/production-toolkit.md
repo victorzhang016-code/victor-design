@@ -1,22 +1,27 @@
 # Production toolkit
 
-Load only after Gate 1 releases a named production need. Tools implement a
-direction; they never invent one.
+Load only after the image role (when an image is attached) and Gate 1 release a
+named production need. Tools implement a direction; they never invent an image
+role, a medium, or a visual direction.
 
 ## Assets and generation
 
-Search eligible workspace material first. Search a specific licensed web source
-only for a named unmet role. Use generation only after both routes are recorded
-in `ASSET_LEDGER.md` and the user explicitly approves the remaining role.
+Fill every imagery or material role through this four-rung source chain, in
+order, and record each rung's outcome in `ASSET_LEDGER.md`:
+
+1. **Local workspace material** — search eligible real material first.
+2. **Licensed web source** — search only for a named unmet role.
+3. **AI generation** — only after both routes are recorded as unmet and the
+   user explicitly approves the remaining role.
+4. **Code (CSS/SVG/HTML)** — last resort, and only for roles code can
+   genuinely render: material fields, textures, grain, halftone, rules, and
+   simple graphics. Never draw a complex real object in CSS/SVG when any of
+   the first three rungs could supply it.
 
 For every selected asset record provenance, factual/interpretive status, role,
 crop rule, and any composite rule. Generated imagery is interpretive, cannot be
 factual evidence, and cannot become the hero unless Gate 1 contains explicit
 user approval for that exception.
-
-Use authored SVG only when a vector interpretation genuinely serves the role
-better than credible source material. Do not draw a complex real object in CSS
-when a real asset is available.
 
 ### Generated or found image processing
 
@@ -56,6 +61,20 @@ perspective.
 For posters, create a self-contained HTML master at the target ratio. Mark text
 and image roles plus any line/bar cause as required by `operations/review.md`.
 Render and obtain user approval before Figma work.
+
+Start controlled v3.1 artifacts from
+`assets/html-starters/artifact-v31.html` when applicable. Keep
+`data-vds-schema="v3.1"`, use `data-vds-role` for content purpose,
+`data-vds-layer` for field/event/inscription/material structure,
+`data-vds-cause` for surviving devices, and `data-vds-action` for at least four
+concrete authored acts.
+
+Use `scripts/render_artifact_views.py` to plan or render review views. It writes
+UTF-8 JSON manifests with file hashes. Surface sets are: poster (full,
+thumbnail, copy-hidden, image-hidden, bottom), graphic-text (pages, contact
+sheet, reading sequence), slides (pages, contact sheet, densest, bottom), and
+UI (default, long-copy, empty, error, recovery). Masters must respond to the
+documented `?view=` names; the renderer does not invent missing states.
 
 For Figma delivery, read the required Figma skills before using its APIs. Build
 native named text, fields, masks, rules, and structural geometry; retain raster

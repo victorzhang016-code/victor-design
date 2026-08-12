@@ -1,5 +1,11 @@
 # Slides adapter
 
+If an image is attached, resolve `workflow/image-role-routing.md` before this
+adapter. A `base` image may lead a cover or an earned evidence page; it does not
+turn the deck into a poster. `project-evidence` and `supporting` images remain
+in their declared roles, while `reference` images inform style evidence and
+stay out of the deck by default.
+
 ## Job and boundary
 
 Use this adapter for a case, methodology, tutorial, pitch, research narrative,
@@ -46,6 +52,12 @@ Give each page a distinct job and a shared world. Consistency comes from a
 caused field, type roles, and semantic color; it does not require identical
 headers, bars, cards, or one repeated poster composition.
 
+Select strong human-made references adjacent to the actual deck job: evidence
+deck, editorial narrative, research presentation, product story, or another
+specific family. Run `optional/reference-synthesis.md`. Translate scale courage,
+image treatment, and relational density into a sequence of conclusions and
+proof; do not cover every page with poster typography.
+
 ## Palette and material test
 
 Derive the field from the current case's carrier: report, interface, specimen,
@@ -68,11 +80,29 @@ event, composed evidence, factual inscriptions, or precise furniture. A page
 that is only a heading, two sentences, and an unprocessed image has failed
 the craft floor even when it passes every refusal.
 
+The benchmark obligation and the thin-brief playbook in
+`workflow/density-and-care.md` apply to decks as well: when the user supplies
+no references, calibrate against the built-in base, and treat a thin brief as
+a production task. This carrier's own density sources are the
+conclusion/evidence hierarchy, chart and diagram reconstruction, and factual
+annotation — not poster ornament.
+
 Never batch-produce a full deck before approval of pilot pages. Build one to
 three representative pages first — the cover, the densest evidence page, and
 the darkest or most unusual page — at full craft, and obtain user approval of
 those renders. The approved pilots become the per-type reference for the
 remaining pages.
+
+Compare pilots beside the selected references at equal scale before approval.
+Each page must carry `conclusion + evidence + authored design acts`. Cover,
+section, and decisive transition pages may use high-intensity image/type
+treatment. Evidence pages earn richness through chart reconstruction, image
+processing, annotation, comparison, spatial relation, and precise furniture.
+Decoration cannot substitute for proof or disturb speaking order.
+
+When evidence is thin, search the permitted source pool for real examples,
+quotes, process images, or explanatory diagrams. Mark any designed transition
+copy as `interpretive draft`; never invent data or citations to fill a page.
 
 ## Typography and reading gates
 

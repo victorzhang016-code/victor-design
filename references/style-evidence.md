@@ -1,42 +1,56 @@
-# Style evidence
+# Victor style evidence
 
-This module is a source of judgment, not a preset. **It ships with a default
-evidence base**: the distilled visual grammar of Victor Design's author,
-recorded from approved, shipped work. Use it as-is when you want that voice.
-If you are a designer or team adopting this system, replace or extend it with
-evidence from your own approved work — the file is a record of judgment, and
-your judgment belongs here.
+This is a source of judgment, not a preset. Select only evidence that serves
+the confirmed subject, audience, and medium. A project may inherit a principle,
+not a surface treatment. Record the source, confidence, role, and exception in
+the Gate 1 evidence ledger.
 
-Select only evidence that serves the confirmed subject, audience, and medium.
-A project may inherit a principle, not a surface treatment. Record the
-source, confidence, role, and exception in the Gate 1 evidence ledger.
+## Source index
 
-## Default source index
+| Source | Confidence | Use for | Do not turn into |
+| --- | --- | --- | --- |
+| `E:\Bonjour!\预告` | high | industrial photography, hard black/white/gray contrast, bold wordmark, one precise electric color event, printed-poster completion | a fixed black/blue palette or launch-template grid |
+| `E:\个人项目\排版阶段性总结` | high | spatial sequence, threshold, macro-to-micro evidence, strong image scale, color courage, architectural figure-field | dense boards, color bands, or collage for their own sake |
+| `E:\个人项目\模子の衣柜` | high when accessible/approved | paper, textile, ink, stamp, string, archive tactility; semantic material systems and usable editorial UI | generic scrapbook nostalgia or decorative craft texture |
+| `E:\个人项目\ar毕设\最终` | project-specific | actual spatial-photo, interface, and research evidence; truthful product claims | a general-purpose retro-tech visual language |
+| Victor-approved current render | highest | the current project's protected character | a rule for unrelated projects |
 
-The default base is distilled from four bodies of finished, approved work:
-industrial product launch graphics, architectural presentation across media,
-a tactile archive/product UI, and AR product documentation. The evidence
-below records *what was learned*, not the artifacts themselves — no path,
-render, or asset from those projects is required to apply it.
-
-| Source (category of approved work) | Confidence | Use for | Do not turn into |
-| --- | --- | --- |
-| Industrial launch graphics | high | industrial photography, hard black/white/gray contrast, bold wordmark, one precise electric color event, printed-poster completion | a fixed black/blue palette or launch-template grid |
-| Architectural presentation | high | spatial sequence, threshold, macro-to-micro evidence, strong image scale, color courage, architectural figure-field | dense boards, color bands, or collage for their own sake |
-| Tactile archive/product UI | high | paper, textile, ink, stamp, string, archive tactility; semantic material systems and usable editorial UI | generic scrapbook nostalgia or decorative craft texture |
-| AR product documentation | project-specific | actual spatial-photo, interface, and research evidence; truthful product claims | a general-purpose retro-tech visual language |
-| Owner-approved current render | highest | the current project's protected character | a rule for unrelated projects |
-
-When a named reference is a finished artifact, probe for its engineering
-source first — the HTML, font files, and asset directory beside the render.
-The source outranks the image: fonts, filter parameters, and component
-structure are the actual evidence; a screenshot of them is a summary.
+When a named reference is a finished Victor artifact, probe for its
+engineering source first — the HTML, font files, and asset directory beside
+the render. The source outranks the image: fonts, filter parameters, and
+component structure are the actual evidence; a screenshot of them is a
+summary.
 
 Do not promote an inferred style from a source that is inaccessible, one-off,
-adapted, or unapproved. Reinspect source work when a task depends on a
-specific claim rather than relying on this summary.
+adapted, or unapproved. Reinspect source work when a task depends on a specific
+claim rather than relying on this summary.
 
 ## Durable visual grammar
+
+### Victor-approved contemporary poster evidence — 2026-08
+
+Victor supplied boards of strong human-made contemporary posters and approved
+their level of completion as the aesthetic benchmark for poster work. Rights
+and authorship of the screenshots were not verified; the images remain outside
+the Skill. Preserve only these observations:
+
+- display type behaves as image and spatial structure, not a header;
+- one photograph may be made rich through crop, repetition, overprint,
+  exposure, scan, halftone, blur, collage, or same-source detail;
+- content outside the photograph — bilingual hierarchy, synopsis, quotation,
+  caption, line, icon, block, frame, or drawing — can complete narrative and
+  composition when its role is authored;
+- dense local clusters and strong quiet regions coexist through decisive
+  visual weight and alignment;
+- texture and imperfect print/image processes change the carrier rather than
+  float above it;
+- apparent playfulness is supported by precise scale, drawing, spacing, and
+  typography.
+
+Use this as direct aesthetic evidence for posters. Other carriers may inherit
+scale courage, type as imagery, image treatment, and relational density, but
+must translate them into article flow, evidence sequence, or interaction state
+rather than copy a film-poster surface.
 
 ### Field and sequence
 
@@ -68,18 +82,17 @@ specific claim rather than relying on this summary.
 
 - Default to clear sans-serif. Create character through hierarchy, crop,
   alignment, spacing, and actual language before searching for a display font.
-- Treat the display title as structural imagery. Judge the real word's
-  silhouette, counterforms, spacing, and overlap at final scale; a genre label
-  such as "retro" is not a font-selection rationale.
+- Treat the display title as structural imagery, judged at final scale — the
+  specimen protocol lives in `adapters/poster.md`.
 - Use serif only with a subject-specific reason and rendered approval. Use mono,
   tracking, all caps, or micro text only when the source material genuinely
   requires that reading voice.
 - Inscriptions and furniture default to the page's body sans at generous size.
   Mono + tracking is an opt-in voice with a named source cause: even when every
   value is factual, corner-annotation clusters in tracked mono read as technical
-  costume (flagged twice in user review of a built-work deck, 2026-08). A type
-  floor is a minimum, not a target — when a page feels over-annotated, cut the
-  number of annotations, never their size.
+  costume (user-flagged twice in the 波光墀影 MVT, 2026-08). A type floor is a
+  minimum, not a target — when a page feels over-annotated, cut the number of
+  annotations, never their size.
 - Text has one of four roles: title/orientation, necessary explanation,
   factual evidence, or action. Delete any text that has no role.
 - Preserve supplied title, descriptor, author line, and product definition;
@@ -95,9 +108,9 @@ specific claim rather than relying on this summary.
   use a decorative line to assert a relationship.
 - An excerpt cropped from a board or drawing that still carries neighbor-frame
   bleed, header fragments, or clipped labels is unclean input: re-crop it or
-  drop it. A missing material node beats a dirty one (built-work deck MVT,
-  2026-08: the cover specimen figure was removed after two failed re-crops,
-  and the page improved).
+  drop it. A missing material node beats a dirty one (波光墀影 MVT, 2026-08:
+  the cover specimen figure was removed after two failed re-crops, and the
+  page improved).
 - Texture and secondary devices may be visually rich when they articulate a
   real carrier, signal, time, measurement, or spatial relation. Do not equate
   high taste with removing every secondary layer.
@@ -106,11 +119,11 @@ specific claim rather than relying on this summary.
 
 ### Density evidence
 
-The default approved artifacts are dense with crafted, factual detail — the
-AR product poster carries a pixel-serif wordmark, axis ticks with mono
+Victor's approved artifacts are dense with crafted, factual detail — the
+FELD PLAYBACK poster carries a pixel-serif wordmark, axis ticks with mono
 labels, a seven-stage terminal loop list, tape inscriptions, a facet color
 band, waveform residue, paper grain, and a composited machine in one canvas;
-the methodology deck carries skill cards, mono micro-labels, and layered
+the mid-term deck carries skill cards, mono micro-labels, and layered
 inscriptions per page. This is the density anchor. Count such components in
 the reference and carry the count into the Gate 1 record. A deck page with
 only a title, two sentences, and an unprocessed figure is below the anchor —
@@ -127,6 +140,11 @@ mandate for bare pages. A page carrying several caused layers (treated field,
 made protagonist, factual inscriptions, precise furniture) is compliant; a
 page carrying none is unfinished. For the positive model, run
 `workflow/density-and-care.md`.
+
+Lines, icons, color blocks, small type, frames, and drawn marks are not refusals
+by category. Reject weak drawing, default styling, weightless repetition, fake
+meaning, or no relationship to the subject. Also reject the opposite failure:
+an untreated asset with a title and faint furniture presented as sophistication.
 
 - AI hero spectacle, floating-object collage, or mood before subject.
 - Genre costumes as spectacle: dark neon tech-arena fields, scanline or static
@@ -157,24 +175,6 @@ If no row can explain a proposed color, type, material, or layout move, treat
 the move as an unapproved hypothesis and ask the user or remove it.
 
 A swatch, paper field, serif face, texture, or layout move from an earlier
-project is **not** current-task evidence. Reuse one only after recording
+Victor project is **not** current-task evidence. Reuse one only after recording
 its present subject cause, the alternative considered, and why the inherited
 move improves this task rather than merely repeating a past success.
-
-## Make it yours
-
-To replace the default base with your own voice, rewrite the source index
-with one row per finished work you authored and stand behind. The right
-column is as important as the left: it records what the source must *never*
-degenerate into.
-
-Rules for filling it:
-
-- Prefer the engineering source over its image: the HTML, font files, and
-  asset directory beside a render outrank a screenshot of them.
-- Weight by recency, authorship, degree of control, repetition across media,
-  and your explicit endorsement. Explicit statements outrank inference.
-- Do not promote an inferred style from a source that is inaccessible,
-  one-off, adapted, or unapproved.
-- When a task depends on a specific claim, reinspect the source work instead
-  of relying on this summary.

@@ -1,72 +1,172 @@
-# Density and care — the positive craft model
+# Density and care — reference-level richness
 
-This module is the missing affirmative half of the system. Most of the skill
-tells you what to refuse; this file tells you what to *make*. A page that
-passes every refusal and contains nothing crafted has failed — restraint is a
-choice among crafted elements, not their absence.
+The system rejects two opposite failures: generic AI ornament and fearful
+under-design. Both are visible in the first render; neither may reach the
+user. Restraint is a late editing decision made after a surface has enough
+authored relationships to be complete.
 
-Root cause this answers to: an executor that follows only the refusal rules
-produces austerity — system fonts, flat color fields, bare-line diagrams, no
-inscriptions, no material. That is not minimalism; it is the absence of
-design. Approved authored work is dense with crafted, factual detail. Target
-that density, not its evacuation.
+## The principle chain
 
-## The six layers of a cared-for page
+Work in this order and do not skip a step:
 
-Every page or canvas is built from some of these layers. Select per page type,
-but never ship a page with only title + body.
+1. **Understand subject and emotion.** Who is in this, what pressure they are
+   under, what the audience should feel before understanding anything.
+2. **Choose techniques with cause.** Every technique names a subject cause or
+   a reference cause. "It looks designed" is not a cause.
+3. **Choose enough techniques.** Richness is a requirement, not a risk. A
+   draft that passes every veto but feels thin has failed.
+4. **Reach reference-level density before the user sees the work.** A shown
+   draft is already a designed artifact, not a sketch awaiting permission.
 
-1. **Field layer** — a treated ground, not a flat fill: paper grain, scanline
-   residue, a dark emissive field, a measured vignette. The field carries the
-   subject's material truth.
-2. **Dominant event layer** — one made protagonist: a composed image, a
-   composite, a display-size wordmark, a constructed diagram. "Placed" is not
-   "made": crop, seat, light, and align it deliberately.
-3. **Evidence layer** — real assets and diagrams with composition: a figure
-   trimmed and blended into the field, a chart with deliberate nodes, weights,
-   and annotation. A bare line joining three dots is not a diagram.
-4. **Inscription layer** — *factual* microcopy: coordinates, readouts, tape
-   inscriptions, measurements, source lines. This is core authored language.
-   `copy-discipline.md` bans invented metadata and decorative microcopy; it
-   does not ban true ones. If a real value exists (a coordinate, a date, a
-   parameter, a filename with meaning), it may be set as crafted small type.
-5. **Furniture layer** — footer systems, progress indicators, axis ticks,
-   section markers. Repeated, precise, quiet.
-6. **Material-node layer** — a sparse physical motif with direct semantics (a
-   tape, a waveform, a machine). One per sequence, not one per page.
+## When there aren't enough elements — add, don't shrink
 
-## Density calibration
+A sparse brief is a production task, not permission for austerity. When the
+supplied content cannot reach reference-level completion, build the missing
+design from these four moves:
 
-When a reference artifact is named, count it before designing: layers per
-page, type-scale ratios, inscription count, material effects, furniture
-components. Write the counts into the Gate 1 record as the density target —
-"reference-level density, N inscription instances per page, treated field" is
-a decision an executor can hit; "clean and premium" is not.
+1. **Supplementary type levels.** Draft a bilingual subtitle, a one-line
+   definition, a logline or proposition, an annotation, a caption. Mark
+   non-factual additions as `interpretive draft — awaiting approval`. A poster
+   carrying only a title and one sentence is under-built, not elegant.
+2. **Same-source operations.** Run the existing material through more than one
+   operation: decisive crop, split exposure, color-plate misregistration,
+   reflection scan, halftone, collage. Density comes from operations performed
+   inside the material — not from ornaments placed next to it.
+3. **A named craft family.** Derive one material system from the subject or
+   the benchmark (film development, misregistered print, photocopy, screen
+   light) and let it touch every layer, including the type. Isolated glow and
+   shadow effects stacked on a photo are not a craft family.
+4. **Caused decorative devices.** Lines, icons, ticks, blocks, and marks are
+   valid when each inherits a real mechanism, measurement, or material cause.
+   A device that only signals "designed" is AI slop — but its absence is not a
+   virtue either.
 
-Without a reference, the default anchor is the owner's approved poster/deck
-density — treated field + dominant event + inscription layer + furniture — not
-a bare academic page. If you find yourself below that anchor, justify the
-departure explicitly in the control record.
+Sparse truth is fixed with drafted interpretive copy and more operations on
+real material. Never fabricate dates, credits, coordinates, parameters, or
+institutions to simulate density.
 
-## Care pass — run per page before calling it done
+## Benchmark obligation — never optional
 
-Ask of every page: **what did the designer make here?** The answer cannot be
-"placed the content." Name two or three concrete craft acts: a chosen crop, an
-alignment intention, one inscription, one material treatment, a measured
-scale relationship. If you cannot name them, the page goes back.
+Every task is calibrated against adjacent human-made work, chosen per task:
+film, music, exhibition, or editorial posters for a poster; magazine or
+campaign spreads for graphic-text; strong product surfaces for UI; crafted
+decks for slides.
+
+- The user supplies references → decompose them with
+  `optional/reference-synthesis.md`.
+- The user supplies none → calibrate against the built-in base: **view** the
+  benchmark boards (`assets/benchmarks/poster-board-1.png` … `-4.png`, guide
+  in `optional/poster-benchmark-boards.md`), read
+  `references/style-evidence.md`, plus `optional/case-night-shift-poster.md`
+  when the task is an image-carried poster. The obligation is discharged by
+  looking, not by reading descriptions of looking.
+- Declaring "no prior outcome inspected" in a brief exempts nothing. The
+  calibration table below is filled either way.
+
+Record for the benchmark:
+
+- number and scale ratio of type levels;
+- operations performed inside images;
+- content and visual elements added outside images;
+- line, icon, shape, and material systems;
+- locations of dense and quiet zones;
+- distribution of visual weight.
+
+Target comparable completion, not a copied surface. Concrete paired examples
+of "meets it" vs "below it" live in `scripts/fixtures/`
+(`v31-crafted-poster/good.html` vs `underdesigned.html`,
+`single-image-poster/good.html` vs `bad.html`,
+`v32-night-shift-crafted/` vs `v32-night-shift-thin/`).
+
+## Density targets — a gradient, not a floor
+
+Floors block the worst; targets describe done. For a single poster/key visual:
+
+| Measure | Default requirement | Reference-level |
+| --- | --- | --- |
+| Type levels (distinct size/role steps) | 5 | 6+ (display title, subtitle, definition, logline, credit/annotation…) |
+| Text anchor regions forming a reading loop | 4 | 5 |
+| Operations inside the main image | 3 | 4+ (crop, grading, plate, mask, reflection, halftone — chosen per subject) |
+| Concrete design acts per page/state | 4 | enough that removing any one changes the work |
+
+Fewer than the default requirement needs an explicit user-approved exception;
+meeting only the floor is not a completion claim. Other carriers read the
+same gradient through their calibration below. If source material is sparse,
+reach the target through the playbook above — never redefine it downward.
+
+## Three kinds of density
+
+- **Relational density:** type, image, diagram, icon, material, and space affect
+  one another through scale, contact, crop, alignment, light, state, or rhythm.
+- **Information density:** the audience receives the definition, evidence,
+  context, decision, or recovery information required by the carrier.
+- **Design-act density:** the author has made visible decisions rather than
+  merely placed content. Acts include crop, scale relation, type treatment,
+  information choreography, material processing, diagram reconstruction, icon
+  system, or feedback. The count alone certifies nothing — four related acts
+  can be rich, six unrelated layers can be empty.
+
+## Cared-for layers
+
+Choose what the carrier needs:
+
+1. **Field** — a ground with subject-specific pressure, material, light, or
+   spatial logic.
+2. **Dominant event** — one made protagonist: image, wordmark, diagram, result,
+   or interaction state.
+3. **Evidence/content** — real explanation, assets, comparison, data, or
+   mechanism composed to change understanding.
+4. **Inscription** — factual copy or explicitly marked interpretive draft with
+   a clear reading role.
+5. **Furniture/system** — repeated orientation, navigation, scale, or status.
+6. **Material/semantic graphics** — lines, icons, blocks, marks, texture, or
+   motion that inherit a subject or functional cause.
+
+No element type is banned by default. Inspect drawing quality, visual weight,
+rhythm, and relationship. A line that structures reading may be essential; a
+floating hairline that only signals "designed" is AI slop.
+
+## User-visible draft gate
+
+Internal sketches may be crude. Any direction shown to the user must already:
+
+- communicate first attention and a complete reading path;
+- use real copy lengths and the target geometry;
+- meet the density targets above;
+- show in the pixels the seed of the named craft family and the declared
+  same-source operations — a claim that exists only in the control record
+  fails this gate;
+- include reference-level close-reading detail;
+- survive both AI-formula and over-restraint vetoes.
+
+A title, untreated image, and a few thin rules is not a direction. Neither is
+real copy stacked over a merely graded photo. Return both to internal work.
+
+## Region and removal pass
+
+Divide the surface into meaningful regions. Every region serves protagonist,
+information, transition, rhythm, operation, or intentional quiet. A dead zone
+with no compositional job is unfinished; quiet space that releases a dense
+event is designed.
+
+Build enough first, then remove. After every removal pass, rerun the density
+targets, reading order, and design-act checks. Do not clean the work back
+into austerity.
+
+## Carrier calibration
+
+- **Poster:** richness appears through image/type/composition/material and
+  distance–mid-distance–close readings. See the density targets above and
+  `adapters/poster.md`.
+- **Graphic-text:** the cover may carry poster pressure; body richness comes
+  from narrative pacing, factual captions, image detail, and recurring devices.
+- **Slides:** richness comes from conclusion, evidence, reconstruction,
+  annotation, and sequence; decoration never replaces proof.
+- **UI:** use functional and aesthetic density together. Operational states
+  stay clear; brand, imagery, data, motion, feedback, and recovery carry care.
 
 ## Type as sourced voice
 
-When project or reference fonts exist, find the font files and use them;
-record the path in the control file. A system font stack is a fallback for
-reference-less tasks, never a default aesthetic. A display face rendered from
-the actual file is part of the deliverable's identity — substituting it
-silently is a fidelity failure, not a convenience.
-
-## Interaction with the refusal rules
-
-The refusal lists ban *uncaused* decoration — rails, badges, dots, and
-metadata that exist only to simulate polish. They do not cap density. A page
-with six caused layers is compliant; a page with zero layers is not "safe",
-it is unfinished. When in doubt, add the caused layer and name its cause —
-do not subtract your way to compliance.
+Find project or reference font files when available. Test actual titles and
+body copy at final and thumbnail scale. A system stack is a fallback, not a
+design decision. Never shrink type to preserve an effect.
