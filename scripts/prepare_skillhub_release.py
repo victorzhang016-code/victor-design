@@ -23,6 +23,7 @@ EXCLUDED_FILES = {
     "test-mock.js",
 }
 ALLOWED_EXTENSIONS = {".md", ".txt", ".html", ".htm", ".css", ".js", ".py", ".json", ".xml"}
+BENCHMARK_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
 
 
 def keep(path: Path, root: Path) -> bool:
@@ -33,6 +34,10 @@ def keep(path: Path, root: Path) -> bool:
         return False
     if path.name == "LICENSE":
         return True
+    # Benchmark boards are runtime material: the poster benchmark obligation
+    # requires viewing them. Ship them despite the text-only extension list.
+    if relative.parts[:2] == ("assets", "benchmarks"):
+        return path.suffix.lower() in BENCHMARK_IMAGE_EXTENSIONS
     return path.suffix.lower() in ALLOWED_EXTENSIONS
 
 
