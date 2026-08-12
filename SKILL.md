@@ -1,6 +1,6 @@
 ---
-name: victor-design-system
-description: Art-direct and deliver high-quality posters, key visuals, editorial graphics, AI product interfaces, and cross-medium visual systems through Victor Design's evidence-led design language. Use when a task needs subject understanding translated into authored canvas structure, typography, content hierarchy, color, processed imagery, material texture, HTML-first poster production, high-fidelity editable Figma delivery, or critique that rejects generic AI image-led design and exhibition-board thinking without flattening authored character.
+name: victor-design
+description: 视觉设计与 Figma 交付工作流：从任务分析、字体与版式，到材质处理、HTML 海报和可编辑 UI 迁移。
 ---
 
 # Victor Design
@@ -60,34 +60,76 @@ layer, run the form and asset counterfactuals, and leave remaining risk visible
 for review. Never invent user approval, product facts, assets, or a visual
 preference to keep moving.
 
+## Light lane — small single-canvas tasks
+
+The full chain below is the default for substantial work. A task may run
+the light lane when **all** of these hold: one canvas or one screen; the
+user is present to confirm; no named brand campaign, product launch,
+editable-source requirement, or unattended controller; and the form sanity
+backstop confirms a single canvas is the right carrier.
+
+The light lane keeps the discipline and drops the ceremony:
+
+- Keep: the form sanity backstop; a proposition stated and confirmed in one
+  grouped exchange covering subject, soul, required copy, canvas, source
+  route, and the delivery-format choice — asking only what the request has
+  not already established; `references/aesthetic-core.md`,
+  `references/style-evidence.md`, `references/copy-discipline.md`, and one
+  adapter; every refusal rule; a caused field with a protagonist and real
+  content — never title-only emptiness; explicit user approval of the
+  rendered master before delivery. The compressed path is still the three
+  gates: proposition confirmed, master approved, then delivery — with their
+  records kept inline.
+- Drop: the `TASK_BRIEF.md` and `DESIGN_CONTROL.md` files — record the same
+  answers inline in the dialogue; the contact sheet and asset ledger when
+  few assets are involved — name each source in the reply instead; the
+  three-direction requirement — present one master direction and let the
+  user ask for alternatives; the full Gate record field list.
+- Delivery: offer flattened output as the default and editable source as an
+  option; record the user's choice in the dialogue. An editable request
+  exits to the full chain's delivery rules.
+
+Escalate to the full chain the moment any entry condition breaks: a second
+page or state, a named brand or product, an unattended run, an
+editable-source request, or a form conflict. The light lane is a shorter
+path to the same standard, never a lower one.
+
 ## Evidence, not a preset
 
-Read `references/style-evidence.md` for every task. It ships as a template:
-the owner fills it with color, layout, typography, material, and anti-pattern
-evidence from their own approved work. It is a record of judgment, never a
-palette, font pair, or layout template. Use only the evidence that fits the
-confirmed task, and name any exception.
+Read `references/style-evidence.md` for every task. It ships with a default
+evidence base — the author's distilled visual grammar from approved shipped
+work — so the system has a real voice out of the box. **An adopter with
+approved work of their own should replace the default base with it**: the
+file's "Make it yours" section is part of onboarding, not an advanced
+option, and a team adopting this system treats swapping in their own
+evidence as step one. It is a record of judgment, never a palette, font
+pair, or layout template. Use only the evidence that fits the confirmed
+task, and name any exception.
 
 ## Required execution chain
+
+This is the full lane. A task that meets every light-lane condition above
+follows that shorter path instead; everything else runs this chain.
 
 1. Run the form sanity and task-grounding backstops above. Then read
    `references/aesthetic-core.md`, `references/style-evidence.md`,
    `references/copy-discipline.md`, and
    `references/workflow/density-and-care.md`.
    Conduct the design dialogue through the native structured prompt when
-   callable. Do not infer Gate 1 approval from the request.
+   callable; where no such interface exists, ask in plain prose with the
+   questions grouped. Do not infer Gate 1 approval from the request.
 2. Classify the deliverable form before choosing a visual direction, then read
-   exactly one adapter: `adapters/poster.md` for a user-specified single canvas,
-   `adapters/product-ui.md` for product surfaces, or `adapters/slides.md` for
+   exactly one adapter: `references/adapters/poster.md` for a user-specified single canvas,
+   `references/adapters/product-ui.md` for product surfaces, or `references/adapters/slides.md` for
    cases, methodologies, tutorials, pitches, and narrated presentations.
-3. Read `operations/execution.md` and `operations/three-gates.md`. They are
+3. Read `references/operations/execution.md` and `references/operations/three-gates.md`. They are
    blocking rules, not documentation to complete after making work.
-4. Read `operations/production-toolkit.md` only for a released production need;
-   read `operations/review.md` before calling a render approved or complete.
-   For any editable delivery, read `operations/delivery-implementations.md`
+4. Read `references/operations/production-toolkit.md` only for a released production need;
+   read `references/operations/review.md` before calling a render approved or complete.
+   For any editable delivery, read `references/operations/delivery-implementations.md`
    for the build pipeline; for Figma translation, also read
-   `operations/figma-fidelity.md` first.
-5. Load `optional/*` only for its named need.
+   `references/operations/figma-fidelity.md` first.
+5. Load `references/optional/*` only for its named need.
 
 ## Non-negotiable defaults
 
@@ -127,6 +169,14 @@ confirmed task, and name any exception.
 - Treat the approved render as Gate 3's golden source. Inventory custom fonts,
   CSS masks/blends/repeating textures, and perspective composites before
   translation; these are fidelity risks, not acceptable silent approximations.
+- For controlled VDS product UI, treat DOM Migrate v3 as a first-pass quality
+  gate: author the exact viewport states with semantic flex/grid and the
+  importer annotations, capture the golden package, then compare the imported
+  Figma states before release. A build that merely completes is not a pass.
+- When an AI product UI may need editable Figma delivery, author export-ready
+  controlled HTML from the first draft. Do not defer DOM Migrate annotations,
+  state routes, reusable tokens, or semantic layer names until after visual
+  approval; they are part of the UI's authored structure.
 - A control record proves a decision happened; it never replaces user approval
   or authored visual judgment.
 

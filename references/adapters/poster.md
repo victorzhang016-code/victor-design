@@ -1,5 +1,10 @@
 # Poster and key-visual adapter
 
+When the task runs the light lane (`../../SKILL.md`), this adapter's contact
+sheet, asset-ledger file, three-direction, and full gate-record requirements
+yield to the light lane's inline records and single master direction. Its
+content, typography, material, and refusal rules still apply in full.
+
 ## Contents
 
 - [Job and boundary](#job-and-boundary)

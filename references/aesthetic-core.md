@@ -2,7 +2,9 @@
 
 ## 1. Discover the cause
 
-Use the native structured question interface when callable. Ask only what has
+Use the native structured question interface when callable; otherwise ask in
+plain prose, grouping the questions so the user can answer in one reply. Ask
+only what has
 not already been established, then confirm a proposition before substantial
 production. Establish:
 

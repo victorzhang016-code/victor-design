@@ -4,6 +4,12 @@ Use this contract for every substantial visual task. It converts design
 principles into releases; a later record cannot retroactively release earlier
 work.
 
+A task on the light lane (see `../../SKILL.md`) is exempt from this contract's
+file and field requirements while every light-lane condition holds; its
+proposition, approvals, and delivery choice are recorded inline in the
+dialogue. The refusal rules, density floor, and rendered-approval requirement
+still apply in full.
+
 ## Gate 1 — proposition and evidence
 
 Before the proposition is released, create or update `TASK_BRIEF.md` using

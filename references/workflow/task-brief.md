@@ -5,6 +5,10 @@ product surface, deck, named product/brand, ambiguous brief, or unattended
 race lane. It makes the task knowable without importing any palette, layout,
 or visual style.
 
+A task that meets the light-lane conditions in `../../SKILL.md` does not
+create this file; it records the same answers inline in the dialogue. If any
+light-lane condition breaks mid-task, create this record before continuing.
+
 ## Minimum record
 
 Create `TASK_BRIEF.md` beside the task control file. Keep it concise and use

@@ -2,12 +2,17 @@
 
 ## Default chain
 
+0. Lane check — a small single-canvas task with the user present may qualify
+   for the light lane (see `../SKILL.md`); it then needs only
+   `aesthetic-core.md`, `style-evidence.md`, `copy-discipline.md`, and one
+   adapter, with records kept inline.
 1. `workflow/task-brief.md` — establish the current task's authority, facts,
    reader, material boundary, asset necessity, and form questions. Use before
    substantial, ambiguous, branded, or unattended design work.
 2. `aesthetic-core.md` — establish cause, task, tension, and proposition.
-3. `style-evidence.md` — select task-relevant evidence from the owner's
-   authored work; never import a preset by default.
+3. `style-evidence.md` — select task-relevant evidence from the default
+   evidence base (or the adopter's own replacement); never import a preset
+   by default.
 4. `workflow/density-and-care.md` — the positive craft model: page layers,
    density calibration against the reference, and the per-page care pass.
 5. `copy-discipline.md` — voice rules and the AI-flavor blacklist for all

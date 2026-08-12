@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-ui-ready="true">
+<head>
+<meta charset="utf-8">
+<style>
+  :root { --ink:#111318; --brand:#2a5ce4; --space-md:16px; --radius-md:12px; }
+  * { box-sizing:border-box; margin:0; }
+  html, body { width:390px; height:844px; font-family:Arial,sans-serif; color:var(--ink); }
+  .phone { width:390px; height:844px; display:flex; flex-direction:column; padding:24px; overflow:hidden; }
+  .header { display:flex; align-items:center; gap:12px; }
+  .header .mark { width:38px; height:38px; border-radius:var(--radius-md); background:var(--brand); }
+  .title { font-size:24px; font-weight:700; }
+  .wordmark { font-size:20px; font-weight:700; }
+  .wordmark span { color:var(--brand); }
+  .fact { font-size:14px; line-height:22px; }
+  .fact span { margin-right:6px; color:#9aa0aa; font-size:12px; }
+  .content { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:var(--space-md); padding-top:var(--space-md); }
+  .card { position:relative; min-width:0; display:flex; flex-direction:column; padding:16px; border-radius:var(--radius-md); background:#f4f6fb; }
+  .avatar { width:48px; height:48px; display:block; object-fit:cover; object-position:70% 20%; }
+  .badge { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; background:var(--brand); }
+  .glow { width:20px; height:20px; background:radial-gradient(circle, rgba(42,92,228,.8), transparent 70%); }
+  .copy { font-size:14px; line-height:20px; }
+  .action { margin-top:auto; display:inline-flex; align-items:center; justify-content:center; min-height:40px; color:white; background:var(--brand); border-radius:var(--radius-md); }
+  .inactive { display:none; position:absolute; inset:0; }
+  @media (width:390px) { .header { min-height:40px; } }
+</style>
+</head>
+<body>
+  <main class="phone" data-figma-root data-figma-name="Screen">
+    <header class="header" data-figma-name="Header">
+      <div class="mark" data-figma-name="Brand / Mark"></div>
+      <h1 class="title" data-figma-text-style="Heading/Medium">Controlled UI</h1>
+      <div class="wordmark" data-figma-name="Wordmark">Bonjour<span>!</span></div>
+      <p class="fact" data-figma-name="Fact"><span data-figma-name="Fact / Meta">Label</span>Value</p>
+    </header>
+    <section class="content" data-figma-name="Content / Grid">
+      <article class="card" data-figma-component="Card">
+        <img class="avatar" data-figma-name="Avatar" alt="Avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect width='48' height='48' fill='%232a5ce4'/%3E%3C/svg%3E">
+        <span class="badge" data-figma-name="Status / Online"></span>
+        <span class="glow" data-figma-name="Effect / Presence Glow" data-figma-rasterize="radial glow"></span>
+        <p class="copy" data-figma-property="Body:text">A long editable sentence that wraps without overlapping the action below.</p>
+        <span class="action" data-figma-name="Action">Continue</span>
+      </article>
+      <article class="card" data-figma-component="Card">
+        <img class="avatar" data-figma-name="Avatar" alt="Avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect width='48' height='48' fill='%232a5ce4'/%3E%3C/svg%3E">
+        <span class="badge" data-figma-name="Status / Online"></span>
+        <span class="glow" data-figma-name="Effect / Presence Glow" data-figma-rasterize="radial glow"></span>
+        <p class="copy" data-figma-property="Body:text">A long editable sentence that wraps without overlapping the action below.</p>
+        <span class="action" data-figma-name="Action">Continue</span>
+      </article>
+    </section>
+    <aside class="inactive">Hidden state</aside>
+  </main>
+</body>
+</html>

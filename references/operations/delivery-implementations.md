@@ -1,142 +1,110 @@
 # Delivery implementations
 
-How to actually build what Gate 3 (`execution.md`) requires. Load this when a
-deliverable reaches Gate 3. Rules live in `execution.md` / `three-gates.md`;
-this file is the pipeline.
+This is the execution route for Gate 3 deliverables. Visual approval and
+editable structure are separate acceptance criteria; neither silently replaces
+the other.
 
-## Route detection (run first)
+## Route detection
 
-1. **Figma**: check availability in order —
-   a. **the bundled dom-migrate plugin** (`assets/figma-plugins/dom-migrate/`):
-      snapshot the approved master in a browser, package with `package.py`,
-      import the JSON in Figma. This migrates the DOM instead of rebuilding
-      it and works offline, free, forever;
-   b. other HTML→Figma importers (free browser extensions or self-hosted
-      open-source plugins; paid ones only when the user already subscribes);
-   c. Figma MCP / plugin API or REST + token for direct writes.
-   If none is available, stop and tell the user; do not silently ship
-   flattened images.
-2. **PPTX**: `python-pptx` for authoring; LibreOffice headless
-   (`soffice --headless --convert-to`) for verification renders. If neither
-   exists, install into an isolated environment or declare the gap.
-3. **Interactive HTML**: no dependency — plain HTML/CSS/JS.
+1. **Figma UI:** use bundled DOM Migrate v3 first. It is offline, local, free,
+   and versioned. Use another importer only when the approved source is outside
+   the controlled VDS HTML contract.
+2. **Figma poster/flat work:** keep the plugin's legacy visual route, then run
+   the poster repair checklist.
+3. **PPTX:** author with native slide objects and verify with a rendered export.
+4. **Interactive HTML:** retain a static query route for every review state.
 
-## Figma pipeline (per frame)
+Do not ship a flattened screenshot as an editable deliverable.
 
-One frame per page (set/deck) or per state (UI), at the exact approved canvas
-size.
+## Figma UI pipeline — DOM Migrate v3
 
-### Route A — automated HTML import (preferred)
+### 1. Prepare the master
 
-Import the approved HTML master directly instead of rebuilding by hand. This
-is a *migration*, not a reconstruction: text arrives as text nodes, flex
-containers as auto-layout, images as fills.
+- Set the exact viewport and a stable `?state=<name>` route per state.
+- Waitable UI must expose `data-ui-ready="true"`, or provide a custom ready
+  expression to the capture CLI.
+- Use semantic flex/grid, gap, padding, CSS variables, and the annotations in
+  `references/adapters/product-ui.md`.
+- Mark only the smallest unsupported effect with `data-figma-rasterize`.
 
-- Tooling, in order: the bundled **dom-migrate** plugin
-  (`assets/figma-plugins/dom-migrate/`, see its README for the
-  snapshot → package → import pipeline); other free importers; a paid
-  importer only when the user already subscribes.
-- Multi-page/state work: one frame per page or state (the master's static
-  single-page mode, e.g. `?p=N`, keeps each page importable on its own).
-- Prerequisites: all fonts installed in the Figma environment; images reachable
-  as local/relative resources.
+### 2. Capture once
 
-### Route B — manual rebuild (fallback)
+```bash
+cd assets/figma-plugins/dom-migrate
+npm install
+npm run build
+npm run capture -- \
+  --input /absolute/path/to/master.html \
+  --output /absolute/path/to/export \
+  --states view,sheet,profile,quiet \
+  --viewport 390x844
+```
 
-Only when no importer is available or the import of a critical frame fails.
-Build bottom-up, matching the approved HTML layer order: treated field →
-image fills (uploaded, replaceable) → rules/shapes → text layers. Name every
-layer semantically. Never substitute fonts silently — use the outline strategy
-in `figma-fidelity.md`.
+The command waits for fonts, images, UI readiness, and stable animation frames,
+then emits the v3 IR, a golden PNG per state, a compatibility report, and local
+effect/image assets. A repeated capture must produce identical structural and
+image hashes under the same source and environment.
 
-### Repair pass (mandatory after either route)
+### 3. Preflight in Figma
 
-Import gives geometry, not semantics. Before release:
+Import `manifest.json`, load `dom-migrate.v3.json`, and review:
 
-1. Read `figma-fidelity.md` and inventory risks: custom fonts, CSS
-   masks/blends/repeating textures, perspective composites, crop focal points.
-2. Rename imported layers semantically; delete import artifacts (wrapper
-   frames, duplicate backgrounds).
-3. Verify text nodes kept family/weight/size/line-height/tracking; fix or
-   outline per `figma-fidelity.md`.
-4. Rebuild whatever the import flattened — masks, blends, filters — or isolate
-   them as raster layers with editable sources kept beside the file, declared
-   in the node audit.
-5. Export each frame as PNG and run `scripts/compare_renders.py` against the
-   approved render at equal scale. Fix drift before release; record the node
-   audit and comparison in the Gate 3 fields.
+- target page and screen count;
+- exact font family/weight availability;
+- component, variable, text-style, and raster-layer counts;
+- warnings and hard errors.
+
+Strict v3 blocks illegal sizing, malformed IR, and unsupported packages.
+Missing fonts or weights remain visible warnings with deterministic
+same-family/global fallback so a delivery can still complete. v2 UI packages
+show a deprecation warning. Flat/poster packages stay on the legacy route.
+
+### 4. Build and audit
+
+Leave the target page blank to build into the current Figma page; enter a name
+only when a specific page is intended. Preserve any failed baseline frames as
+evidence when they exist. The generator creates fixed screen roots, native
+flex/grid containers, legal axis sizing, semantic spacing/alignment wrappers,
+vectors, replaceable images, components/instances, scoped local variables, and
+text styles. Download the Figma geometry audit from the plugin.
+
+### 5. Verify
+
+- Compare each Figma export with its golden at equal scale.
+- Require ≤1 px non-text geometry error and ≤2 px text-bound error.
+- Require identical wrapping, whole-frame SSIM ≥0.98, and image SSIM ≥0.995.
+- Audit zero missing fonts, illegal sizing pairs, anonymous spacers, duplicate
+  sibling names, and visible off-canvas inactive state nodes.
+- Replace title, button, and body copy with longer strings. Confirm Auto Layout
+  redistributes space without overlap or accidental clipping.
+- Confirm component instance properties, variable bindings, text styles, and
+  semantic names.
+
+### First-pass quality gate
+
+Before handing an editable UI over, run `npm test` and `npm run typecheck`, then
+capture the current master once in strict mode. Import and compare at least the
+default, overlay/sheet, densest-information, and empty/recovery state against
+their goldens. Check that centred fill containers retain their available height,
+full-width controls remain Fill, and content image crops are sharp at normal
+zoom. Fix a mismatch in the source/IR/importer before asking the user to repair
+it by hand in Figma.
+
+## Minimal raster effect layers
+
+Gradients, filters, masks, blends, complex shadows, and pseudo-elements may not
+have a native Figma equivalent. Rasterize only the isolated visual effect, never
+the UI structure or text. Keep the layer named by purpose and retain the reason
+in the compatibility report. Verify z-order first when an effect diff grows.
 
 ## PPTX pipeline
 
-1. Slide size from the deck canvas: 1920×1080 px → 13.333×7.5 in. Conversion:
-   1 px = 0.75 pt.
-2. Rebuild each approved page as a native slide: background fill, positioned
-   text frames (family/size/weight/color/line spacing), native shapes, and
-   pictures as replaceable image parts. A pasted page render is not editable
-   delivery.
-3. Verification: render the PPTX via LibreOffice to PNG/PDF, compare page by
-   page with the approved renders (`compare_renders.py`), fix font and
-   position drift.
-4. Record template choice, fonts embedded or substituted, and the comparison
-   in Gate 3.
+Rebuild with native slide shapes, text, and replaceable images. Render with
+LibreOffice or PowerPoint and compare page by page. Record font substitution,
+template choice, and remaining non-editable effects.
 
 ## Interactive HTML pipeline
 
-Shared constraints (from the motion discipline): 150–400 ms, one easing,
-function only, `prefers-reduced-motion` honored, no autoplay loops.
-
-**Slides**: one self-contained file.
-
-- One `<section>` per page; navigation by arrow keys, click zones, and swipe.
-- Transitions: opacity + small translate on enter/exit, applied to the page,
-  then to primary content blocks with a short stagger — reading order, not
-  decoration.
-- A quiet progress indicator (page n/N) that matches the static export
-  numbering.
-- Reduced-motion media query collapses all transitions to instant.
-- Keep the `?p=N` static-render mode so headless screenshots of each page
-  remain possible.
-
-**Product UI**: state flow build.
-
-- One route per declared state (hash routes are fine): entry, decision,
-  confirmation, result, waiting, empty, error — every state declared at Gate 1
-  must be reachable by click or key.
-- Every interactive element gives visible feedback; transitions mark state
-  changes.
-- Each state must also render standalone (`?state=name`) for the per-state
-  PNG export.
-
-## Effect layers (gradients, grain, vignettes, photo filters)
-
-CSS effect layers are the first thing every translation loses: gradients and
-vignettes usually live on `::before/::after` pseudo-elements, grain is often
-an SVG filter, and photo treatment is a CSS `filter`. None of these survive
-HTML → Figma/PPTX migration by default. The durable, cross-target pattern:
-
-1. At packaging time, pre-render each effect layer to an alpha PNG at its
-   target pixel size (linear fades, radial vignettes, noise/grain, pre-filtered
-   photo variants). Keep the math from the CSS, not an eyeball approximation —
-   then verify the layer against the master render numerically (mean/std of
-   the affected region). Hand-tuned alphas have measured up to 7× off the CSS
-   spec (波光墀影 MVT, 2026-08). Note that browsers composite SVG noise in
-   linear-light while most office targets composite in sRGB: the same grain
-   overlay lifts a dark field noticeably less there — generate a separately
-   calibrated dark-field variant rather than accepting the mismatch.
-2. Insert each PNG as a native picture node at the **same z-order** the effect
-   had in the HTML (e.g. page grain under content, hero fade above the photo).
-   In Figma the overlay stays a replaceable, toggleable layer; in PPTX it is a
-   replaceable picture part.
-3. Rebuild a gradient natively (Figma gradient fill / PPTX gradFill XML) only
-   when the gradient itself must stay parametrically editable — record that
-   choice in the node audit.
-4. Verification renders must show the effect diff shrinking versus the master;
-   if the diff grows, suspect z-order inversion first.
-
-## Release verification
-
-- `compare_renders.py` at equal scale for every translated frame/page.
-- The interactive build gets a click-through of every route plus a console
-  error check.
-- All of this is evidence, not taste approval: Gate 3 still releases only on
-  the user's approval of the comparison.
+Every declared state must be reachable by click/key and independently rendered.
+Motion is functional, brief, and reduced-motion safe. Run a full state click-
+through and console-error check before release.

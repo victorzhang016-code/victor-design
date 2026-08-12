@@ -1,56 +1,122 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <style>
-  body { font-family: -apple-system, "Segoe UI", sans-serif; margin: 16px; font-size: 13px; color: #222; }
-  h2 { font-size: 14px; margin: 0 0 12px; }
-  input[type=file] { width: 100%; margin-bottom: 12px; }
-  button { width: 100%; padding: 8px; background: #1B1D1F; color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+  :root { color-scheme: light dark; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px; color: var(--figma-color-text); background: var(--figma-color-bg); font-size: 12px; }
+  h1 { margin: 0; font-size: 18px; line-height: 1.2; letter-spacing: -.2px; }
+  .version { color: var(--figma-color-text-secondary); font-weight: 500; }
+  .lede { margin: 8px 0 18px; color: var(--figma-color-text-secondary); line-height: 1.5; }
+  label { display: block; margin: 14px 0 6px; color: var(--figma-color-text-secondary); font-weight: 600; }
+  input[type="file"], input[type="text"] { width: 100%; min-height: 34px; border: 1px solid var(--figma-color-border); border-radius: 7px; background: var(--figma-color-bg-secondary); color: var(--figma-color-text); padding: 8px 10px; }
+  input[type="file"] { padding: 5px; }
+  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+  .metric { padding: 10px; border: 1px solid var(--figma-color-border); border-radius: 8px; background: var(--figma-color-bg-secondary); }
+  .metric strong { display: block; font-size: 16px; line-height: 1.2; }
+  .metric span { color: var(--figma-color-text-secondary); }
+  .route { margin-top: 12px; padding: 9px 10px; border-radius: 7px; background: var(--figma-color-bg-secondary); font-family: "SFMono-Regular", Consolas, monospace; }
+  .issues { max-height: 180px; margin-top: 12px; overflow: auto; }
+  .issue { margin-bottom: 6px; padding: 8px 10px; border-radius: 7px; line-height: 1.4; }
+  .warning { background: rgba(242, 153, 0, .13); color: var(--figma-color-text-warning, #8a5200); }
+  .error { background: rgba(242, 72, 34, .12); color: var(--figma-color-text-danger, #b42318); }
+  .actions { display: flex; gap: 8px; margin-top: 16px; }
+  button { flex: 1; min-height: 36px; border: 0; border-radius: 7px; padding: 8px 12px; font: inherit; font-weight: 600; cursor: pointer; }
+  button.primary { color: #fff; background: #2a5ce4; }
+  button.secondary { color: var(--figma-color-text); background: var(--figma-color-bg-secondary); border: 1px solid var(--figma-color-border); }
   button:disabled { opacity: .4; cursor: default; }
-  #status { margin-top: 12px; color: #666; white-space: pre-wrap; }
+  #status { margin-top: 12px; min-height: 18px; color: var(--figma-color-text-secondary); line-height: 1.5; white-space: pre-wrap; }
+  .hidden { display: none; }
 </style>
 </head>
 <body>
-  <h2>DOM Migrate — JSON 导入</h2>
-  <input type="file" id="file" accept=".json">
-  <button id="go" disabled>构建 frame</button>
-  <div id="status"></div>
-  <script>
-    let pkg = null;
-    const status = (t) => document.getElementById("status").textContent = t;
-    document.getElementById("file").addEventListener("change", (e) => {
-      const f = e.target.files[0];
-      if (!f) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          pkg = JSON.parse(reader.result);
-          document.getElementById("go").disabled = false;
-          status(`已加载：${pkg.pages.length} 页，${Object.keys(pkg.images).length} 张图`);
-        } catch (err) { status("JSON 解析失败：" + err.message); }
-      };
-      reader.readAsText(f);
-    });
-    document.getElementById("go").addEventListener("click", () => {
-      document.getElementById("go").disabled = true;
-      parent.postMessage({ pluginMessage: { type: "build", pkg } }, "*");
-    });
-    onmessage = (e) => {
-      const m = e.data.pluginMessage;
-      if (!m) return;
-      if (m.type === "status" || m.type === "done") status(m.text);
-      if (m.type === "error") { status("错误：" + m.text); document.getElementById("go").disabled = false; }
-      if (m.type === "done") document.getElementById("go").disabled = false;
-      if (m.type === "report") {
-        const blob = new Blob([m.data], { type: "application/json" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "figma-geometry-report.json";
-        a.click();
-        status(status.textContent + " | 几何报告已下载 figma-geometry-report.json");
-      }
+  <h1>DOM Migrate <span class="version">v3</span></h1>
+  <p class="lede">受控 HTML UI → 原生 Figma 结构。构建前会检查字体、布局约束、组件、变量与局部栅格层。</p>
+  <label for="file">迁移包</label>
+  <input type="file" id="file" accept=".json,application/json">
+  <label for="pageName">目标页面</label>
+  <input type="text" id="pageName" placeholder="留空则导入当前页面">
+  <section id="preflight" class="hidden">
+    <div class="summary" id="summary"></div>
+    <div class="route" id="route"></div>
+    <div class="issues" id="issues"></div>
+  </section>
+  <div class="actions">
+    <button class="secondary" id="download" disabled>下载审计报告</button>
+    <button class="primary" id="build" disabled>构建到 Figma</button>
+  </div>
+  <div id="status">选择迁移包以开始预检。</div>
+<script>
+  let pkg = null;
+  let report = null;
+  let audit = null;
+  const file = document.getElementById("file");
+  const build = document.getElementById("build");
+  const download = document.getElementById("download");
+  const status = document.getElementById("status");
+  const setStatus = (text) => { status.textContent = text; };
+
+  function renderPreflight(value) {
+    report = value;
+    document.getElementById("preflight").classList.remove("hidden");
+    document.getElementById("summary").innerHTML = [
+      [value.pages, "screens"], [value.nodes, "nodes"], [value.components, "components"],
+      [value.variables, "variables"], [value.textStyles, "text styles"], [value.rasterLayers, "raster layers"]
+    ].map(([number, label]) => `<div class="metric"><strong>${number}</strong><span>${label}</span></div>`).join("");
+    document.getElementById("route").textContent = `route: ${value.route} · schema: ${value.schemaVersion ?? "legacy"}`;
+    const issues = [
+      ...value.errors.map((item) => ({ ...item, level: "error" })),
+      ...value.warnings.map((item) => ({ ...item, level: "warning" }))
+    ];
+    document.getElementById("issues").innerHTML = issues.length
+      ? issues.map((item) => `<div class="issue ${item.level}"><strong>${item.code}</strong><br>${item.message}</div>`).join("")
+      : `<div class="issue">预检通过：未发现结构或字体问题。</div>`;
+    build.disabled = value.errors.length > 0;
+    setStatus(value.errors.length ? `预检失败：${value.errors.length} 个硬错误。` : `预检通过，${value.warnings.length} 个提醒。`);
+  }
+
+  file.addEventListener("change", () => {
+    const selected = file.files[0];
+    if (!selected) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        pkg = JSON.parse(reader.result);
+        build.disabled = true;
+        setStatus("正在检查字体与布局约束…");
+        parent.postMessage({ pluginMessage: { type: "preflight", pkg } }, "*");
+      } catch (error) { setStatus(`JSON 解析失败：${error.message}`); }
     };
-  </script>
+    reader.readAsText(selected);
+  });
+
+  build.addEventListener("click", () => {
+    build.disabled = true;
+    file.disabled = true;
+    setStatus("开始构建…");
+    parent.postMessage({ pluginMessage: { type: "build", pkg, pageName: document.getElementById("pageName").value.trim() || undefined } }, "*");
+  });
+
+  download.addEventListener("click", () => {
+    if (!audit) return;
+    const blob = new Blob([audit], { type: "application/json" });
+    const anchor = document.createElement("a");
+    anchor.href = URL.createObjectURL(blob);
+    anchor.download = "dom-migrate-v3-figma-audit.json";
+    anchor.click();
+    URL.revokeObjectURL(anchor.href);
+  });
+
+  onmessage = (event) => {
+    const message = event.data.pluginMessage;
+    if (!message) return;
+    if (message.type === "preflight") renderPreflight(message.report);
+    if (message.type === "progress") setStatus(message.text);
+    if (message.type === "report") { audit = message.data; download.disabled = false; }
+    if (message.type === "done") { setStatus(message.text); build.disabled = false; file.disabled = false; }
+    if (message.type === "error") { setStatus(`错误：${message.text}`); build.disabled = false; file.disabled = false; }
+  };
+</script>
 </body>
 </html>

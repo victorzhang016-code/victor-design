@@ -2,76 +2,90 @@
 
 ## Job
 
-Make a person’s next task, system state, and recovery path unmistakable while
-letting the interface inhabit the authored world established by the aesthetic
-core.
-
-## Translate the core
-
-Use field, scale, rhythm, material, and color to clarify the task rather than
-to decorate a component library. Keep the primary task in the largest continuous
-area. Group input, source, inference, output, and correction by the decision
-they support. Give atmosphere to surfaces, imagery, type, and motion; keep
-controls sober enough to operate.
+Make the next task, current state, and recovery path unmistakable while keeping
+the authored visual world intact. UI is a state system, not a decorated static
+screen.
 
 ## Product hardening
 
-Apply UI/UX Pro Max and Impeccable mechanisms here only:
-
 - one clear primary action per action group;
 - visible current state, progress, result, and recovery where risk warrants it;
-- readable copy, labels, and non-color-only state distinctions;
-- responsive recomposition rather than miniature desktop panels;
-- keyboard focus, contrast, reduced motion, and semantic control labels;
-- honest separation of user input, source evidence, inference, and generated
-  output for AI products.
+- readable copy, labels, keyboard focus, contrast, and reduced motion;
+- responsive recomposition instead of miniature desktop panels;
+- honest separation of user input, evidence, inference, and generated output;
+- both outcomes of every decision, with a path onward or back.
 
-Do not import poster metaphors, fake hardware texture, or editorial microcopy
-into controls unless the product task gives them a real operating role.
+Every declared state must render independently as `?state=<name>` for golden
+capture. Waiting, empty, error, accept, and decline states receive the same
+typographic and interaction care as the happy path.
 
-## Interaction semantics
+## DOM Migrate v3 authoring contract
 
-- Confirmation friction attaches only to consequential or irreversible actions
-  (skip, delete, send, publish). Navigation never gets a modal, a sheet, or a
-  warning.
-- Every decision has both outcome states designed (accept and decline), and
-  every state offers a way onward or back — no dead ends.
-- A task brief that implies action implies a state flow: receiving/viewing,
-  the decision moment, and the post-decision state. One static screen is not a
-  state flow.
-- Waiting, empty, and error states get the same typographic care as the happy
-  path; silence is not feedback.
+Strict editable-Figma delivery is guaranteed only for controlled VDS HTML.
+When editable Figma is requested or plausibly downstream, VDS must author this
+contract from the first HTML draft: one `data-figma-root` with a stable name,
+semantic names on meaningful layers, reusable tokens, and the annotations below
+where browser geometry cannot express intent. Do not retrofit the contract
+after the visual master is complete.
 
-## Review
+- `data-figma-name` for stable layer naming;
+- `data-figma-width` / `data-figma-height` with `fixed|hug|fill` when browser
+  geometry alone cannot express intent;
+- `data-figma-component` for product components;
+- `data-figma-property="Name:text"` for editable instance copy;
+- `data-figma-text-style` for named typography;
+- `data-figma-rasterize` only on the smallest unsupported effect layer;
+- `data-figma-ignore` for non-design DOM.
 
-Test the real primary task at intended size and a narrow layout. Verify that a
-new person can identify what happened, what the system knows, what is uncertain,
-and what to do next. Run the authored review first, then deterministic
-accessibility and resilience checks, then reconcile without neutralizing the
-visual world.
+Use real flex/grid semantics, authored `gap` and padding, and CSS custom
+properties for reusable color/spacing/radius values. Do not introduce empty
+DOM elements as visual spacers. `margin-top:auto` is allowed for a single grow
+region. Hidden and inactive state nodes must be genuinely invisible or clipped.
 
-## Delivery
+Font family and numeric weight are part of the source contract. The importer
+uses the exact family and weight when available, then the nearest same-family
+face, and finally an explicitly reported global fallback so the job remains
+buildable. Fallbacks are warnings and are recorded in the compatibility report;
+they must never be silent.
 
-Per the matrix in `operations/execution.md`:
+## First-pass import rules
 
-- Ship an interactive HTML build in which every declared state — including
-  waiting, empty, and error states — is reachable by click or key, and every
-  state transition carries motion feedback that follows the shared motion
-  discipline (functional only, 150–400 ms, reduced-motion safe).
-- Ship one PNG per state for review, plus an editable Figma file with one
-  frame per state: native text and components, replaceable image fills.
-- A single static screen recording or a flattened mockup is not delivery.
+Write the source so its intended layout is unambiguous before capture:
 
-Production-grade Figma acceptance for UI (check all before release):
+- Mark a full-width card, image, input, or button inside a column with
+  `data-figma-width="fill"`; mark a full-height flex region with
+  `data-figma-height="fill"`. This is essential for vertically centred empty,
+  loading, and completion states.
+- Keep centring on the parent (`justify-content` / `align-items`) and let text
+  use its real `text-align`; do not imitate it with absolute coordinates.
+- Keep mixed-size inline labels in source reading order with real inline
+  elements. DOM Migrate preserves the order by x-position and maps their shared
+  line to Figma Baseline alignment; never fake this relationship with offsets.
+- Use a source `<img>` for content imagery whenever possible. DOM Migrate
+  captures its visible crop at 3× device resolution into a replaceable Figma
+  image fill. Keep CSS effects on a separate named effect layer.
+- Use negative margins only for a documented visual overlap. Prefer gap,
+  padding, and a semantic wrapper for ordinary spacing.
+- Name the four most revealing states: default, overlay/sheet, information
+  dense, and empty/recovery. They are the minimum first-pass visual sample.
+- Before delivery, emit the strict v3 package and its goldens alongside the
+  approved HTML. The Figma import is an expected output of UI work, not an
+  optional later conversion.
 
-- frames use auto-layout with real gap/padding, not absolute stacks;
-- repeated elements (chips, buttons, bars) exist as components with
-  instances, not copies;
-- icons are vectors, images are replaceable fills;
-- layer names are semantic (the DOM's class names), no "Frame 127";
-- every declared state has its own frame, and each frame passes the
-  equal-scale comparison against its approved render.
+## Figma acceptance
 
-The bundled dom-migrate plugin's UI structural mode
-(`assets/figma-plugins/dom-migrate/`, README › UI structural mode) produces
-this shape from the approved HTML master; the repair pass closes the rest.
+- one fixed-size root frame per state;
+- native Auto Layout/Grid for the primary structure;
+- valid Hug/Fill/Fixed on both axes after long-copy replacement;
+- no anonymous spacer rectangles, hidden-state pollution, or visible overflow;
+- components/instances for explicitly marked or exactly repeated semantics;
+- local variables and text styles where the source defines reusable tokens;
+- vectors stay vectors; images remain replaceable image fills;
+- unsupported CSS is isolated as a named minimal raster effect layer;
+- semantic, unique layer names; no `Frame 127` debris;
+- equal-scale golden comparison passes for every state.
+
+Production thresholds: ≤1 px non-text geometry error, ≤2 px text-bound error,
+matching line breaks, whole-frame SSIM ≥0.98, and image-region SSIM ≥0.995.
+Replace titles, body copy, and buttons with longer text before release; the
+result must not overlap, clip unexpectedly, or break hierarchy.
