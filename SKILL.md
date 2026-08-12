@@ -62,11 +62,15 @@ preference to keep moving.
 
 ## Evidence, not a preset
 
-Read `references/style-evidence.md` for every task. It ships as a template:
-the owner fills it with color, layout, typography, material, and anti-pattern
-evidence from their own approved work. It is a record of judgment, never a
-palette, font pair, or layout template. Use only the evidence that fits the
-confirmed task, and name any exception.
+Read `references/style-evidence.md` for every task. It ships with a default
+evidence base — the author's distilled visual grammar from approved shipped
+work — so the system has a real voice out of the box. **An adopter with
+approved work of their own should replace the default base with it**: the
+file's "Make it yours" section is part of onboarding, not an advanced
+option, and a team adopting this system treats swapping in their own
+evidence as step one. It is a record of judgment, never a palette, font
+pair, or layout template. Use only the evidence that fits the confirmed
+task, and name any exception.
 
 ## Required execution chain
 
@@ -75,7 +79,8 @@ confirmed task, and name any exception.
    `references/copy-discipline.md`, and
    `references/workflow/density-and-care.md`.
    Conduct the design dialogue through the native structured prompt when
-   callable. Do not infer Gate 1 approval from the request.
+   callable; where no such interface exists, ask in plain prose with the
+   questions grouped. Do not infer Gate 1 approval from the request.
 2. Classify the deliverable form before choosing a visual direction, then read
    exactly one adapter: `references/adapters/poster.md` for a user-specified single canvas,
    `references/adapters/product-ui.md` for product surfaces, or `references/adapters/slides.md` for

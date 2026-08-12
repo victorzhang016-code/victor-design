@@ -17,8 +17,6 @@ from pathlib import Path
 EXCLUDED_DIRS = {".git", "node_modules", "test-results", "__pycache__", "tests", "fixtures"}
 EXCLUDED_FILES = {
     ".gitignore",
-    "LICENSE",
-    "README.md",
     "package-lock.json",
     "prepare_skillhub_release.py",
     "test_design_execution.py",
@@ -33,6 +31,8 @@ def keep(path: Path, root: Path) -> bool:
         return False
     if path.name in EXCLUDED_FILES:
         return False
+    if path.name == "LICENSE":
+        return True
     return path.suffix.lower() in ALLOWED_EXTENSIONS
 
 

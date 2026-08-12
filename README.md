@@ -35,6 +35,15 @@ git clone https://github.com/victorzhang016-code/victor-design.git "$HOME\.agent
 
 The entry point is `SKILL.md`. MIT License.
 
+## First run
+
+The skill ships with the author's default style evidence, so it has a real
+voice immediately. If you have approved work of your own, open
+`references/style-evidence.md` and replace the default base with evidence
+from your own finished pieces — the "Make it yours" section walks through
+it. Teams adopting the system should treat this swap as onboarding step one,
+not an advanced option.
+
 ## SkillHub release
 
 The repository includes development and test files. Prepare a clean SkillHub source directory first:

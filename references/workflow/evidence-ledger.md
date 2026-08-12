@@ -1,4 +1,4 @@
-# Evidence ledger — template
+# Evidence ledger — default base
 
 Historical source expansion. The active runtime summary is
 `../style-evidence.md`; update both files together when a newly approved work
@@ -6,7 +6,10 @@ changes the owner's durable design evidence. This ledger preserves the longer
 source rationale and must not be treated as an optional substitute for the
 active evidence layer.
 
-**This file ships as a template.** Fill the tiers with the owner's own work.
+**This file ships with the same default evidence base as
+`../style-evidence.md`,** distilled from the author's approved shipped work
+and recorded without any private file paths. An adopter may replace the
+tiers with their own work.
 
 ## Why this exists
 
@@ -29,27 +32,39 @@ The latest approved authored work. Record its location, its specific
 evidence, and what it must not degenerate into. This tier is the primary
 evidence for current tasks.
 
-- Source:
-- Evidence:
-- Do not turn into:
+- Source: AR product documentation (default base)
+- Evidence: actual spatial photography, interface, and research evidence;
+  truthful product claims; dense crafted factual detail on one canvas
+- Do not turn into: a general-purpose retro-tech visual language
 
 ### Tier B: mature authored evidence
 
 Earlier work with proven control. Record groups, locations, and the strengths
 worth translating (sequence logic, hierarchy, material truth).
 
-- Group / location:
-- Evidence:
-- Correction to apply when reusing:
+- Group / location: industrial launch graphics (default base)
+- Evidence: industrial photography, hard black/white/gray contrast, bold
+  wordmark, one precise electric color event, printed-poster completion
+- Correction to apply when reusing: the palette and grid belong to that
+  subject; translate the contrast discipline, not the colors
+
+- Group / location: architectural presentation (default base)
+- Evidence: spatial sequence, threshold, macro-to-micro evidence, strong
+  image scale, color courage, architectural figure-field
+- Correction to apply when reusing: never reproduce an exhibition board on
+  another surface; translate sequence and scale, not panels
+
+- Group / location: tactile archive/product UI (default base)
+- Evidence: paper, textile, ink, stamp, string; semantic material systems;
+  usable editorial UI
+- Correction to apply when reusing: tactility must come from the current
+  subject's materials, not from generic scrapbook nostalgia
 
 ### Tier C: early authored evidence
 
 Formative work. Record the energy worth keeping and the excess worth
-correcting (over-density, small text, competing modules).
-
-- Group / location:
-- Evidence:
-- Correction to apply when reusing:
+correcting (over-density, small text, competing modules). The default base
+records none publicly; adopters fill this tier from their own history.
 
 ### Tier D: adaptation or secondary evidence
 
