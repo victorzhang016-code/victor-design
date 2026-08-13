@@ -178,3 +178,38 @@ A swatch, paper field, serif face, texture, or layout move from an earlier
 Victor project is **not** current-task evidence. Reuse one only after recording
 its present subject cause, the alternative considered, and why the inherited
 move improves this task rather than merely repeating a past success.
+
+## Person-cover recipe — taught by Victor, 2026-08-13
+
+For social covers combining the author portrait, a title, and his finished
+works (tutorial/宣发 type). Victor's own method, recorded after two rejected
+drafts and one accepted iteration:
+
+1. **Diagonal composition**: big display title anchored top-left (midline or
+   slightly above, measured against real copy width so lines never wrap or
+   collide); the person cutout flush to the right and bottom edges, enlarged
+   to own the lower-right quadrant. The two never fight.
+2. **Person treatment**: brighten (+12%) and grade the cutout for skin, then
+   a light outline stroke and a soft halo so the figure lifts off the busy
+   background.
+3. **Background — tilted waterfall**: tile as many finished works as possible
+   into a masonry wall, rotate it (~7°, test both tilt directions and show
+   both), enlarge tiles, and keep blur low (~5px) — the works should stay
+   barely recognizable. Richness comes from the works themselves.
+4. **Veils**: a top veil running solid-to-transparent down to about the first
+   half, carrying the title; a lighter bottom veil. Readability and fullness
+   at once.
+5. **Title readability fallback**: if display text still fights the wall, add
+   a thin light face-edge (stacked text-shadow outline in the field color).
+   Do not blur the wall further to save weak type.
+6. **Ornament discipline**: skip extra devices by default. The tag/placard
+   and the Greek-key band were both tried and both cut — the user removed
+   them. One factual block (e.g. 发布一天 · 1k 收藏) set at reading size in a
+   deliberate position beats corner micro-annotation clusters (banned twice
+   before, 波光墀影).
+
+Process failures that preceded this lesson, do not repeat: showing a
+user-visible skeleton before the draft gate; floating polaroid cards instead
+of a treated field; corner-annotation costume; title lines not measured
+against real copy width; declaring "3 versions" before one version survives
+the vetoes.

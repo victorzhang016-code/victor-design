@@ -164,6 +164,11 @@ into austerity.
   annotation, and sequence; decoration never replaces proof.
 - **UI:** use functional and aesthetic density together. Operational states
   stay clear; brand, imagery, data, motion, feedback, and recovery carry care.
+- **Social person cover (video/post thumbnail with the author portrait):**
+  follow the Person-cover recipe in `references/style-evidence.md`
+  (2026-08-13): diagonal title/figure composition, treated and enlarged
+  portrait flush to the edges, tilted works-waterfall background with low
+  blur, veil gradients for readability, no corner-annotation costume.
 
 ## Type as sourced voice
 
