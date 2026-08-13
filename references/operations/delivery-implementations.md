@@ -6,11 +6,19 @@ the other.
 
 ## Route detection
 
-1. **Figma UI:** use bundled DOM Migrate v3 first. It is offline, local, free,
-   and versioned. Use another importer only when the approved source is outside
-   the controlled VDS HTML contract.
-2. **Figma poster/flat work:** keep the plugin's legacy visual route, then run
-   the poster repair checklist.
+Route by carrier first; never let a flat carrier enter the v3 Auto Layout
+machinery (2026-08-13 regression: an absolutely-positioned person cover was
+force-fed through v3 inference and every frame came out misplaced):
+
+1. **Figma UI (product surfaces):** use bundled DOM Migrate v3 first. It is
+   offline, local, free, and versioned. Auto Layout inference is justified
+   here and only here. Use another importer only when the approved source is
+   outside the controlled VDS HTML contract.
+2. **Figma poster / graphic-text / slides / any flat work:** use the legacy
+   visual route — `snapshot.js` (browser capture) → `package.py` → import.
+   The flat master should be pre-flattened: bake filters, gradients, blends,
+   and transforms into plain image layers, keep text native, and use simple
+   absolute positioning. Then run the poster repair checklist.
 3. **PPTX:** author with native slide objects and verify with a rendered export.
 4. **Interactive HTML:** retain a static query route for every review state.
 
